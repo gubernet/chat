@@ -3,8 +3,8 @@
 import { AuiIf, SuggestionPrimitive, ThreadPrimitive } from "@assistant-ui/react";
 import { ArrowDownIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { useTranslations } from "use-intl";
 
+import { useTranslations } from "../i18n/intl";
 import { Button } from "../ui/button";
 import { cn } from "../ui/cn";
 import { ChatComposer } from "./ChatComposer";
@@ -40,7 +40,7 @@ export function ChatThread({
 	return (
 		<ChatOptionsContext.Provider value={{ filesOnly }}>
 			<ChatPreviewLayout enabled={preview}>
-				<ThreadPrimitive.Root className="flex h-full min-h-0 flex-col">
+				<ThreadPrimitive.Root className="flex h-full min-h-0 flex-col bg-background text-foreground">
 					<ThreadPrimitive.Viewport className="flex flex-1 flex-col overflow-y-auto pt-6">
 						<AuiIf condition={(s) => s.thread.messages.length === 0}>
 							<div

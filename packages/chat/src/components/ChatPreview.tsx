@@ -1,7 +1,7 @@
 "use client";
 
 import { useAui, useAuiState } from "@assistant-ui/react";
-import { DownloadIcon, Maximize2Icon, Minimize2Icon, XIcon } from "lucide-react";
+import { DownloadIcon, FileIcon, Maximize2Icon, Minimize2Icon, XIcon } from "lucide-react";
 import Papa from "papaparse";
 import {
 	createContext,
@@ -15,9 +15,11 @@ import {
 	useState,
 } from "react";
 import readXlsxFile from "read-excel-file/browser";
-import { useTranslations } from "use-intl";
 
+import { useFormatter, useTranslations } from "../i18n/intl";
+import { FILE_SIZE_FORMAT } from "../lib/file-size";
 import type { ChatFile } from "../lib/messages";
+import { type LoadedPreviewKind, previewOf } from "../lib/preview";
 import { Button } from "../ui/button";
 import { cn } from "../ui/cn";
 import { chatComposerInput } from "./ChatComposer";
@@ -27,76 +29,6 @@ import { MarkdownDocument } from "./MarkdownText";
 
 // PDF.js loads only when a PDF opens, and never in the server's render
 const ChatPdfView = lazy(() => import("./ChatPdfView"));
-
-const TEXT_EXTENSIONS = new Set([
-	"txt",
-	"json",
-	"xml",
-	"yaml",
-	"yml",
-	"log",
-	"py",
-	"js",
-	"ts",
-	"sql",
-	"css",
-]);
-
-// The presentations, whose PDF pages are slides
-const SLIDE_EXTENSIONS = new Set(["ppt", "pptx", "odp"]);
-
-type Loaded = "csv" | "spreadsheet" | "text" | "markdown" | "html";
-
-type Preview =
-	| { kind: "image"; url: string }
-	| { kind: "pdf"; url: string; unit: "page" | "slide" }
-	| { kind: Loaded }
-	| { kind: "none" };
-
-const extensionOf = (name: string) => name.split(".").pop()?.toLowerCase() ?? "";
-
-// How a file shows: images as they are, PDFs, documents and slides drawn as PDF, sheets as tables
-function previewOf(file: ChatFile): Preview {
-	const extension = extensionOf(file.name);
-
-	if (file.mimeType.startsWith("image/")) {
-		return { kind: "image", url: file.url };
-	}
-
-	if (file.mimeType === "application/pdf" || extension === "pdf") {
-		return { kind: "pdf", url: file.url, unit: "page" };
-	}
-
-	if (file.previewUrl) {
-		return {
-			kind: "pdf",
-			url: file.previewUrl,
-			unit: SLIDE_EXTENSIONS.has(extension) ? "slide" : "page",
-		};
-	}
-
-	if (extension === "csv" || file.mimeType === "text/csv") {
-		return { kind: "csv" };
-	}
-
-	if (extension === "xlsx") {
-		return { kind: "spreadsheet" };
-	}
-
-	if (extension === "md" || extension === "markdown" || file.mimeType === "text/markdown") {
-		return { kind: "markdown" };
-	}
-
-	if (extension === "html" || extension === "htm" || file.mimeType === "text/html") {
-		return { kind: "html" };
-	}
-
-	if (file.mimeType.startsWith("text/") || TEXT_EXTENSIONS.has(extension)) {
-		return { kind: "text" };
-	}
-
-	return { kind: "none" };
-}
 
 const ChatPreviewContext = createContext<{
 	// Null where the chat has no preview: its files download
@@ -156,7 +88,7 @@ export function ChatPreviewLayout({
 
 	return (
 		<ChatPreviewContext.Provider value={{ open: enabled ? setFile : null }}>
-			<div className="flex h-full min-h-0">
+			<div className="flex h-full min-h-0 bg-background text-foreground">
 				<div className="min-w-0 flex-1">{children}</div>
 				{enabled && file && (
 					<ChatPreviewPanel key={file.id} file={file} onClose={() => setFile(null)} />
@@ -185,6 +117,7 @@ export function ChatFilePreview({
 	embedded?: boolean;
 }) {
 	const t = useTranslations("chat.preview");
+	const format = useFormatter();
 	const aui = useAui();
 	const preview = previewOf(file);
 	const [fullScreen, setFullScreen] = useState(false);
@@ -240,20 +173,22 @@ export function ChatFilePreview({
 						))}
 					</fieldset>
 				)}
-				<Button
-					variant="ghost"
-					size="icon"
-					className={cn(!embedded && "max-md:hidden")}
-					onClick={() => setFullScreen((current) => !current)}
-					aria-label={t(fullScreen ? "exitFullScreen" : "fullScreen")}
-					title={t(fullScreen ? "exitFullScreen" : "fullScreen")}
-				>
-					{fullScreen ? (
-						<Minimize2Icon className="size-4" />
-					) : (
-						<Maximize2Icon className="size-4" />
-					)}
-				</Button>
+				{preview.kind !== "none" && (
+					<Button
+						variant="ghost"
+						size="icon"
+						className={cn(!embedded && "max-md:hidden")}
+						onClick={() => setFullScreen((current) => !current)}
+						aria-label={t(fullScreen ? "exitFullScreen" : "fullScreen")}
+						title={t(fullScreen ? "exitFullScreen" : "fullScreen")}
+					>
+						{fullScreen ? (
+							<Minimize2Icon className="size-4" />
+						) : (
+							<Maximize2Icon className="size-4" />
+						)}
+					</Button>
+				)}
 				<Button
 					variant="ghost"
 					size="icon"
@@ -312,7 +247,29 @@ export function ChatFilePreview({
 						}
 					/>
 				)}
-				{preview.kind === "none" && <Message>{t("unavailable")}</Message>}
+				{/* Only where the files are the page, as an elaborato's: the file itself, to download */}
+				{preview.kind === "none" && (
+					<div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+						<FileIcon className="size-8 text-muted-foreground" />
+						<div>
+							<p className="text-sm font-medium break-all">{file.name}</p>
+							<p className="text-xs text-muted-foreground">
+								{format.number(file.size / 1024, FILE_SIZE_FORMAT)}
+							</p>
+						</div>
+						<Button
+							variant="primary"
+							render={({ children, ...props }) => (
+								<a {...props} href={file.url} download={file.name}>
+									{children}
+								</a>
+							)}
+						>
+							<DownloadIcon className="size-4" />
+							{t("download")}
+						</Button>
+					</div>
+				)}
 			</div>
 		</aside>
 	);
@@ -346,7 +303,7 @@ function LoadedPreview({
 	onAskCells,
 }: {
 	file: ChatFile;
-	kind: Loaded;
+	kind: LoadedPreviewKind;
 	showCode: boolean;
 	onAskCells?: (range: string) => void;
 }) {

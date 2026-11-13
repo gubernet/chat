@@ -1,5 +1,59 @@
 {
 	"chat": {
+		"newChat": "Nuevo chat",
+		"untitled": "Nueva conversación",
+		"notFound": "Conversación no encontrada.",
+		"readOnly": "Ya no puedes usar este agente: la conversación sigue siendo legible.",
+		"agentUnavailable": "Este agente no está disponible.",
+		"history": {
+			"title": "Conversaciones",
+			"empty": "Aún no hay conversaciones.",
+			"search": "Buscar",
+			"noResults": "No se encontraron conversaciones.",
+			"groups": {
+				"pinned": "Fijadas",
+				"today": "Hoy",
+				"yesterday": "Ayer",
+				"week": "Últimos 7 días",
+				"month": "Últimos 30 días",
+				"older": "Más antiguas"
+			},
+			"actions": {
+				"more": "Acciones de «{title}»",
+				"rename": "Cambiar nombre",
+				"renameLabel": "Nuevo título",
+				"pin": "Fijar",
+				"unpin": "Dejar de fijar",
+				"delete": "Eliminar",
+				"deleteTitle": "¿Eliminar «{title}»?",
+				"deleteMessage": "La conversación y sus archivos se eliminan para siempre.",
+				"cancel": "Cancelar",
+				"error": "No se pudo guardar el cambio."
+			}
+		},
+		"controls": {
+			"noModel": "Ningún modelo disponible",
+			"modelError": "No se pudo cambiar el modelo."
+		},
+		"modelCost": {
+			"title": "Consumo de uso",
+			"levels": {
+				"low": "Bajo",
+				"moderate": "Moderado",
+				"high": "Alto",
+				"veryHigh": "Muy alto"
+			}
+		},
+		"budget": {
+			"warning": "Has usado el {percent} % de tu presupuesto del mes.",
+			"exhausted": "Has agotado tu presupuesto del mes: solo puedes seguir con los modelos de reserva.",
+			"request": "Solicitar aumento de presupuesto",
+			"requestDescription": "La solicitud llega a los admins de la organización, que pueden moverte a un perfil con más presupuesto.",
+			"note": "Nota (opcional)",
+			"send": "Enviar solicitud",
+			"requestSent": "Solicitud enviada",
+			"requestError": "No se pudo enviar la solicitud."
+		},
 		"composer": {
 			"placeholder": "Escribe un mensaje…",
 			"attach": "Adjuntar archivos",
@@ -35,6 +89,11 @@
 			"allow": "Permitir",
 			"refuse": "Rechazar"
 		},
+		"question": {
+			"other": "Otra",
+			"otherPlaceholder": "Escribe tu respuesta",
+			"send": "Enviar"
+		},
 		"usage": {
 			"tokens": "{count, number} tokens"
 		},
@@ -66,7 +125,6 @@
 			"close": "Cerrar la vista previa",
 			"loading": "Cargando la vista previa…",
 			"failed": "No se pudo cargar la vista previa: descarga el archivo para abrirlo.",
-			"unavailable": "Este tipo de archivo no tiene vista previa: descárgalo para abrirlo.",
 			"sheets": "Hojas",
 			"truncated": "Se muestran las primeras {count} filas.",
 			"downloadFile": "Descargar {name}",

@@ -11,8 +11,8 @@ import {
 	XIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useFormatter, useTranslations } from "use-intl";
 
+import { useFormatter, useTranslations } from "../i18n/intl";
 import { Button } from "../ui/button";
 import { ChatAttachment } from "./ChatAttachment";
 

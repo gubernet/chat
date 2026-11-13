@@ -3,9 +3,9 @@
 import { ActionBarPrimitive, useAui, useAuiState } from "@assistant-ui/react";
 import { ChevronDownIcon, ClipboardListIcon, PencilIcon } from "lucide-react";
 import { createContext, type ReactNode, useContext, useState } from "react";
-import { useTranslations } from "use-intl";
 
 import type { FormElement, FormPart, FormResult } from "../contract/form";
+import { useTranslations } from "../i18n/intl";
 import type { ChatFormMessage } from "../lib/use-chat-runtime";
 import { Button } from "../ui/button";
 import { ChatForm, type ChatFormSubmission } from "./ChatForm";

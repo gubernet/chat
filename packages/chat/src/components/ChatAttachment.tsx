@@ -2,7 +2,8 @@
 
 import { AttachmentPrimitive, useAuiState } from "@assistant-ui/react";
 import { FileIcon, XIcon } from "lucide-react";
-import { useTranslations } from "use-intl";
+
+import { useTranslations } from "../i18n/intl";
 
 export function ChatAttachment({ removable = false }: { removable?: boolean }) {
 	const t = useTranslations("chat.composer");

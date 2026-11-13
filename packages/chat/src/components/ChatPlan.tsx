@@ -8,8 +8,8 @@ import {
 	ListChecksIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "use-intl";
 
+import { useTranslations } from "../i18n/intl";
 import type { ChatPlan } from "../lib/messages";
 import { cn } from "../ui/cn";
 

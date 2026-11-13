@@ -6,6 +6,39 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-13
+
+### Added
+
+- **`GubernetChat`**: the whole chat of an agent of an installation, from the installation's
+  address and the agent's id. A new chat or one of the user's conversations with the agent, its
+  model with how much it costs to use, the notice on the user's budget, the microphone where the
+  organization has it on, and the conversations had before: in a menu of the bar, in a panel
+  beside the chat or hidden (`history`). The agent's name and the choice of the model can be
+  left out of the bar (`hideTitle`, `hideModel`). The user is the one signed in to the
+  installation.
+- **Colours without codes**: `color` on `GubernetChat` and `ChatProvider` takes one of eight
+  colours (`CHAT_COLORS`) for the buttons and what is selected, in the light and the dark theme.
+- `createGubernetClient`: the API of an installation as the chat uses it.
+- **Questions with options**: an agent ends its answer with questions the user answers by
+  choosing among options or writing an answer of their own (`ChatQuestion`, shown by
+  `ChatThread`). The answers are the user's next message: a `ChatTransport` receives them as
+  `answers` in `send`.
+- `@gubernet/chat/contract`: the `question` event and part, the `answers` part of a user's
+  message, and their schemas and checks (`questionsSchema`, `answersSchema`, `readAnswers`).
+
+### Fixed
+
+- The chat paints its own background: on a page of another colour only the band of the text box
+  had it.
+- The chat takes the page's font, as documented; it fell back to the system's.
+- `ChatProvider` keeps the chat's texts apart from the page's: in an application that uses
+  next-intl or use-intl, what the page drew inside the chat lost its own translations.
+- A Word document or a presentation opens as its PDF: the answer lost the preview its file came
+  with (`previewUrl`).
+- A file the chat cannot show downloads from its card and never opens the preview. Among the
+  files of an elaborato it shows its name, its size and its download.
+
 ## [0.1.0] - 2026-11-13
 
 ### Added
@@ -20,5 +53,6 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/gubernet/chat/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/gubernet/chat/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/gubernet/chat/releases/tag/v0.1.0

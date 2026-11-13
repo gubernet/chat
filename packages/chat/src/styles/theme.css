@@ -45,6 +45,8 @@
 		--radius: var(--gubernet-radius, 0.625rem);
 
 		color: var(--foreground);
+		/* The page's font, unless --gubernet-font names another */
+		font-family: var(--gubernet-font, inherit);
 	}
 
 	:root[data-theme="dark"] {

@@ -13,8 +13,8 @@ import {
 	WrenchIcon,
 } from "lucide-react";
 import { type PropsWithChildren, useState } from "react";
-import { useTranslations } from "use-intl";
 
+import { useTranslations } from "../i18n/intl";
 import type { ChatStep, ChatStepView } from "../lib/messages";
 import { Button } from "../ui/button";
 import { cn } from "../ui/cn";

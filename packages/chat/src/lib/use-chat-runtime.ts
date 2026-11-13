@@ -11,11 +11,12 @@ import {
 	useExternalStoreRuntime,
 } from "@assistant-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "use-intl";
 
 import type { AnswerEvent, ChatAttachment } from "../contract/events";
 import type { FormPart, FormValues } from "../contract/form";
 import { MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS_PER_MESSAGE } from "../contract/limits";
+import type { Answer, AnswersPart } from "../contract/questions";
+import { useTranslations } from "../i18n/intl";
 import { createRecordingDictationAdapter, type Transcribe } from "./dictation";
 import {
 	answerConfirmation,
@@ -63,6 +64,8 @@ export interface ChatTransport {
 			// The agent's form, filled in, with the message whose files it keeps
 			form?: { values: FormValues };
 			keepFrom?: string;
+			// The answers to the agent's questions, one per question in their order
+			answers?: Answer[];
 		},
 		signal: AbortSignal,
 	): Promise<AsyncIterable<AnswerEvent>>;
@@ -281,33 +284,36 @@ export function useChatRuntime({
 	// A message, new or edited, after the answer it follows, with the agent's answer
 	const sendAfter = (message: AppendMessage) => {
 		const custom = message.metadata?.custom as
-			| { quote?: QuoteInfo; form?: ChatFormMessage }
+			| { quote?: QuoteInfo; form?: ChatFormMessage; answers?: AnswersPart }
 			| undefined;
 		const form = custom?.form;
+		const answers = custom?.answers;
 		const typed = message.content
 			.flatMap((part) => (part.type === "text" ? [part.text] : []))
 			.join("\n")
 			.trim();
-		// The part of a file the message is about goes at its top; a form has no text
-		const text = form ? "" : joinQuote(custom?.quote?.text, typed);
-		const attachments: ChatOutgoingAttachment[] = form
-			? [
-					...form.files.map((file) => ({
-						name: file.name,
-						mimeType: file.type || "application/octet-stream",
-						size: file.size,
-						file,
-					})),
-					...form.kept,
-				]
-			: (message.attachments ?? [])
-					.slice(0, MAX_ATTACHMENTS_PER_MESSAGE)
-					.map((attachment) => ({
-						name: attachment.name,
-						mimeType: attachment.contentType || "application/octet-stream",
-						size: attachment.file?.size ?? 0,
-						file: attachment.file,
-					}));
+		// The part of a file the message is about goes at its top; a form and answers have no text
+		const text = form || answers ? "" : joinQuote(custom?.quote?.text, typed);
+		const attachments: ChatOutgoingAttachment[] = answers
+			? []
+			: form
+				? [
+						...form.files.map((file) => ({
+							name: file.name,
+							mimeType: file.type || "application/octet-stream",
+							size: file.size,
+							file,
+						})),
+						...form.kept,
+					]
+				: (message.attachments ?? [])
+						.slice(0, MAX_ATTACHMENTS_PER_MESSAGE)
+						.map((attachment) => ({
+							name: attachment.name,
+							mimeType: attachment.contentType || "application/octet-stream",
+							size: attachment.file?.size ?? 0,
+							file: attachment.file,
+						}));
 		const parentId = message.parentId;
 		const userMessageId = generateId();
 		const answerId = generateId();
@@ -319,7 +325,7 @@ export function useChatRuntime({
 					userMessageId,
 					text,
 					attachments.map(({ file: _file, ...attachment }) => attachment),
-					form?.part,
+					form?.part ?? answers,
 				),
 				parentId,
 			},
@@ -334,6 +340,7 @@ export function useChatRuntime({
 					attachments,
 					parentId,
 					...(form && { form: { values: form.part.values }, keepFrom: form.keepFrom }),
+					...(answers && { answers: answers.answers }),
 				},
 				signal,
 			),

@@ -1,14 +1,17 @@
 "use client";
 
 import { DownloadIcon, FileIcon } from "lucide-react";
-import { useFormatter, useTranslations } from "use-intl";
 
+import { useFormatter, useTranslations } from "../i18n/intl";
+import { FILE_SIZE_FORMAT } from "../lib/file-size";
 import type { ChatFile } from "../lib/messages";
+import { hasPreview } from "../lib/preview";
 import { useChatPreview } from "./ChatPreview";
 
 /**
  * A file the agent delivered: it opens in the preview beside the chat and
- * downloads from its icon; where the chat has no preview, it downloads.
+ * downloads from its icon. A file of a type the chat cannot show, or where the
+ * chat has no preview, only downloads: nothing opens to say there is nothing to see.
  */
 export function ChatFileLink({ file }: { file: ChatFile }) {
 	const t = useTranslations("chat.preview");
@@ -21,17 +24,13 @@ export function ChatFileLink({ file }: { file: ChatFile }) {
 			<span className="min-w-0">
 				<span className="block truncate text-sm font-medium">{file.name}</span>
 				<span className="block text-xs text-muted-foreground">
-					{format.number(file.size / 1024, {
-						style: "unit",
-						unit: "kilobyte",
-						maximumFractionDigits: 1,
-					})}
+					{format.number(file.size / 1024, FILE_SIZE_FORMAT)}
 				</span>
 			</span>
 		</>
 	);
 
-	if (!open) {
+	if (!open || !hasPreview(file)) {
 		return (
 			<a
 				href={file.url}

@@ -1,5 +1,59 @@
 {
 	"chat": {
+		"newChat": "New chat",
+		"untitled": "New conversation",
+		"notFound": "Conversation not found.",
+		"readOnly": "You can no longer use this agent: the conversation stays readable.",
+		"agentUnavailable": "This agent is not available.",
+		"history": {
+			"title": "Conversations",
+			"empty": "No conversations yet.",
+			"search": "Search",
+			"noResults": "No conversations found.",
+			"groups": {
+				"pinned": "Pinned",
+				"today": "Today",
+				"yesterday": "Yesterday",
+				"week": "Previous 7 days",
+				"month": "Previous 30 days",
+				"older": "Older"
+			},
+			"actions": {
+				"more": "Actions for “{title}”",
+				"rename": "Rename",
+				"renameLabel": "New title",
+				"pin": "Pin",
+				"unpin": "Unpin",
+				"delete": "Delete",
+				"deleteTitle": "Delete “{title}”?",
+				"deleteMessage": "The conversation and its files are deleted for good.",
+				"cancel": "Cancel",
+				"error": "The change could not be saved."
+			}
+		},
+		"controls": {
+			"noModel": "No model available",
+			"modelError": "The model could not be changed."
+		},
+		"modelCost": {
+			"title": "Usage consumption",
+			"levels": {
+				"low": "Low",
+				"moderate": "Moderate",
+				"high": "High",
+				"veryHigh": "Very high"
+			}
+		},
+		"budget": {
+			"warning": "You have used {percent}% of your monthly budget.",
+			"exhausted": "You have used up your monthly budget: you can go on only with the reserve models.",
+			"request": "Request budget increase",
+			"requestDescription": "The request reaches the organization's admins, who can move you to a profile with more budget.",
+			"note": "Note (optional)",
+			"send": "Send request",
+			"requestSent": "Request sent",
+			"requestError": "Could not send the request."
+		},
 		"composer": {
 			"placeholder": "Write a message…",
 			"attach": "Attach files",
@@ -35,6 +89,11 @@
 			"allow": "Allow",
 			"refuse": "Refuse"
 		},
+		"question": {
+			"other": "Other",
+			"otherPlaceholder": "Write your answer",
+			"send": "Send"
+		},
 		"usage": {
 			"tokens": "{count, number} tokens"
 		},
@@ -66,7 +125,6 @@
 			"close": "Close the preview",
 			"loading": "Loading the preview…",
 			"failed": "The preview could not be loaded: download the file to open it.",
-			"unavailable": "This type of file has no preview: download it to open it.",
 			"sheets": "Sheets",
 			"truncated": "The first {count} rows are shown.",
 			"downloadFile": "Download {name}",

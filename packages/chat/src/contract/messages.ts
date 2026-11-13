@@ -6,6 +6,13 @@ import type { z } from "zod";
 
 import type { AnswerEvent, ChatAttachment, ChatEvent, chatPartSchema } from "./events";
 import { type FormPart, formPrompt, formSummary, publicFormElements } from "./form";
+import {
+	type AnswersPart,
+	answersPrompt,
+	answersSummary,
+	type QuestionPart,
+	questionsText,
+} from "./questions";
 
 export type ChatErrorCode = Extract<ChatEvent, { type: "error" }>["code"];
 
@@ -32,17 +39,17 @@ export interface ChatMessage {
 	usage: ChatUsage | null;
 }
 
-// A message of the user: what they wrote, or the form they filled in
+// A message of the user: what they wrote, the form they filled in or their answers to the agent's questions
 export function createUserMessage(
 	id: string,
 	text: string,
 	attachments: ChatAttachment[],
-	form?: FormPart,
+	part?: FormPart | AnswersPart,
 ): ChatMessage {
 	return {
 		id,
 		role: "user",
-		parts: form ? [form] : text ? [{ type: "text", text }] : [],
+		parts: part ? [part] : text ? [{ type: "text", text }] : [],
 		attachments,
 		status: "complete",
 		errorCode: null,
@@ -50,23 +57,47 @@ export function createUserMessage(
 	};
 }
 
-// A message as the agent reads it: its text, or its form with what to do with each field
+/**
+ * A message as the agent reads it: its text, its form with what to do with
+ * each field, the questions it asked or the user's answers to them.
+ */
 export function messageText(parts: ChatPart[]) {
 	return parts
+		.flatMap((part) => {
+			switch (part.type) {
+				case "text":
+					return [part.text];
+				case "form":
+					return [formPrompt(part)];
+				case "question":
+					return [`\n\n${questionsText(part.questions)}`];
+				case "answers":
+					return [answersPrompt(part.answers)];
+				default:
+					return [];
+			}
+		})
+		.join("");
+}
+
+// A user's message as they wrote it, for the conversation's title: its text, its form's values or its answers
+export function userText(parts: ChatPart[]) {
+	return parts
 		.flatMap((part) =>
-			part.type === "text" ? [part.text] : part.type === "form" ? [formPrompt(part)] : [],
+			part.type === "text"
+				? [part.text]
+				: part.type === "form"
+					? [formSummary(part)]
+					: part.type === "answers"
+						? [answersSummary(part.answers)]
+						: [],
 		)
 		.join("");
 }
 
-// A user's message as they wrote it, for the conversation's title: its text, or its form's values
-export function userText(parts: ChatPart[]) {
-	return parts
-		.flatMap((part) =>
-			part.type === "text" ? [part.text] : part.type === "form" ? [formSummary(part)] : [],
-		)
-		.join("");
-}
+// The questions at the end of an agent's answer, if any
+export const questionOfParts = (parts: ChatPart[]) =>
+	parts.find((part): part is QuestionPart => part.type === "question") ?? null;
 
 // The parts as the browser gets them: a form without the agent's notes on its fields
 export const publicParts = (parts: ChatPart[]): ChatPart[] =>
@@ -173,6 +204,11 @@ export function applyChatEvent(message: ChatMessage, event: ChatEvent): ChatMess
 						: part,
 				),
 			};
+		// Once, at the end of the answer
+		case "question":
+			return message.parts.some((part) => part.type === "question")
+				? message
+				: { ...message, parts: [...message.parts, event] };
 		case "file":
 			return {
 				...message,
@@ -185,6 +221,8 @@ export function applyChatEvent(message: ChatMessage, event: ChatEvent): ChatMess
 						mimeType: event.mimeType,
 						size: event.size,
 						url: event.url,
+						// The PDF a Word document or a presentation is shown as
+						...(event.previewUrl !== undefined && { previewUrl: event.previewUrl }),
 					},
 				],
 			};

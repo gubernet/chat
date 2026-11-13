@@ -3,9 +3,9 @@
 import { MessageByIndexProvider, MessagePrimitive, useAui, useAuiState } from "@assistant-ui/react";
 import { SquareIcon } from "lucide-react";
 import { type ReactNode, useState } from "react";
-import { useTranslations } from "use-intl";
 
 import type { FormPart } from "../contract/form";
+import { useTranslations } from "../i18n/intl";
 import type { ChatFile, ChatPlan, ChatStepView } from "../lib/messages";
 import { Button } from "../ui/button";
 import { ChatForm } from "./ChatForm";
@@ -34,7 +34,7 @@ export function ChatElaborato({
 	const isDisabled = useAuiState((s) => s.thread.isDisabled);
 
 	return (
-		<div className="flex h-full min-h-0 max-md:flex-col max-md:overflow-y-auto">
+		<div className="flex h-full min-h-0 bg-background text-foreground max-md:flex-col max-md:overflow-y-auto">
 			<section className="flex flex-col gap-6 p-4 md:w-[min(42%,32rem)] md:shrink-0 md:overflow-y-auto md:border-e md:p-6">
 				{welcome}
 				{count === 0 ? (

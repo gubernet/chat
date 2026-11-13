@@ -1,5 +1,59 @@
 {
 	"chat": {
+		"newChat": "Nuova chat",
+		"untitled": "Nuova conversazione",
+		"notFound": "Conversazione non trovata.",
+		"readOnly": "Non puoi più usare questo agente: la conversazione resta leggibile.",
+		"agentUnavailable": "Questo agente non è disponibile.",
+		"history": {
+			"title": "Conversazioni",
+			"empty": "Ancora nessuna conversazione.",
+			"search": "Cerca",
+			"noResults": "Nessuna conversazione trovata.",
+			"groups": {
+				"pinned": "Fissate",
+				"today": "Oggi",
+				"yesterday": "Ieri",
+				"week": "Ultimi 7 giorni",
+				"month": "Ultimi 30 giorni",
+				"older": "Più vecchie"
+			},
+			"actions": {
+				"more": "Azioni per «{title}»",
+				"rename": "Rinomina",
+				"renameLabel": "Nuovo titolo",
+				"pin": "Fissa",
+				"unpin": "Togli dalle fissate",
+				"delete": "Elimina",
+				"deleteTitle": "Eliminare «{title}»?",
+				"deleteMessage": "La conversazione e i suoi file vengono cancellati per sempre.",
+				"cancel": "Annulla",
+				"error": "Non è stato possibile salvare la modifica."
+			}
+		},
+		"controls": {
+			"noModel": "Nessun modello disponibile",
+			"modelError": "Impossibile cambiare modello."
+		},
+		"modelCost": {
+			"title": "Consumo di utilizzo",
+			"levels": {
+				"low": "Basso",
+				"moderate": "Moderato",
+				"high": "Alto",
+				"veryHigh": "Molto alto"
+			}
+		},
+		"budget": {
+			"warning": "Hai usato l'{percent}% del tuo budget del mese.",
+			"exhausted": "Hai esaurito il tuo budget del mese: puoi continuare solo con i modelli di riserva.",
+			"request": "Richiedi aumento budget",
+			"requestDescription": "La richiesta arriva agli admin dell'organizzazione, che possono spostarti in un profilo con più budget.",
+			"note": "Nota (facoltativa)",
+			"send": "Invia richiesta",
+			"requestSent": "Richiesta inviata",
+			"requestError": "Impossibile inviare la richiesta."
+		},
 		"composer": {
 			"placeholder": "Scrivi un messaggio…",
 			"attach": "Allega file",
@@ -35,6 +89,11 @@
 			"allow": "Consenti",
 			"refuse": "Rifiuta"
 		},
+		"question": {
+			"other": "Altro",
+			"otherPlaceholder": "Scrivi la tua risposta",
+			"send": "Invia"
+		},
 		"usage": {
 			"tokens": "{count, number} token"
 		},
@@ -66,7 +125,6 @@
 			"close": "Chiudi l'anteprima",
 			"loading": "Carico l'anteprima…",
 			"failed": "Non è stato possibile caricare l'anteprima: scarica il file per aprirlo.",
-			"unavailable": "Per questo tipo di file non c'è un'anteprima: scaricalo per aprirlo.",
 			"sheets": "Fogli",
 			"truncated": "Sono mostrate le prime {count} righe.",
 			"downloadFile": "Scarica {name}",

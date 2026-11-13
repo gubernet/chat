@@ -1,9 +1,10 @@
 "use client";
 
 import { type ReactNode, useEffect, useState, useSyncExternalStore } from "react";
-import { IntlProvider } from "use-intl";
 
 import { messagesFor, resolveChatLocale } from "../i18n";
+import { ChatIntlProvider } from "../i18n/intl";
+import { type ChatColor, chatColorStyle, chatColorVariables } from "../lib/colors";
 import { defaultNotify, type Notify, NotifyContext } from "../lib/notify";
 import { PortalContext } from "../lib/portal";
 import { Toaster } from "../ui/toast";
@@ -40,6 +41,7 @@ const watchNothing = () => () => undefined;
 export function ChatProvider({
 	locale,
 	theme = "auto",
+	color,
 	notify,
 	children,
 }: {
@@ -47,6 +49,8 @@ export function ChatProvider({
 	locale?: string;
 	// "auto" follows the page: dark when its <html> has the class "dark" or data-theme="dark"
 	theme?: ChatTheme;
+	// One of the chat's own colours, for its buttons and what is selected; without it, the theme's
+	color?: ChatColor;
 	// Shows the chat's notices with the app's own toasts, in place of the chat's
 	notify?: Notify;
 	children: ReactNode;
@@ -74,18 +78,39 @@ export function ChatProvider({
 		return () => element.remove();
 	}, []);
 
+	// Menus and toasts are drawn outside the chat: they take its theme and its colour too
 	useEffect(() => {
-		container?.setAttribute("data-theme", resolvedTheme);
-	}, [container, resolvedTheme]);
+		if (!container) {
+			return;
+		}
+
+		const variables = chatColorVariables(color, resolvedTheme);
+
+		container.setAttribute("data-theme", resolvedTheme);
+
+		for (const [name, value] of Object.entries(variables)) {
+			container.style.setProperty(name, value);
+		}
+
+		return () => {
+			for (const name of Object.keys(variables)) {
+				container.style.removeProperty(name);
+			}
+		};
+	}, [container, resolvedTheme, color]);
 
 	const content = (
-		<div className={ROOT_CLASS} data-theme={resolvedTheme} style={{ display: "contents" }}>
+		<div
+			className={ROOT_CLASS}
+			data-theme={resolvedTheme}
+			style={{ display: "contents", ...chatColorStyle(color, resolvedTheme) }}
+		>
 			{children}
 		</div>
 	);
 
 	return (
-		<IntlProvider
+		<ChatIntlProvider
 			locale={locale ?? browserLocale ?? chatLocale}
 			messages={messagesFor(chatLocale)}
 			timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
@@ -95,6 +120,6 @@ export function ChatProvider({
 					{notify ? content : <Toaster>{content}</Toaster>}
 				</NotifyContext.Provider>
 			</PortalContext.Provider>
-		</IntlProvider>
+		</ChatIntlProvider>
 	);
 }

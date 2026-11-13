@@ -1,4 +1,4 @@
-import type { AbstractIntlMessages } from "use-intl";
+import type { AbstractIntlMessages } from "use-intl/core";
 
 import de from "./messages/de.json";
 import en from "./messages/en.json";

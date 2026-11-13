@@ -1,5 +1,59 @@
 {
 	"chat": {
+		"newChat": "Neuer Chat",
+		"untitled": "Neue Unterhaltung",
+		"notFound": "Unterhaltung nicht gefunden.",
+		"readOnly": "Du kannst diesen Agenten nicht mehr nutzen: Die Unterhaltung bleibt lesbar.",
+		"agentUnavailable": "Dieser Agent ist nicht verfügbar.",
+		"history": {
+			"title": "Unterhaltungen",
+			"empty": "Noch keine Unterhaltungen.",
+			"search": "Suchen",
+			"noResults": "Keine Unterhaltungen gefunden.",
+			"groups": {
+				"pinned": "Angeheftet",
+				"today": "Heute",
+				"yesterday": "Gestern",
+				"week": "Letzte 7 Tage",
+				"month": "Letzte 30 Tage",
+				"older": "Älter"
+			},
+			"actions": {
+				"more": "Aktionen für „{title}“",
+				"rename": "Umbenennen",
+				"renameLabel": "Neuer Titel",
+				"pin": "Anheften",
+				"unpin": "Lösen",
+				"delete": "Löschen",
+				"deleteTitle": "„{title}“ löschen?",
+				"deleteMessage": "Die Unterhaltung und ihre Dateien werden endgültig gelöscht.",
+				"cancel": "Abbrechen",
+				"error": "Die Änderung konnte nicht gespeichert werden."
+			}
+		},
+		"controls": {
+			"noModel": "Kein Modell verfügbar",
+			"modelError": "Das Modell konnte nicht gewechselt werden."
+		},
+		"modelCost": {
+			"title": "Nutzungsverbrauch",
+			"levels": {
+				"low": "Niedrig",
+				"moderate": "Mäßig",
+				"high": "Hoch",
+				"veryHigh": "Sehr hoch"
+			}
+		},
+		"budget": {
+			"warning": "Sie haben {percent} % Ihres Monatsbudgets verbraucht.",
+			"exhausted": "Sie haben Ihr Monatsbudget aufgebraucht: Sie können nur mit den Reservemodellen weitermachen.",
+			"request": "Budgeterhöhung anfragen",
+			"requestDescription": "Die Anfrage geht an die Admins der Organisation, die Sie in ein Profil mit mehr Budget verschieben können.",
+			"note": "Notiz (optional)",
+			"send": "Anfrage senden",
+			"requestSent": "Anfrage gesendet",
+			"requestError": "Die Anfrage konnte nicht gesendet werden."
+		},
 		"composer": {
 			"placeholder": "Nachricht schreiben…",
 			"attach": "Dateien anhängen",
@@ -35,6 +89,11 @@
 			"allow": "Erlauben",
 			"refuse": "Ablehnen"
 		},
+		"question": {
+			"other": "Andere",
+			"otherPlaceholder": "Eigene Antwort schreiben",
+			"send": "Senden"
+		},
 		"usage": {
 			"tokens": "{count, number} Token"
 		},
@@ -66,7 +125,6 @@
 			"close": "Vorschau schließen",
 			"loading": "Vorschau wird geladen…",
 			"failed": "Die Vorschau konnte nicht geladen werden: Lade die Datei herunter, um sie zu öffnen.",
-			"unavailable": "Für diesen Dateityp gibt es keine Vorschau: Lade die Datei herunter, um sie zu öffnen.",
 			"sheets": "Tabellenblätter",
 			"truncated": "Die ersten {count} Zeilen werden angezeigt.",
 			"downloadFile": "{name} herunterladen",

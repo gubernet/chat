@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { formPartSchema } from "./form";
+import { answersPartSchema, questionPartSchema } from "./questions";
 
 // "agent" is a sub-agent: a copy of the agent working on a part of the answer
 export const CHAT_STEP_KINDS = ["file", "tool", "skill", "web", "agent"] as const;
@@ -84,6 +85,9 @@ export const chatEventSchema = z.discriminatedUnion("type", [
 		stepId: z.string(),
 		input: z.record(z.string(), z.unknown()),
 	}),
+	// The agent asks the user questions with options: the answer ends, and the
+	// user's answers are their next message
+	questionPartSchema,
 	fileEventSchema,
 	usageEventSchema,
 	z.object({ type: z.literal("error"), code: z.enum(CHAT_ERROR_CODES) }),
@@ -112,6 +116,9 @@ export const chatPartSchema = z.discriminatedUnion("type", [
 	z.object({ type: z.literal("notice"), code: z.enum(CHAT_NOTICE_CODES) }),
 	// A user's message that is a filled-in form
 	formPartSchema,
+	// The agent's questions, and a user's message that answers them
+	questionPartSchema,
+	answersPartSchema,
 ]);
 
 /**

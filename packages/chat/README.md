@@ -17,6 +17,46 @@ Requires React 19.
 ```tsx
 "use client";
 
+import { GubernetChat } from "@gubernet/chat";
+
+import "@gubernet/chat/styles.css";
+
+export function AgentChat() {
+	return (
+		<div style={{ height: 600 }}>
+			<GubernetChat url="https://app.example.com" agentId="…" />
+		</div>
+	);
+}
+```
+
+`GubernetChat` is the whole chat of an agent: a new chat or one of the user's conversations with
+it, its model and the conversations had before. The chat fills the height of its container.
+
+The user is the one signed in to the installation at `url`: this version works on the
+installation's own site.
+
+| Prop                   | Default  | What it does                                                                             |
+| ---------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `url`                  | —        | The address of the Gubernet installation.                                                |
+| `agentId`              | —        | The agent to chat with.                                                                  |
+| `conversationId`       | —        | The conversation to open; without it, a new chat.                                        |
+| `onConversationChange` | —        | Called with the conversation the chat is on, `null` for a new chat.                      |
+| `history`              | `"menu"` | Where the conversations are: `"menu"` in the bar, `"panel"` beside the chat, `"hidden"`. |
+| `locale`               | browser  | A language tag, as `it` or `it-IT`.                                                      |
+| `theme`                | `"auto"` | `"light"`, `"dark"`, or `"auto"`.                                                        |
+| `hideTitle`            | `false`  | Without the agent's name in the bar.                                                     |
+| `hideModel`            | `false`  | Without the choice of the model.                                                         |
+| `color`                | —        | `"blue"`, `"indigo"`, `"violet"`, `"pink"`, `"red"`, `"orange"`, `"green"` or `"teal"`.  |
+| `notify`               | —        | Shows the chat's notices with your own toasts, in place of the chat's.                   |
+
+## Your own transport
+
+The chat alone, connected to an agent by a transport of yours:
+
+```tsx
+"use client";
+
 import {
 	ChatProvider,
 	ChatRuntimeProvider,
@@ -48,7 +88,7 @@ export function AgentChat({ transport }: { transport: ChatTransport }) {
 }
 ```
 
-`ChatProvider` goes around every chat. The chat fills the height of its container.
+`ChatProvider` goes around every chat.
 
 A `ChatTransport` connects the chat to an agent: `send`, `respond` and `stop`, plus the optional
 `regenerate`, `load` and `follow`. Each call returns the events of a turn, typed in

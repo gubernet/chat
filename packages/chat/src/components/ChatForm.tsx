@@ -2,7 +2,6 @@
 
 import { FileIcon, PaperclipIcon, XIcon } from "lucide-react";
 import { type ReactNode, useId, useRef, useState } from "react";
-import { useTranslations } from "use-intl";
 
 import {
 	checkFormField,
@@ -15,6 +14,7 @@ import {
 	isFormField,
 } from "../contract/form";
 import { MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS_PER_MESSAGE } from "../contract/limits";
+import { useTranslations } from "../i18n/intl";
 import { useNotify } from "../lib/notify";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";

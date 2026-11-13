@@ -3,8 +3,8 @@
 import { MessageSquareQuoteIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { useTranslations } from "use-intl";
 
+import { useTranslations } from "../i18n/intl";
 import { passageOf } from "../lib/references";
 import { Button } from "../ui/button";
 

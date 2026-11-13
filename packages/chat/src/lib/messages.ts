@@ -52,7 +52,8 @@ type StepPart = Extract<ChatMessage["parts"][number], { type: "step" }>;
 /**
  * The message as assistant-ui renders it: steps become tool calls that carry
  * the step, with the confirmation as an approval, and the steps of a
- * sub-agent go inside its own; the plan, files and notices become data parts.
+ * sub-agent go inside its own; the plan, files, notices and the agent's
+ * questions become data parts.
  */
 export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 	const quoted = quoteOf(message);
@@ -68,6 +69,8 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 
 	// A form shows as the form itself, not among the parts
 	const form = parts.find((part) => part.type === "form");
+	// Answers to the agent's questions show as their own short message
+	const answers = parts.find((part) => part.type === "answers");
 	const subagents = new Set(
 		parts.flatMap((part) => (part.type === "step" && part.kind === "agent" ? [part.id] : [])),
 	);
@@ -115,7 +118,10 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 					return [{ type: "data-file", data: part }];
 				case "notice":
 					return [{ type: "data-notice", data: part }];
+				case "question":
+					return [{ type: "data-question", data: part }];
 				case "form":
+				case "answers":
 					return [];
 			}
 		}),
@@ -134,6 +140,7 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 				errorCode: message.errorCode,
 				...(quoted && { quote: quoted.quote }),
 				...(form && { form }),
+				...(answers && { answers }),
 			},
 		},
 	};

@@ -60,6 +60,68 @@ describe("chat messages", () => {
 		]);
 	});
 
+	it("ends the answer with the agent's questions, and shows the answers as the user's message", () => {
+		const questions = [
+			{
+				question: "In che formato?",
+				header: "Formato",
+				options: [{ label: "Sintesi" }, { label: "Report" }],
+				multiSelect: false,
+			},
+		];
+		let message = applyChatEvent(createAssistantMessage("answer-1"), {
+			type: "text",
+			delta: "Prima una scelta.",
+		});
+
+		message = applyChatEvent(message, { type: "question", id: "call-1", questions });
+		message = applyChatEvent(message, { type: "question", id: "call-1", questions });
+		message = applyChatEvent(message, { type: "end", reason: "completed" });
+
+		expect(message.status).toBe("complete");
+		expect(toThreadMessage(message).content).toEqual([
+			{ type: "text", text: "Prima una scelta." },
+			{ type: "data-question", data: { type: "question", id: "call-1", questions } },
+		]);
+
+		const answers = {
+			type: "answers" as const,
+			answers: [{ question: "In che formato?", header: "Formato", selected: ["Sintesi"] }],
+		};
+		const reply = toThreadMessage(createUserMessage("user-2", "", [], answers));
+
+		expect(reply.content).toEqual([]);
+		expect(reply.metadata?.custom).toMatchObject({ answers });
+	});
+
+	it("keeps the PDF a Word document is shown as, with the file", () => {
+		const file = {
+			id: "file-1",
+			name: "Contratto.docx",
+			mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			size: 12_000,
+			url: "https://app.example.com/api/conversations/c1/files/file-1",
+		};
+		const withPreview = applyChatEvent(createAssistantMessage("answer-1"), {
+			type: "file",
+			...file,
+			previewUrl: `${file.url}/preview`,
+		});
+		const without = applyChatEvent(createAssistantMessage("answer-2"), {
+			type: "file",
+			...file,
+		});
+
+		expect(toThreadMessage(withPreview).content).toEqual([
+			{
+				type: "data-file",
+				data: { type: "file", ...file, previewUrl: `${file.url}/preview` },
+			},
+		]);
+		// A file without one says nothing of a preview
+		expect(without.parts).toEqual([{ type: "file", ...file }]);
+	});
+
 	it("sums the usage of the turn, without a cost for the tenant's own key", () => {
 		const usage = {
 			type: "usage",

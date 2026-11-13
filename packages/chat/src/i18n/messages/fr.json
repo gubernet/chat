@@ -1,5 +1,59 @@
 {
 	"chat": {
+		"newChat": "Nouveau chat",
+		"untitled": "Nouvelle conversation",
+		"notFound": "Conversation introuvable.",
+		"readOnly": "Vous ne pouvez plus utiliser cet agent : la conversation reste lisible.",
+		"agentUnavailable": "Cet agent n'est pas disponible.",
+		"history": {
+			"title": "Conversations",
+			"empty": "Aucune conversation pour l'instant.",
+			"search": "Rechercher",
+			"noResults": "Aucune conversation trouvée.",
+			"groups": {
+				"pinned": "Épinglées",
+				"today": "Aujourd'hui",
+				"yesterday": "Hier",
+				"week": "7 derniers jours",
+				"month": "30 derniers jours",
+				"older": "Plus anciennes"
+			},
+			"actions": {
+				"more": "Actions pour « {title} »",
+				"rename": "Renommer",
+				"renameLabel": "Nouveau titre",
+				"pin": "Épingler",
+				"unpin": "Désépingler",
+				"delete": "Supprimer",
+				"deleteTitle": "Supprimer « {title} » ?",
+				"deleteMessage": "La conversation et ses fichiers sont supprimés définitivement.",
+				"cancel": "Annuler",
+				"error": "La modification n'a pas pu être enregistrée."
+			}
+		},
+		"controls": {
+			"noModel": "Aucun modèle disponible",
+			"modelError": "Impossible de changer de modèle."
+		},
+		"modelCost": {
+			"title": "Consommation d'utilisation",
+			"levels": {
+				"low": "Faible",
+				"moderate": "Modérée",
+				"high": "Élevée",
+				"veryHigh": "Très élevée"
+			}
+		},
+		"budget": {
+			"warning": "Vous avez utilisé {percent} % de votre budget du mois.",
+			"exhausted": "Vous avez épuisé votre budget du mois : vous pouvez continuer seulement avec les modèles de réserve.",
+			"request": "Demander une augmentation du budget",
+			"requestDescription": "La demande arrive aux admins de l'organisation, qui peuvent vous déplacer vers un profil avec plus de budget.",
+			"note": "Note (facultative)",
+			"send": "Envoyer la demande",
+			"requestSent": "Demande envoyée",
+			"requestError": "Impossible d'envoyer la demande."
+		},
 		"composer": {
 			"placeholder": "Écris un message…",
 			"attach": "Joindre des fichiers",
@@ -35,6 +89,11 @@
 			"allow": "Autoriser",
 			"refuse": "Refuser"
 		},
+		"question": {
+			"other": "Autre",
+			"otherPlaceholder": "Écrivez votre réponse",
+			"send": "Envoyer"
+		},
 		"usage": {
 			"tokens": "{count, number} tokens"
 		},
@@ -66,7 +125,6 @@
 			"close": "Fermer l'aperçu",
 			"loading": "Chargement de l'aperçu…",
 			"failed": "L'aperçu n'a pas pu être chargé : téléchargez le fichier pour l'ouvrir.",
-			"unavailable": "Ce type de fichier n'a pas d'aperçu : téléchargez-le pour l'ouvrir.",
 			"sheets": "Feuilles",
 			"truncated": "Les {count} premières lignes sont affichées.",
 			"downloadFile": "Télécharger {name}",

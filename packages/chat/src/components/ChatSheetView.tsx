@@ -2,8 +2,8 @@
 
 import { MessageSquareQuoteIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "use-intl";
 
+import { useTranslations } from "../i18n/intl";
 import { cellRange, columnName } from "../lib/references";
 import { Button } from "../ui/button";
 import { cn } from "../ui/cn";

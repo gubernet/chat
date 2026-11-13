@@ -18,10 +18,11 @@ import {
 	PencilIcon,
 	RefreshCwIcon,
 } from "lucide-react";
-import { useFormatter, useTranslations } from "use-intl";
 
 import { MAX_RUNNING_ANSWERS } from "../contract/events";
 import type { FormPart } from "../contract/form";
+import { answerText, type AnswersPart, type QuestionPart } from "../contract/questions";
+import { useFormatter, useTranslations } from "../i18n/intl";
 import type {
 	ChatErrorCode,
 	ChatFile,
@@ -37,6 +38,7 @@ import { ChatComposerQuote } from "./ChatComposer";
 import { ChatFileLink } from "./ChatFileLink";
 import { FormMessage, useChatOptions } from "./ChatFormMessages";
 import { ChatPlanList } from "./ChatPlan";
+import { ChatQuestion } from "./ChatQuestion";
 import { ChatStepRow, ChatSteps } from "./ChatSteps";
 import { MarkdownText } from "./MarkdownText";
 
@@ -56,12 +58,34 @@ function UserMessage() {
 	const form = useAuiState(
 		(s) => (s.message.metadata.custom.form as FormPart | undefined) ?? null,
 	);
+	const answers = useAuiState(
+		(s) => (s.message.metadata.custom.answers as AnswersPart | undefined) ?? null,
+	);
 
 	// A form: only "Form compilato", which opens on the form
 	if (form) {
 		return (
 			<MessagePrimitive.Root className="flex flex-col items-end gap-2">
 				<FormMessage part={form} versions={<Versions />} />
+			</MessagePrimitive.Root>
+		);
+	}
+
+	// The answers to the agent's questions: one line per question
+	if (answers) {
+		return (
+			<MessagePrimitive.Root className="flex flex-col items-end gap-2">
+				<div className="max-w-[85%] rounded-2xl bg-muted px-4 py-2 text-base break-words whitespace-pre-wrap">
+					{answers.answers.map((answer) => (
+						<p key={answer.question}>
+							<span className="text-muted-foreground">{answer.header}:</span>{" "}
+							{answerText(answer)}
+						</p>
+					))}
+				</div>
+				<div className="-me-2 flex min-h-8 items-center gap-1">
+					<Versions />
+				</div>
 			</MessagePrimitive.Root>
 		);
 	}
@@ -206,6 +230,10 @@ function AssistantMessage() {
 
 							if (part.name === "plan") {
 								return <ChatPlanList plan={part.data as ChatPlan} />;
+							}
+
+							if (part.name === "question") {
+								return <ChatQuestion part={part.data as QuestionPart} />;
 							}
 
 							return part.name === "file" ? (
