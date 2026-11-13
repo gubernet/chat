@@ -1,0 +1,51 @@
+/*
+ * The chat's stylesheet. scripts/build-css.mjs compiles it and writes every
+ * rule under .gubernet-chat, so it neither changes the page around the chat
+ * nor is changed by it.
+ */
+@import "tailwindcss";
+@import "./animate.css";
+@import "./theme.css";
+@import "katex/dist/katex.min.css";
+@import "react-pdf/dist/Page/TextLayer.css";
+
+@source "../components";
+@source "../ui";
+/* The classes of Streamdown's code blocks, formulas and diagrams */
+@source "../../node_modules/streamdown/dist/*.js";
+
+/* The chat's own theme, never the page's: ChatProvider sets it */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+	/* The page's font, unless --gubernet-font names another */
+	--font-sans: var(--gubernet-font, inherit);
+	/* The chat's sparkles while the agent works */
+	--animate-twinkle: twinkle 1.4s ease-in-out infinite;
+
+	@keyframes twinkle {
+		0%,
+		100% {
+			opacity: 0.25;
+			transform: scale(0.6);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+}
+
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--border);
+	}
+
+	svg.lucide {
+		stroke-width: 1.5;
+	}
+}

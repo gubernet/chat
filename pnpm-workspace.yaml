@@ -1,0 +1,12 @@
+packages:
+    - packages/*
+
+# A release younger than a day is not installed
+minimumReleaseAge: 1440
+
+overrides:
+    # Everywhere, so formulas render with the version of the stylesheet the chat ships
+    katex: ^0.18.2
+
+allowBuilds:
+    esbuild: true

@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+
+# build
+dist/
+*.tsbuildinfo
+
+# testing
+coverage
+
+# misc
+.DS_Store
+*.pem
+*.tgz
+
+# debug
+npm-debug.log*
+
+# local env files
+.env
+.env.local

@@ -1,0 +1,112 @@
+/*
+ * The chat's colours and corners. Each one can be set from the page with a
+ * --gubernet-* variable, on :root or on any element around the chat; :root
+ * here becomes .gubernet-chat in the built stylesheet.
+ */
+@layer base {
+	:root {
+		--gray-50: var(--color-olive-50);
+		--gray-100: var(--color-olive-100);
+		--gray-200: var(--color-olive-200);
+		--gray-300: var(--color-olive-300);
+		--gray-400: var(--color-olive-400);
+		--gray-500: var(--color-olive-500);
+		--gray-600: var(--color-olive-600);
+		--gray-700: var(--color-olive-700);
+		--gray-800: var(--color-olive-800);
+		--gray-900: var(--color-olive-900);
+		--gray-950: var(--color-olive-950);
+
+		--border: var(--gubernet-border, var(--gray-200));
+		--input: var(--gubernet-input, var(--gray-200));
+		--ring: var(--gubernet-ring, var(--gray-400));
+		--background: var(--gubernet-background, var(--gray-50));
+		--foreground: var(--gubernet-foreground, var(--gray-950));
+		--primary: var(--gubernet-primary, var(--gray-950));
+		--primary-foreground: var(--gubernet-primary-foreground, var(--gray-50));
+		--secondary: var(--gubernet-secondary, var(--gray-100));
+		--secondary-foreground: var(--gubernet-secondary-foreground, var(--gray-900));
+		--destructive: var(--gubernet-destructive, var(--color-red-700));
+		--destructive-foreground: var(--gubernet-destructive-foreground, var(--color-white));
+		--success: var(--gubernet-success, var(--color-green-800));
+		--success-foreground: var(--gubernet-success-foreground, var(--color-white));
+		--warning: var(--gubernet-warning, var(--color-yellow-700));
+		--warning-foreground: var(--gubernet-warning-foreground, var(--color-white));
+		--muted: var(--gubernet-muted, var(--gray-100));
+		--muted-foreground: var(--gubernet-muted-foreground, var(--gray-600));
+		--accent: var(--gubernet-accent, var(--gray-100));
+		--accent-foreground: var(--gubernet-accent-foreground, var(--gray-900));
+		--touch: var(--gubernet-touch, oklch(0.51 0.12 128));
+		--touch-foreground: var(--gubernet-touch-foreground, oklch(0.99 0.01 128));
+		--popover: var(--gubernet-popover, var(--color-white));
+		--popover-foreground: var(--gubernet-popover-foreground, var(--gray-950));
+		--card: var(--gubernet-card, var(--color-white));
+		--card-foreground: var(--gubernet-card-foreground, var(--gray-950));
+		--radius: var(--gubernet-radius, 0.625rem);
+
+		color: var(--foreground);
+	}
+
+	:root[data-theme="dark"] {
+		--border: var(--gubernet-border, var(--gray-800));
+		--input: var(--gubernet-input, var(--gray-800));
+		--ring: var(--gubernet-ring, var(--gray-500));
+		--background: var(--gubernet-background, var(--gray-950));
+		--foreground: var(--gubernet-foreground, var(--gray-50));
+		--primary: var(--gubernet-primary, var(--gray-50));
+		--primary-foreground: var(--gubernet-primary-foreground, var(--gray-950));
+		--secondary: var(--gubernet-secondary, var(--gray-800));
+		--secondary-foreground: var(--gubernet-secondary-foreground, var(--gray-50));
+		--destructive: var(--gubernet-destructive, var(--color-red-400));
+		--destructive-foreground: var(--gubernet-destructive-foreground, var(--color-white));
+		--success: var(--gubernet-success, var(--color-green-400));
+		--success-foreground: var(--gubernet-success-foreground, var(--gray-950));
+		--warning: var(--gubernet-warning, var(--color-yellow-500));
+		--warning-foreground: var(--gubernet-warning-foreground, var(--gray-950));
+		--muted: var(--gubernet-muted, var(--gray-900));
+		--muted-foreground: var(--gubernet-muted-foreground, var(--gray-400));
+		--accent: var(--gubernet-accent, var(--gray-900));
+		--accent-foreground: var(--gubernet-accent-foreground, var(--gray-50));
+		--touch: var(--gubernet-touch, oklch(0.76 0.11 128));
+		--touch-foreground: var(--gubernet-touch-foreground, oklch(0.22 0.04 128));
+		--popover: var(--gubernet-popover, var(--gray-900));
+		--popover-foreground: var(--gubernet-popover-foreground, var(--gray-50));
+		--card: var(--gubernet-card, var(--gray-900));
+		--card-foreground: var(--gubernet-card-foreground, var(--gray-50));
+	}
+}
+
+@theme {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-touch: var(--touch);
+	--color-touch-foreground: var(--touch-foreground);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}

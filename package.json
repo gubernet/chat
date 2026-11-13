@@ -1,0 +1,23 @@
+{
+	"name": "gubernet-chat",
+	"private": true,
+	"scripts": {
+		"build": "pnpm -r build",
+		"format": "oxfmt .",
+		"format:check": "oxfmt --check .",
+		"lint": "oxlint .",
+		"lint:fix": "oxlint --fix .",
+		"test": "pnpm -r test",
+		"type-check": "pnpm -r type-check"
+	},
+	"devDependencies": {
+		"oxfmt": "^0.75.0",
+		"oxlint": "^1.90.0",
+		"oxlint-tsgolint": "^7.0.2005",
+		"typescript": "7.0.2"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"packageManager": "pnpm@12.4.2"
+}

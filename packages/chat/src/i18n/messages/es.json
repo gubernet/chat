@@ -1,0 +1,109 @@
+{
+	"chat": {
+		"composer": {
+			"placeholder": "Escribe un mensaje…",
+			"attach": "Adjuntar archivos",
+			"removeAttachment": "Quitar {name}",
+			"send": "Enviar",
+			"stop": "Detener",
+			"removeQuote": "Quitar la referencia",
+			"dictate": "Dictar",
+			"stopDictation": "Detener y transcribir",
+			"transcribing": "Transcribiendo…",
+			"dictationErrors": {
+				"microphone": "El micrófono no está disponible: revisa los permisos del navegador.",
+				"failed": "No se pudo transcribir el audio.",
+				"limit": "El dictado se detuvo tras 5 minutos."
+			}
+		},
+		"steps": {
+			"count": "{count, plural, one {# paso} other {# pasos}}",
+			"kinds": {
+				"file": "Leído",
+				"tool": "Herramienta",
+				"skill": "Skill",
+				"web": "Web",
+				"agent": "Subagente"
+			},
+			"refused": "Rechazado"
+		},
+		"plan": {
+			"progress": "Plan {done} de {total}"
+		},
+		"confirmation": {
+			"title": "El agente quiere usar {tool}",
+			"allow": "Permitir",
+			"refuse": "Rechazar"
+		},
+		"usage": {
+			"tokens": "{count, number} tokens"
+		},
+		"stopped": "Detenido",
+		"errors": {
+			"engine_unavailable": "El motor de los agentes aún no está activo.",
+			"internal": "Algo salió mal. Inténtalo de nuevo.",
+			"interrupted": "La respuesta se interrumpió.",
+			"too_many_running": "Ya tienes {max} respuestas en curso: espera a que termine una o detenla."
+		},
+		"notices": {
+			"restarted": "Reanudada en un nuevo entorno",
+			"modelChanged": "Reanudada con un nuevo modelo"
+		},
+		"actions": {
+			"copy": "Copiar",
+			"edit": "Editar",
+			"cancel": "Cancelar",
+			"send": "Enviar",
+			"previousVersion": "Versión anterior",
+			"nextVersion": "Versión siguiente",
+			"regenerate": "Regenerar",
+			"retry": "Reintentar"
+		},
+		"scrollToBottom": "Ir al final",
+		"preview": {
+			"open": "Abrir la vista previa de {name}",
+			"download": "Descargar",
+			"close": "Cerrar la vista previa",
+			"loading": "Cargando la vista previa…",
+			"failed": "No se pudo cargar la vista previa: descarga el archivo para abrirlo.",
+			"unavailable": "Este tipo de archivo no tiene vista previa: descárgalo para abrirlo.",
+			"sheets": "Hojas",
+			"truncated": "Se muestran las primeras {count} filas.",
+			"downloadFile": "Descargar {name}",
+			"fullScreen": "Pantalla completa",
+			"exitFullScreen": "Salir de pantalla completa",
+			"view": "Vista",
+			"rendered": "Vista previa",
+			"code": "Código",
+			"page": "Página {number}",
+			"slide": "Diapositiva {number}",
+			"askPage": "Preguntar sobre esta página",
+			"askSlide": "Preguntar sobre esta diapositiva",
+			"askPassage": "Preguntar sobre este texto",
+			"askCells": "Preguntar sobre estas celdas",
+			"pageOf": "{name} · página {number}",
+			"slideOf": "{name} · diapositiva {number}",
+			"cellsOf": "{name} · {range}",
+			"passage": "«{text}»"
+		},
+		"form": {
+			"filled": "Formulario completado",
+			"send": "Enviar",
+			"generate": "Generar",
+			"cancel": "Cancelar",
+			"edit": "Editar",
+			"stop": "Detener",
+			"required": "Campo obligatorio.",
+			"invalid": "Valor no válido.",
+			"choose": "Elige…",
+			"addFiles": "Añadir archivos",
+			"removeFile": "Quitar {name}",
+			"noFile": "Ningún archivo",
+			"fileTooLarge": "{name} es demasiado grande.",
+			"fileTypeNotAccepted": "{name}: este tipo de archivo no se acepta.",
+			"tooManyFiles": "Como máximo {max} archivos por envío.",
+			"noFiles": "No se ha producido ningún archivo",
+			"resultHint": "Completa el formulario y pulsa Generar: aquí aparecerán los archivos producidos."
+		}
+	}
+}

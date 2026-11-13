@@ -1,0 +1,109 @@
+{
+	"chat": {
+		"composer": {
+			"placeholder": "Écris un message…",
+			"attach": "Joindre des fichiers",
+			"removeAttachment": "Retirer {name}",
+			"send": "Envoyer",
+			"stop": "Arrêter",
+			"removeQuote": "Retirer la référence",
+			"dictate": "Dicter",
+			"stopDictation": "Arrêter et transcrire",
+			"transcribing": "Transcription…",
+			"dictationErrors": {
+				"microphone": "Le micro n'est pas disponible : vérifiez les autorisations du navigateur.",
+				"failed": "Impossible de transcrire l'audio.",
+				"limit": "La dictée s'est arrêtée après 5 minutes."
+			}
+		},
+		"steps": {
+			"count": "{count, plural, one {# étape} other {# étapes}}",
+			"kinds": {
+				"file": "Lu",
+				"tool": "Outil",
+				"skill": "Skill",
+				"web": "Web",
+				"agent": "Sous-agent"
+			},
+			"refused": "Refusé"
+		},
+		"plan": {
+			"progress": "Plan {done} sur {total}"
+		},
+		"confirmation": {
+			"title": "L'agent veut utiliser {tool}",
+			"allow": "Autoriser",
+			"refuse": "Refuser"
+		},
+		"usage": {
+			"tokens": "{count, number} tokens"
+		},
+		"stopped": "Arrêté",
+		"errors": {
+			"engine_unavailable": "Le moteur des agents n'est pas encore actif.",
+			"internal": "Une erreur est survenue. Réessaie.",
+			"interrupted": "La réponse a été interrompue.",
+			"too_many_running": "Tu as déjà {max} réponses en cours : attends qu'une se termine ou arrête-la."
+		},
+		"notices": {
+			"restarted": "Reprise dans un nouvel environnement",
+			"modelChanged": "Reprise avec un nouveau modèle"
+		},
+		"actions": {
+			"copy": "Copier",
+			"edit": "Modifier",
+			"cancel": "Annuler",
+			"send": "Envoyer",
+			"previousVersion": "Version précédente",
+			"nextVersion": "Version suivante",
+			"regenerate": "Régénérer",
+			"retry": "Réessayer"
+		},
+		"scrollToBottom": "Revenir en bas",
+		"preview": {
+			"open": "Ouvrir l'aperçu de {name}",
+			"download": "Télécharger",
+			"close": "Fermer l'aperçu",
+			"loading": "Chargement de l'aperçu…",
+			"failed": "L'aperçu n'a pas pu être chargé : téléchargez le fichier pour l'ouvrir.",
+			"unavailable": "Ce type de fichier n'a pas d'aperçu : téléchargez-le pour l'ouvrir.",
+			"sheets": "Feuilles",
+			"truncated": "Les {count} premières lignes sont affichées.",
+			"downloadFile": "Télécharger {name}",
+			"fullScreen": "Plein écran",
+			"exitFullScreen": "Quitter le plein écran",
+			"view": "Affichage",
+			"rendered": "Aperçu",
+			"code": "Code",
+			"page": "Page {number}",
+			"slide": "Diapositive {number}",
+			"askPage": "Demander sur cette page",
+			"askSlide": "Demander sur cette diapositive",
+			"askPassage": "Demander sur ce texte",
+			"askCells": "Demander sur ces cellules",
+			"pageOf": "{name} · page {number}",
+			"slideOf": "{name} · diapositive {number}",
+			"cellsOf": "{name} · {range}",
+			"passage": "« {text} »"
+		},
+		"form": {
+			"filled": "Formulaire rempli",
+			"send": "Envoyer",
+			"generate": "Générer",
+			"cancel": "Annuler",
+			"edit": "Modifier",
+			"stop": "Arrêter",
+			"required": "Champ obligatoire.",
+			"invalid": "Valeur non valide.",
+			"choose": "Choisir…",
+			"addFiles": "Ajouter des fichiers",
+			"removeFile": "Retirer {name}",
+			"noFile": "Aucun fichier",
+			"fileTooLarge": "{name} est trop volumineux.",
+			"fileTypeNotAccepted": "{name} : ce type de fichier n'est pas accepté.",
+			"tooManyFiles": "{max} fichiers au maximum par envoi.",
+			"noFiles": "Aucun fichier produit",
+			"resultHint": "Remplis le formulaire et appuie sur Générer : les fichiers produits apparaîtront ici."
+		}
+	}
+}

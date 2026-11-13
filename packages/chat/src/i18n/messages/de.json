@@ -1,0 +1,109 @@
+{
+	"chat": {
+		"composer": {
+			"placeholder": "Nachricht schreiben…",
+			"attach": "Dateien anhängen",
+			"removeAttachment": "{name} entfernen",
+			"send": "Senden",
+			"stop": "Stoppen",
+			"removeQuote": "Verweis entfernen",
+			"dictate": "Diktieren",
+			"stopDictation": "Beenden und transkribieren",
+			"transcribing": "Wird transkribiert…",
+			"dictationErrors": {
+				"microphone": "Das Mikrofon ist nicht verfügbar: Prüfe die Berechtigungen des Browsers.",
+				"failed": "Das Audio konnte nicht transkribiert werden.",
+				"limit": "Das Diktat wurde nach 5 Minuten beendet."
+			}
+		},
+		"steps": {
+			"count": "{count, plural, one {# Schritt} other {# Schritte}}",
+			"kinds": {
+				"file": "Gelesen",
+				"tool": "Werkzeug",
+				"skill": "Skill",
+				"web": "Web",
+				"agent": "Unteragent"
+			},
+			"refused": "Abgelehnt"
+		},
+		"plan": {
+			"progress": "Plan {done} von {total}"
+		},
+		"confirmation": {
+			"title": "Der Agent möchte {tool} verwenden",
+			"allow": "Erlauben",
+			"refuse": "Ablehnen"
+		},
+		"usage": {
+			"tokens": "{count, number} Token"
+		},
+		"stopped": "Gestoppt",
+		"errors": {
+			"engine_unavailable": "Die Agenten-Engine ist noch nicht aktiv.",
+			"internal": "Etwas ist schiefgelaufen. Versuche es erneut.",
+			"interrupted": "Die Antwort wurde unterbrochen.",
+			"too_many_running": "Du hast bereits {max} laufende Antworten: Warte, bis eine fertig ist, oder stoppe sie."
+		},
+		"notices": {
+			"restarted": "In einer neuen Umgebung fortgesetzt",
+			"modelChanged": "Mit einem neuen Modell fortgesetzt"
+		},
+		"actions": {
+			"copy": "Kopieren",
+			"edit": "Bearbeiten",
+			"cancel": "Abbrechen",
+			"send": "Senden",
+			"previousVersion": "Vorherige Version",
+			"nextVersion": "Nächste Version",
+			"regenerate": "Neu generieren",
+			"retry": "Erneut versuchen"
+		},
+		"scrollToBottom": "Nach unten",
+		"preview": {
+			"open": "Vorschau von {name} öffnen",
+			"download": "Herunterladen",
+			"close": "Vorschau schließen",
+			"loading": "Vorschau wird geladen…",
+			"failed": "Die Vorschau konnte nicht geladen werden: Lade die Datei herunter, um sie zu öffnen.",
+			"unavailable": "Für diesen Dateityp gibt es keine Vorschau: Lade die Datei herunter, um sie zu öffnen.",
+			"sheets": "Tabellenblätter",
+			"truncated": "Die ersten {count} Zeilen werden angezeigt.",
+			"downloadFile": "{name} herunterladen",
+			"fullScreen": "Vollbild",
+			"exitFullScreen": "Vollbild beenden",
+			"view": "Ansicht",
+			"rendered": "Vorschau",
+			"code": "Code",
+			"page": "Seite {number}",
+			"slide": "Folie {number}",
+			"askPage": "Zu dieser Seite fragen",
+			"askSlide": "Zu dieser Folie fragen",
+			"askPassage": "Zu diesem Text fragen",
+			"askCells": "Zu diesen Zellen fragen",
+			"pageOf": "{name} · Seite {number}",
+			"slideOf": "{name} · Folie {number}",
+			"cellsOf": "{name} · {range}",
+			"passage": "„{text}“"
+		},
+		"form": {
+			"filled": "Formular ausgefüllt",
+			"send": "Senden",
+			"generate": "Erstellen",
+			"cancel": "Abbrechen",
+			"edit": "Bearbeiten",
+			"stop": "Stoppen",
+			"required": "Pflichtfeld.",
+			"invalid": "Ungültiger Wert.",
+			"choose": "Auswählen…",
+			"addFiles": "Dateien hinzufügen",
+			"removeFile": "{name} entfernen",
+			"noFile": "Keine Datei",
+			"fileTooLarge": "{name} ist zu groß.",
+			"fileTypeNotAccepted": "{name}: Dieser Dateityp wird nicht akzeptiert.",
+			"tooManyFiles": "Höchstens {max} Dateien pro Senden.",
+			"noFiles": "Keine Dateien erstellt",
+			"resultHint": "Formular ausfüllen und auf Erstellen klicken: Hier erscheinen die erstellten Dateien."
+		}
+	}
+}

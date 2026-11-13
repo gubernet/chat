@@ -1,0 +1,116 @@
+"use client";
+
+import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import * as React from "react";
+
+import { usePortalContainer } from "../lib/portal";
+import { cn } from "./cn";
+
+/** Base UI `Select.Root`. Pass `items` ({ value, label }[]) so `SelectValue` shows labels, not raw values. */
+const Select = SelectPrimitive.Root;
+
+const SelectGroup = SelectPrimitive.Group;
+
+const SelectValue = SelectPrimitive.Value;
+
+const SelectTrigger = ({
+	className,
+	children,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Trigger>) => (
+	<SelectPrimitive.Trigger
+		className={cn(
+			"flex h-9 w-full items-center justify-between rounded-xl border border-input bg-card px-3 py-2 text-base shadow-xs ring-offset-background placeholder:text-foreground/60 focus:ring-1 focus:ring-ring focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+			className,
+		)}
+		{...props}
+	>
+		{children}
+		<SelectPrimitive.Icon render={<ChevronsUpDownIcon className="size-4 opacity-50" />} />
+	</SelectPrimitive.Trigger>
+);
+
+const SelectContent = ({
+	className,
+	children,
+	footer,
+	sideOffset = 4,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Popup> & {
+	sideOffset?: number;
+	/** Stays under the items, outside their scrolling list. */
+	footer?: React.ReactNode;
+}) => (
+	<SelectPrimitive.Portal container={usePortalContainer()}>
+		<SelectPrimitive.Positioner
+			side="bottom"
+			sideOffset={sideOffset}
+			align="center"
+			className="z-50"
+		>
+			<SelectPrimitive.Backdrop />
+			<SelectPrimitive.Popup
+				className={cn(
+					"relative z-50 min-w-(--anchor-width) overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-md data-[closed]:animate-out data-[closed]:fade-out-0 data-[closed]:zoom-out-95 data-[open]:animate-in data-[open]:fade-in-0 data-[open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+					className,
+				)}
+				{...props}
+			>
+				<SelectPrimitive.List className="max-h-[min(24rem,var(--available-height))] scroll-py-1 p-1 outline-none">
+					{children}
+				</SelectPrimitive.List>
+				{footer}
+			</SelectPrimitive.Popup>
+		</SelectPrimitive.Positioner>
+	</SelectPrimitive.Portal>
+);
+
+const SelectLabel = ({
+	className,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Label>) => (
+	<SelectPrimitive.Label
+		className={cn("px-2 py-1.5 text-sm font-semibold", className)}
+		{...props}
+	/>
+);
+
+const SelectItem = ({
+	className,
+	children,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Item>) => (
+	<SelectPrimitive.Item
+		className={cn(
+			"relative flex w-full cursor-default items-center rounded-md py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50",
+			className,
+		)}
+		{...props}
+	>
+		<span className="absolute right-2 flex size-3.5 items-center justify-center">
+			<SelectPrimitive.ItemIndicator>
+				<CheckIcon className="size-4" />
+			</SelectPrimitive.ItemIndicator>
+		</span>
+		<SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+	</SelectPrimitive.Item>
+);
+
+const SelectSeparator = ({
+	className,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Separator>) => (
+	<SelectPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
+);
+
+export {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectSeparator,
+	SelectTrigger,
+	SelectValue,
+};

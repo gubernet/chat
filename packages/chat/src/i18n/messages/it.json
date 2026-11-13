@@ -1,0 +1,109 @@
+{
+	"chat": {
+		"composer": {
+			"placeholder": "Scrivi un messaggio…",
+			"attach": "Allega file",
+			"removeAttachment": "Togli {name}",
+			"send": "Invia",
+			"stop": "Ferma",
+			"removeQuote": "Togli il riferimento",
+			"dictate": "Detta",
+			"stopDictation": "Ferma e trascrivi",
+			"transcribing": "Trascrivo…",
+			"dictationErrors": {
+				"microphone": "Il microfono non è disponibile: controlla i permessi del browser.",
+				"failed": "Impossibile trascrivere l'audio.",
+				"limit": "La dettatura si è fermata dopo 5 minuti."
+			}
+		},
+		"steps": {
+			"count": "{count, plural, one {# passo} other {# passi}}",
+			"kinds": {
+				"file": "Letto",
+				"tool": "Strumento",
+				"skill": "Skill",
+				"web": "Web",
+				"agent": "Sotto-agente"
+			},
+			"refused": "Rifiutato"
+		},
+		"plan": {
+			"progress": "Piano {done} di {total}"
+		},
+		"confirmation": {
+			"title": "L'agente vuole usare {tool}",
+			"allow": "Consenti",
+			"refuse": "Rifiuta"
+		},
+		"usage": {
+			"tokens": "{count, number} token"
+		},
+		"stopped": "Interrotto",
+		"errors": {
+			"engine_unavailable": "Il motore degli agenti non è ancora attivo.",
+			"internal": "Qualcosa è andato storto. Riprova.",
+			"interrupted": "La risposta si è interrotta.",
+			"too_many_running": "Hai già {max} risposte in corso: aspetta che una finisca o fermala."
+		},
+		"notices": {
+			"restarted": "Ripresa su un nuovo ambiente",
+			"modelChanged": "Ripresa su un nuovo modello"
+		},
+		"actions": {
+			"copy": "Copia",
+			"edit": "Modifica",
+			"cancel": "Annulla",
+			"send": "Invia",
+			"previousVersion": "Versione precedente",
+			"nextVersion": "Versione successiva",
+			"regenerate": "Rigenera",
+			"retry": "Riprova"
+		},
+		"scrollToBottom": "Torna in fondo",
+		"preview": {
+			"open": "Apri l'anteprima di {name}",
+			"download": "Scarica",
+			"close": "Chiudi l'anteprima",
+			"loading": "Carico l'anteprima…",
+			"failed": "Non è stato possibile caricare l'anteprima: scarica il file per aprirlo.",
+			"unavailable": "Per questo tipo di file non c'è un'anteprima: scaricalo per aprirlo.",
+			"sheets": "Fogli",
+			"truncated": "Sono mostrate le prime {count} righe.",
+			"downloadFile": "Scarica {name}",
+			"fullScreen": "Schermo intero",
+			"exitFullScreen": "Esci dallo schermo intero",
+			"view": "Vista",
+			"rendered": "Anteprima",
+			"code": "Codice",
+			"page": "Pagina {number}",
+			"slide": "Slide {number}",
+			"askPage": "Chiedi su questa pagina",
+			"askSlide": "Chiedi su questa slide",
+			"askPassage": "Chiedi su questo testo",
+			"askCells": "Chiedi su queste celle",
+			"pageOf": "{name} · pagina {number}",
+			"slideOf": "{name} · slide {number}",
+			"cellsOf": "{name} · {range}",
+			"passage": "«{text}»"
+		},
+		"form": {
+			"filled": "Form compilato",
+			"send": "Invia",
+			"generate": "Genera",
+			"cancel": "Annulla",
+			"edit": "Modifica",
+			"stop": "Ferma",
+			"required": "Campo obbligatorio.",
+			"invalid": "Valore non valido.",
+			"choose": "Scegli…",
+			"addFiles": "Aggiungi file",
+			"removeFile": "Togli {name}",
+			"noFile": "Nessun file",
+			"fileTooLarge": "{name} è troppo grande.",
+			"fileTypeNotAccepted": "{name}: questo tipo di file non è accettato.",
+			"tooManyFiles": "Al massimo {max} file per invio.",
+			"noFiles": "Nessun file prodotto",
+			"resultHint": "Compila il form e premi Genera: qui compariranno i file prodotti."
+		}
+	}
+}

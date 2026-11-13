@@ -1,0 +1,109 @@
+{
+	"chat": {
+		"composer": {
+			"placeholder": "Write a message…",
+			"attach": "Attach files",
+			"removeAttachment": "Remove {name}",
+			"send": "Send",
+			"stop": "Stop",
+			"removeQuote": "Remove the reference",
+			"dictate": "Dictate",
+			"stopDictation": "Stop and transcribe",
+			"transcribing": "Transcribing…",
+			"dictationErrors": {
+				"microphone": "The microphone is not available: check the browser's permissions.",
+				"failed": "The audio could not be transcribed.",
+				"limit": "The dictation stopped after 5 minutes."
+			}
+		},
+		"steps": {
+			"count": "{count, plural, one {# step} other {# steps}}",
+			"kinds": {
+				"file": "Read",
+				"tool": "Tool",
+				"skill": "Skill",
+				"web": "Web",
+				"agent": "Sub-agent"
+			},
+			"refused": "Refused"
+		},
+		"plan": {
+			"progress": "Plan {done} of {total}"
+		},
+		"confirmation": {
+			"title": "The agent wants to use {tool}",
+			"allow": "Allow",
+			"refuse": "Refuse"
+		},
+		"usage": {
+			"tokens": "{count, number} tokens"
+		},
+		"stopped": "Stopped",
+		"errors": {
+			"engine_unavailable": "The agent engine is not active yet.",
+			"internal": "Something went wrong. Try again.",
+			"interrupted": "The answer was interrupted.",
+			"too_many_running": "You already have {max} answers in progress: wait for one to finish or stop it."
+		},
+		"notices": {
+			"restarted": "Resumed on a new environment",
+			"modelChanged": "Resumed on a new model"
+		},
+		"actions": {
+			"copy": "Copy",
+			"edit": "Edit",
+			"cancel": "Cancel",
+			"send": "Send",
+			"previousVersion": "Previous version",
+			"nextVersion": "Next version",
+			"regenerate": "Regenerate",
+			"retry": "Retry"
+		},
+		"scrollToBottom": "Scroll to bottom",
+		"preview": {
+			"open": "Open the preview of {name}",
+			"download": "Download",
+			"close": "Close the preview",
+			"loading": "Loading the preview…",
+			"failed": "The preview could not be loaded: download the file to open it.",
+			"unavailable": "This type of file has no preview: download it to open it.",
+			"sheets": "Sheets",
+			"truncated": "The first {count} rows are shown.",
+			"downloadFile": "Download {name}",
+			"fullScreen": "Full screen",
+			"exitFullScreen": "Exit full screen",
+			"view": "View",
+			"rendered": "Preview",
+			"code": "Code",
+			"page": "Page {number}",
+			"slide": "Slide {number}",
+			"askPage": "Ask about this page",
+			"askSlide": "Ask about this slide",
+			"askPassage": "Ask about this text",
+			"askCells": "Ask about these cells",
+			"pageOf": "{name} · page {number}",
+			"slideOf": "{name} · slide {number}",
+			"cellsOf": "{name} · {range}",
+			"passage": "“{text}”"
+		},
+		"form": {
+			"filled": "Form filled in",
+			"send": "Send",
+			"generate": "Generate",
+			"cancel": "Cancel",
+			"edit": "Edit",
+			"stop": "Stop",
+			"required": "This field is required.",
+			"invalid": "This value is not valid.",
+			"choose": "Choose…",
+			"addFiles": "Add files",
+			"removeFile": "Remove {name}",
+			"noFile": "No file",
+			"fileTooLarge": "{name} is too large.",
+			"fileTypeNotAccepted": "{name}: this file type is not accepted.",
+			"tooManyFiles": "At most {max} files per submission.",
+			"noFiles": "No files produced",
+			"resultHint": "Fill in the form and press Generate: the files produced appear here."
+		}
+	}
+}
