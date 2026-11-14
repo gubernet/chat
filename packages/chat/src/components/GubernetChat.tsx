@@ -55,6 +55,9 @@ export interface GubernetChatProps {
 	color?: ChatColor;
 	// Shows the chat's notices with the app's own toasts, in place of the chat's
 	notify?: Notify;
+	// What the page puts at the end of the bar on top, as its user's menu: the
+	// chat has nothing of its own there
+	barEnd?: ReactNode;
 }
 
 /**
@@ -74,6 +77,7 @@ export function GubernetChat({
 	theme,
 	color,
 	notify,
+	barEnd,
 }: GubernetChatProps) {
 	const client = useMemo(() => createGubernetClient({ url }), [url]);
 
@@ -89,6 +93,7 @@ export function GubernetChat({
 				history={history}
 				hideTitle={hideTitle}
 				hideModel={hideModel}
+				barEnd={barEnd}
 			/>
 		</ChatProvider>
 	);
@@ -102,6 +107,7 @@ function AgentChatView({
 	history,
 	hideTitle,
 	hideModel,
+	barEnd,
 }: {
 	client: GubernetClient;
 	agentId: string;
@@ -110,6 +116,7 @@ function AgentChatView({
 	history: ChatHistoryPlacement;
 	hideTitle: boolean;
 	hideModel: boolean;
+	barEnd: ReactNode;
 }) {
 	const t = useTranslations("chat");
 	const loadAgent = useCallback(
@@ -184,7 +191,7 @@ function AgentChatView({
 	if (!agentChat.data) {
 		return (
 			<Frame>
-				<Notice>{t("agentUnavailable")}</Notice>
+				<Notice centered>{t("agentUnavailable")}</Notice>
 			</Frame>
 		);
 	}
@@ -212,7 +219,8 @@ function AgentChatView({
 	// With the panel beside the chat, the bar's buttons are only for a narrow screen
 	const inBar = history === "panel" ? "md:hidden" : undefined;
 	// Nothing is left in the bar on a wide screen: it goes away
-	const barClassName = history === "panel" && hideTitle && hideModel ? "md:hidden" : undefined;
+	const barClassName =
+		history === "panel" && hideTitle && hideModel && !barEnd ? "md:hidden" : undefined;
 	const barStart = (
 		<>
 			{!hideTitle && (
@@ -257,6 +265,7 @@ function AgentChatView({
 						chat={chat}
 						conversationId={open.opened}
 						barStart={barStart}
+						barEnd={barEnd}
 						barClassName={barClassName}
 						hideModel={hideModel}
 						transcribe={transcribe}
@@ -275,9 +284,10 @@ function Frame({ children }: { children: ReactNode }) {
 	return <div className="flex h-full flex-col bg-background text-foreground">{children}</div>;
 }
 
-function Notice({ children }: { children: ReactNode }) {
+// Alone in the chat, a notice sits in the middle of its height
+function Notice({ centered, children }: { centered?: boolean; children: ReactNode }) {
 	return (
-		<div className="mx-auto w-full max-w-3xl p-6">
+		<div className={cn("mx-auto w-full max-w-3xl p-6", centered && "my-auto")}>
 			<div className="rounded-xl border bg-card p-8 text-center text-card-foreground">
 				{children}
 			</div>
@@ -321,23 +331,29 @@ function HistoryMenu({
 	);
 }
 
-// The bar on top, what the chat is on the left and its model on the right, and the chat below
+// The bar on top, with what the chat is and its model on the left and what the
+// page adds on the right, and the chat below
 function SessionFrame({
 	start,
+	model,
 	end,
 	className,
 	children,
 }: {
 	start: ReactNode;
-	end?: ReactNode;
+	model?: ReactNode;
+	end: ReactNode;
 	className?: string;
 	children: ReactNode;
 }) {
 	return (
 		<div className="flex h-full flex-col">
 			<div className={cn("flex min-h-14 items-center gap-3 border-b px-4 py-2", className)}>
-				<div className="flex min-w-0 flex-1 items-center gap-1">{start}</div>
-				<div className="flex shrink-0 items-center gap-2">{end}</div>
+				<div className="flex min-w-0 flex-1 items-center gap-1">
+					{start}
+					{model}
+				</div>
+				{end && <div className="flex shrink-0 items-center gap-2">{end}</div>}
 			</div>
 			<div className="min-h-0 flex-1">{children}</div>
 		</div>
@@ -348,6 +364,7 @@ interface SessionProps {
 	client: GubernetClient;
 	chat: AgentChat;
 	barStart: ReactNode;
+	barEnd: ReactNode;
 	barClassName: string | undefined;
 	hideModel: boolean;
 	transcribe: Transcribe | undefined;
@@ -362,7 +379,7 @@ function ChatSession({
 	...session
 }: SessionProps & { conversationId: string | null }) {
 	const t = useTranslations("chat");
-	const { client, chat, barStart, barClassName } = session;
+	const { client, chat, barStart, barEnd, barClassName } = session;
 	const load = useCallback(
 		(signal: AbortSignal) => client.findConversation(conversationId ?? "", signal),
 		[client, conversationId],
@@ -375,7 +392,7 @@ function ChatSession({
 
 	if (conversation.isLoading) {
 		return (
-			<SessionFrame start={barStart} className={barClassName}>
+			<SessionFrame start={barStart} end={barEnd} className={barClassName}>
 				<div className="mx-auto w-full max-w-3xl p-6">
 					<Skeleton className="h-64 w-full" />
 				</div>
@@ -386,7 +403,7 @@ function ChatSession({
 	// Not the user's, deleted, or of another agent
 	if (!conversation.data || conversation.data.agent?.id !== chat.agent.id) {
 		return (
-			<SessionFrame start={barStart} className={barClassName}>
+			<SessionFrame start={barStart} end={barEnd} className={barClassName}>
 				<Notice>{t("notFound")}</Notice>
 			</SessionFrame>
 		);
@@ -408,6 +425,7 @@ function OpenSession({
 	chat,
 	conversation,
 	barStart,
+	barEnd,
 	barClassName,
 	hideModel,
 	transcribe,
@@ -506,8 +524,9 @@ function OpenSession({
 	return (
 		<SessionFrame
 			start={barStart}
+			end={barEnd}
 			className={barClassName}
-			end={
+			model={
 				!hideModel && (
 					<ChatModelPicker
 						models={agent.models}

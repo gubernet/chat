@@ -49,6 +49,10 @@ installation's own site.
 | `hideModel`            | `false`  | Without the choice of the model.                                                         |
 | `color`                | —        | `"blue"`, `"indigo"`, `"violet"`, `"pink"`, `"red"`, `"orange"`, `"green"` or `"teal"`.  |
 | `notify`               | —        | Shows the chat's notices with your own toasts, in place of the chat's.                   |
+| `barEnd`               | —        | What your app puts at the end of the bar, as its user's menu.                            |
+
+The bar on top has the agent's name, the new chat, the conversations and the model on the left.
+Its right end is your app's.
 
 ## Your own transport
 

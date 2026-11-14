@@ -58,7 +58,7 @@ export function ChatModelPicker({
 				}
 			/>
 			<DropdownMenuContent
-				align="end"
+				align="start"
 				// Wide enough for the four bands of the cost bar
 				className="w-80"
 				finalFocus={chatComposerInput}

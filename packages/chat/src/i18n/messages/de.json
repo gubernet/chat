@@ -4,7 +4,7 @@
 		"untitled": "Neue Unterhaltung",
 		"notFound": "Unterhaltung nicht gefunden.",
 		"readOnly": "Du kannst diesen Agenten nicht mehr nutzen: Die Unterhaltung bleibt lesbar.",
-		"agentUnavailable": "Dieser Agent ist nicht verfügbar.",
+		"agentUnavailable": "Agent nicht verfügbar.",
 		"history": {
 			"title": "Unterhaltungen",
 			"empty": "Noch keine Unterhaltungen.",

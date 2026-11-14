@@ -6,6 +6,20 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-14
+
+### Added
+
+- **`barEnd`** on `GubernetChat`: what the app puts at the end of the bar on top, as its user's
+  menu. The chat has nothing of its own there.
+
+### Changed
+
+- The choice of the model is on the left of the bar, after the agent's name, the new chat and the
+  conversations: the right end of the bar is the app's.
+- The notice of an agent the user cannot open is shorter, "Agent unavailable.", and sits in the
+  middle of the chat's height.
+
 ## [0.2.0] - 2026-11-13
 
 ### Added
@@ -53,6 +67,7 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/gubernet/chat/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/gubernet/chat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/gubernet/chat/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/gubernet/chat/releases/tag/v0.1.0

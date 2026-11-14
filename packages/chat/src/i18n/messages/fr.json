@@ -4,7 +4,7 @@
 		"untitled": "Nouvelle conversation",
 		"notFound": "Conversation introuvable.",
 		"readOnly": "Vous ne pouvez plus utiliser cet agent : la conversation reste lisible.",
-		"agentUnavailable": "Cet agent n'est pas disponible.",
+		"agentUnavailable": "Agent indisponible.",
 		"history": {
 			"title": "Conversations",
 			"empty": "Aucune conversation pour l'instant.",
