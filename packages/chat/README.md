@@ -157,3 +157,5 @@ messages they build, the agents' forms and the limits on attachments, as
 ## License
 
 [Apache-2.0](https://github.com/gubernet/chat/blob/main/LICENSE)
+
+The logos of the models come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) (MIT).

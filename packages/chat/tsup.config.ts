@@ -18,6 +18,8 @@ export default defineConfig([
 		outDir: "dist",
 		// The PDF view loads only when a PDF opens
 		splitting: true,
+		// The models' logos are written into the code
+		loader: { ".svg": "dataurl" },
 		banner: { js: '"use client";' },
 	},
 	// The contract, without React and without "use client": a server imports it too.

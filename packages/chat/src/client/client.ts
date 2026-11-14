@@ -12,6 +12,9 @@ import { readEventIterator } from "./sse";
 export interface ChatAgentModel {
 	code: string;
 	name: string;
+	// The family the model belongs to, as "claude" or "mistral", which gives it its
+	// logo; an installation before this one doesn't say it
+	family?: string;
 	// How expensive the model is next to the others, from 0 to 1
 	costLevel: number | null;
 	// Whether the budgets leave it for now

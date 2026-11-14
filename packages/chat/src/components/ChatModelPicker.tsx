@@ -15,6 +15,7 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { chatComposerInput } from "./ChatComposer";
+import { ModelLogo } from "./ModelLogo";
 
 /**
  * The model of the chat, in the bar on top: it opens on the agent's models the
@@ -52,7 +53,8 @@ export function ChatModelPicker({
 						variant="ghost"
 						className="h-10 gap-2 rounded-xl px-2.5 text-sm font-normal disabled:opacity-100 [&>svg]:mr-0"
 					>
-						<span className="max-w-40 truncate">{modelName}</span>
+						<ModelLogo family={model?.family} />
+						<span className="max-w-40 truncate text-xs">{modelName}</span>
 						<ChevronDownIcon className="size-4 text-muted-foreground" />
 					</Button>
 				}
