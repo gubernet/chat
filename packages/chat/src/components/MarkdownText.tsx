@@ -97,8 +97,8 @@ function MarkdownTextImpl() {
 
 export const MarkdownText = memo(MarkdownTextImpl);
 
-// A Markdown file the agent delivered, written as its answers are
-export function MarkdownDocument({ text }: { text: string }) {
+// A Markdown text written as the answers are: a file the agent delivered, a value to confirm
+export function MarkdownDocument({ text, className }: { text: string; className?: string }) {
 	return (
 		<Streamdown
 			mode="static"
@@ -106,7 +106,7 @@ export function MarkdownDocument({ text }: { text: string }) {
 			controls={controls}
 			linkSafety={linkSafety}
 			components={components}
-			className="p-6 text-sm break-words"
+			className={cn("p-6 text-sm break-words", className)}
 		>
 			{text}
 		</Streamdown>

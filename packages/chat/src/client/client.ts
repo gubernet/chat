@@ -7,6 +7,7 @@ import type { AnswerEvent, ChatAttachment } from "../contract/events";
 import type { FormElement, FormResult, FormValues } from "../contract/form";
 import type { ChatMessage } from "../contract/messages";
 import type { Answer } from "../contract/questions";
+import { type ChatAuth, ChatSignedOutError, cookieAuth } from "./auth";
 import { readEventIterator } from "./sse";
 
 export interface ChatAgentModel {
@@ -119,11 +120,17 @@ export interface GubernetClientOptions {
 	url: string;
 	// Another fetch, for a test or a server
 	fetch?: typeof fetch;
+	// How the requests carry the user's session: the installation's cookie by default
+	auth?: ChatAuth;
 }
 
 export type GubernetClient = ReturnType<typeof createGubernetClient>;
 
-export function createGubernetClient({ url, fetch: customFetch }: GubernetClientOptions) {
+export function createGubernetClient({
+	url,
+	fetch: customFetch,
+	auth = cookieAuth,
+}: GubernetClientOptions) {
 	const base = url.replace(/\/+$/, "");
 	const send: typeof fetch = (input, init) => (customFetch ?? fetch)(input, init);
 
@@ -131,30 +138,34 @@ export function createGubernetClient({ url, fetch: customFetch }: GubernetClient
 	const absolute = <T extends string | null>(address: T) =>
 		address?.startsWith("/") ? (`${base}${address}` as T) : address;
 
-	const request = async (
-		path: string,
-		{ method = "GET", query, body, signal }: RequestOptions,
-	) => {
-		const params = new URLSearchParams();
-
-		for (const [name, value] of Object.entries(query ?? {})) {
-			if (value !== undefined) {
-				params.set(name, String(value));
-			}
-		}
-
-		const search = params.size ? `?${params}` : "";
+	// A request with the session; a session refused is asked again once
+	const requestAt = async (
+		address: string,
+		{ method = "GET", body, signal }: Omit<RequestOptions, "query">,
+		retried = false,
+	): Promise<Response> => {
+		const session = await auth.request().catch((error: unknown) => {
+			throw error instanceof ChatSignedOutError
+				? new GubernetApiError(401, "SIGNED_OUT", error.message)
+				: error;
+		});
 		const isForm = body instanceof FormData;
-		const response = await send(`${base}/api${path}${search}`, {
+		const response = await send(address, {
 			method,
-			credentials: "include",
+			credentials: session.credentials,
 			headers: {
 				accept: "application/json, text/event-stream",
 				...(body !== undefined && !isForm && { "content-type": "application/json" }),
+				...session.headers,
 			},
 			body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
 			signal,
 		});
+
+		if (response.status === 401 && !retried && (await auth.renew())) {
+			await response.body?.cancel();
+			return requestAt(address, { method, body, signal }, true);
+		}
 
 		if (!response.ok) {
 			throw toApiError(response.status, await response.json().catch(() => null));
@@ -163,14 +174,32 @@ export function createGubernetClient({ url, fetch: customFetch }: GubernetClient
 		return response;
 	};
 
+	const request = (path: string, { query, ...options }: RequestOptions) => {
+		const params = new URLSearchParams();
+
+		for (const [name, value] of Object.entries(query ?? {})) {
+			if (value !== undefined) {
+				params.set(name, String(value));
+			}
+		}
+
+		return requestAt(`${base}/api${path}${params.size ? `?${params}` : ""}`, options);
+	};
+
+	// The installation's own addresses, which alone get the session's token
+	const installation = base ? new URL(base).origin : null;
+
 	const json = async <T>(path: string, options: RequestOptions = {}) => {
 		const text = await (await request(path, options)).text();
 
 		return (text ? JSON.parse(text) : undefined) as T;
 	};
 
-	// A turn: its events as they come, until it ends or the signal stops it
+	// A turn: its events as they come, until it ends or the signal stops it. The
+	// app's latest token reaches the session first
 	const events = async (path: string, options: RequestOptions) => {
+		await auth.beforeTurn();
+
 		const response = await request(path, options);
 
 		if (!response.body) {
@@ -183,6 +212,34 @@ export function createGubernetClient({ url, fetch: customFetch }: GubernetClient
 	const id = encodeURIComponent;
 
 	return {
+		auth,
+
+		/**
+		 * A link the page can open to a file of a conversation. With the cookie the
+		 * file's own address; with a token, which an image or a download cannot
+		 * carry, a signed link of the file, valid for 15 minutes.
+		 */
+		async fileLink(address: string, signal?: AbortSignal) {
+			if (auth.mode === "cookie" || !installation) {
+				return address;
+			}
+
+			const target = new URL(address, base);
+
+			// The token goes to the installation alone
+			if (target.origin !== installation) {
+				return address;
+			}
+
+			target.searchParams.set("link", "true");
+
+			const { url: link } = (await (
+				await requestAt(target.toString(), { signal })
+			).json()) as { url: string };
+
+			return link;
+		},
+
 		// The agent as the user may chat with it now, with their budget
 		async getAgentChat(agentId: string, signal?: AbortSignal): Promise<AgentChat> {
 			const chat = await json<AgentChat>(`/agents/${id(agentId)}/chat`, { signal });
@@ -266,9 +323,10 @@ export function createGubernetClient({ url, fetch: customFetch }: GubernetClient
 			});
 		},
 
+		// With the values the user changed, which the call goes with
 		respondToConfirmation(
 			conversationId: string,
-			answer: { stepId: string; approved: boolean },
+			answer: { stepId: string; approved: boolean; values?: Record<string, unknown> },
 			signal: AbortSignal,
 		) {
 			return events(`/conversations/${id(conversationId)}/confirmations`, {

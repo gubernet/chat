@@ -4,6 +4,7 @@ import type { FormPart } from "../contract/form";
 import {
 	answerConfirmation,
 	applyChatEvent,
+	confirmedValues,
 	createAssistantMessage,
 	createUserMessage,
 	hasPendingConfirmation,
@@ -58,6 +59,51 @@ describe("chat messages", () => {
 		expect(toThreadMessage(message).content).toMatchObject([
 			{ approval: { id: "step-1", approved: false } },
 		]);
+	});
+
+	it("keeps the tool's description and the values the user allowed the call with", () => {
+		let message = applyChatEvent(createAssistantMessage("answer-1"), step);
+
+		message = applyChatEvent(message, {
+			type: "confirmation",
+			stepId: "step-1",
+			input: { title: "Nota", amount: 10 },
+			description: "Crea una nota sul cliente",
+		});
+		message = answerConfirmation(message, "step-1", true, { title: "Nota breve", amount: 12 });
+
+		expect(message.parts[0]).toMatchObject({
+			confirmation: {
+				input: { title: "Nota", amount: 10 },
+				description: "Crea una nota sul cliente",
+				approved: true,
+				values: { title: "Nota breve", amount: 12 },
+			},
+		});
+		// The changed values come back as the approval's text
+		expect(toThreadMessage(message).content).toMatchObject([
+			{ approval: { id: "step-1", allowFreeform: true, approved: true } },
+		]);
+	});
+
+	it("reads the changed values from the approval's text, an object or nothing", () => {
+		expect(confirmedValues(JSON.stringify({ title: "Nota" }))).toEqual({ title: "Nota" });
+		expect(confirmedValues(undefined)).toBeUndefined();
+		expect(confirmedValues("[1, 2]")).toBeUndefined();
+		expect(confirmedValues("not json")).toBeUndefined();
+	});
+
+	it("closes a confirmation nobody answered in time", () => {
+		let message = applyChatEvent(createAssistantMessage("answer-1"), step);
+
+		message = applyChatEvent(message, { type: "confirmation", stepId: "step-1", input: {} });
+		message = applyChatEvent(message, { type: "end", reason: "confirmation" });
+		message = applyChatEvent(message, { type: "confirmation-expired", stepId: "step-1" });
+
+		expect(hasPendingConfirmation(message)).toBe(false);
+		expect(message.parts[0]).toMatchObject({
+			confirmation: { approved: false, expired: true },
+		});
 	});
 
 	it("ends the answer with the agent's questions, and shows the answers as the user's message", () => {

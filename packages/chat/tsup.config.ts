@@ -1,4 +1,27 @@
-import { defineConfig } from "tsup";
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+
+import { defineConfig, type Options } from "tsup";
+
+type EsbuildPlugin = NonNullable<Options["esbuildPlugins"]>[number];
+
+const RAW = "?raw";
+
+// A file imported with "?raw" is its text, as Vite gives it in the tests
+const rawText: EsbuildPlugin = {
+	name: "raw-text",
+	setup(build) {
+		// Found as Node finds it from the importing file: for esbuild, the packages stay outside
+		build.onResolve({ filter: /\?raw$/ }, ({ path, importer }) => ({
+			path: createRequire(importer).resolve(path.slice(0, -RAW.length)),
+			namespace: "raw-text",
+		}));
+		build.onLoad({ filter: /.*/, namespace: "raw-text" }, async ({ path }) => ({
+			contents: await readFile(path, "utf8"),
+			loader: "text",
+		}));
+	},
+};
 
 const shared = {
 	format: "esm",
@@ -20,6 +43,9 @@ export default defineConfig([
 		splitting: true,
 		// The models' logos are written into the code
 		loader: { ".svg": "dataurl" },
+		// The PDF worker too, in the chunk of the PDF view, though its package stays outside
+		esbuildPlugins: [rawText],
+		noExternal: [/\?raw$/],
 		banner: { js: '"use client";' },
 	},
 	// The contract, without React and without "use client": a server imports it too.

@@ -31,6 +31,23 @@ const THREAD_STATUSES = {
 	error: { type: "incomplete", reason: "error" },
 } as const satisfies Record<ChatMessage["status"], ThreadMessageLike["status"]>;
 
+// The values a user changed in a write tool's card, which come as the approval's text in JSON
+export function confirmedValues(text: string | undefined) {
+	if (!text) {
+		return undefined;
+	}
+
+	try {
+		const values: unknown = JSON.parse(text);
+
+		return values !== null && typeof values === "object" && !Array.isArray(values)
+			? (values as Record<string, unknown>)
+			: undefined;
+	} catch {
+		return undefined;
+	}
+}
+
 // The reference at the top of a user's message, shown and edited apart from its text
 function quoteOf(message: ChatMessage) {
 	const first = message.parts[0];
@@ -105,6 +122,8 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 							...(part.confirmation && {
 								approval: {
 									id: part.id,
+									// The values the user changed come back as the answer's text, in JSON
+									allowFreeform: true,
 									...(part.confirmation.approved !== undefined && {
 										approved: part.confirmation.approved,
 									}),

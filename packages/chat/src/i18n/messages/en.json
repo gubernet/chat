@@ -5,6 +5,8 @@
 		"notFound": "Conversation not found.",
 		"readOnly": "You can no longer use this agent: the conversation stays readable.",
 		"agentUnavailable": "Agent unavailable.",
+		"signIn": "Sign in",
+		"signInFailed": "Sign-in failed.",
 		"history": {
 			"title": "Conversations",
 			"empty": "No conversations yet.",
@@ -79,7 +81,8 @@
 				"web": "Web",
 				"agent": "Sub-agent"
 			},
-			"refused": "Refused"
+			"refused": "Refused",
+			"expired": "Expired"
 		},
 		"plan": {
 			"progress": "Plan {done} of {total}"
@@ -87,7 +90,19 @@
 		"confirmation": {
 			"title": "The agent wants to use {tool}",
 			"allow": "Allow",
-			"refuse": "Refuse"
+			"refuse": "Refuse",
+			"preview": "Preview",
+			"source": "Source",
+			"errors": {
+				"number": "Enter a number.",
+				"json": "This is not valid JSON."
+			},
+			"outcomes": {
+				"allowed": "Allowed",
+				"allowedChanged": "Allowed with changed values",
+				"refused": "Refused",
+				"expired": "Expired: the agent went on without the call"
+			}
 		},
 		"question": {
 			"other": "Other",

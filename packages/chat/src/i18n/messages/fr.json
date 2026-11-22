@@ -5,6 +5,8 @@
 		"notFound": "Conversation introuvable.",
 		"readOnly": "Vous ne pouvez plus utiliser cet agent : la conversation reste lisible.",
 		"agentUnavailable": "Agent indisponible.",
+		"signIn": "Se connecter",
+		"signInFailed": "Échec de la connexion.",
 		"history": {
 			"title": "Conversations",
 			"empty": "Aucune conversation pour l'instant.",
@@ -79,7 +81,8 @@
 				"web": "Web",
 				"agent": "Sous-agent"
 			},
-			"refused": "Refusé"
+			"refused": "Refusé",
+			"expired": "Expiré"
 		},
 		"plan": {
 			"progress": "Plan {done} sur {total}"
@@ -87,7 +90,19 @@
 		"confirmation": {
 			"title": "L'agent veut utiliser {tool}",
 			"allow": "Autoriser",
-			"refuse": "Refuser"
+			"refuse": "Refuser",
+			"preview": "Aperçu",
+			"source": "Source",
+			"errors": {
+				"number": "Saisissez un nombre.",
+				"json": "Ce n'est pas un JSON valide."
+			},
+			"outcomes": {
+				"allowed": "Autorisé",
+				"allowedChanged": "Autorisé avec les valeurs modifiées",
+				"refused": "Refusé",
+				"expired": "Expiré : l'agent a continué sans l'appel"
+			}
 		},
 		"question": {
 			"other": "Autre",

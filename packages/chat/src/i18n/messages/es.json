@@ -5,6 +5,8 @@
 		"notFound": "Conversación no encontrada.",
 		"readOnly": "Ya no puedes usar este agente: la conversación sigue siendo legible.",
 		"agentUnavailable": "Agente no disponible.",
+		"signIn": "Iniciar sesión",
+		"signInFailed": "No se pudo iniciar sesión.",
 		"history": {
 			"title": "Conversaciones",
 			"empty": "Aún no hay conversaciones.",
@@ -79,7 +81,8 @@
 				"web": "Web",
 				"agent": "Subagente"
 			},
-			"refused": "Rechazado"
+			"refused": "Rechazado",
+			"expired": "Caducado"
 		},
 		"plan": {
 			"progress": "Plan {done} de {total}"
@@ -87,7 +90,19 @@
 		"confirmation": {
 			"title": "El agente quiere usar {tool}",
 			"allow": "Permitir",
-			"refuse": "Rechazar"
+			"refuse": "Rechazar",
+			"preview": "Vista previa",
+			"source": "Código",
+			"errors": {
+				"number": "Escribe un número.",
+				"json": "No es un JSON válido."
+			},
+			"outcomes": {
+				"allowed": "Permitido",
+				"allowedChanged": "Permitido con los valores modificados",
+				"refused": "Rechazado",
+				"expired": "Caducado: el agente siguió sin la llamada"
+			}
 		},
 		"question": {
 			"other": "Otra",

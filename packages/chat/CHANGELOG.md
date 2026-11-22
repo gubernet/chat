@@ -6,6 +6,39 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-22
+
+### Added
+
+- **The chat on your own site.** `GubernetChat` works on a site other than the installation's: its
+  requests carry a session of the chat alone, never the installation's cookie.
+    - **`getToken`**: your app's token of the user, an OpenID Connect token of the organization's
+      identity provider, exchanged for the chat's session and given again before each message.
+    - Without it, a visitor sees **Sign in**: the installation's window, through the organization's
+      identity provider, hands the session to your site if it is among the organization's sites. The
+      session stays in the page's `sessionStorage` until the tab closes, 12 hours at most.
+    - Files open through signed links of the installation (`link` on the file's address).
+    - `EMBED_SESSION_MESSAGE` and the session's schemas in `/contract`.
+
+- The card of a tool that writes shows what the tool does (`description` on the `confirmation`
+  event) and lets the user change the agent's values before allowing the call: texts, numbers,
+  yes/no, and lists or objects as JSON. A long text shows as it reads, with its source to edit
+  (Preview / Source). The values the user changed go with the answer (`values` on
+  `respondToConfirmation` and on `ChatTransport.respond`) and stay on the step.
+- **`confirmation-expired`** event: nobody answered in time and the agent went on without the
+  call; the card closes as expired.
+
+### Changed
+
+- The card stays in the conversation once answered, with the outcome: allowed, allowed with the
+  changed values, refused or expired.
+
+### Fixed
+
+- PDF previews, and Word documents and presentations shown as PDF, open with any build, as Vite:
+  the PDF worker is inside the package and starts from the page. A site with a Content Security
+  Policy allows it with `worker-src blob:`.
+
 ## [0.3.1] - 2026-11-14
 
 ### Changed
@@ -75,7 +108,8 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/gubernet/chat/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/gubernet/chat/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/gubernet/chat/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/gubernet/chat/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/gubernet/chat/compare/v0.1.0...v0.2.0

@@ -200,7 +200,32 @@ export function applyChatEvent(message: ChatMessage, event: ChatEvent): ChatMess
 				...message,
 				parts: message.parts.map((part) =>
 					part.type === "step" && part.id === event.stepId
-						? { ...part, confirmation: { input: event.input } }
+						? {
+								...part,
+								confirmation: {
+									input: event.input,
+									...(event.description !== undefined && {
+										description: event.description,
+									}),
+								},
+							}
+						: part,
+				),
+			};
+		// The call never ran, whatever the user answered late
+		case "confirmation-expired":
+			return {
+				...message,
+				parts: message.parts.map((part) =>
+					part.type === "step" && part.id === event.stepId && part.confirmation
+						? {
+								...part,
+								confirmation: {
+									...part.confirmation,
+									approved: false,
+									expired: true,
+								},
+							}
 						: part,
 				),
 			};
@@ -275,17 +300,29 @@ export function closingEvents(message: ChatMessage): AnswerEvent[] {
 	}
 }
 
+/**
+ * The user's answer to a write tool: with the values the call goes with, when
+ * the user changed the agent's.
+ */
 export function answerConfirmation(
 	message: ChatMessage,
 	stepId: string,
 	approved: boolean,
+	values?: Record<string, unknown>,
 ): ChatMessage {
 	return {
 		...message,
 		status: "running",
 		parts: message.parts.map((part) =>
 			part.type === "step" && part.id === stepId && part.confirmation
-				? { ...part, confirmation: { ...part.confirmation, approved } }
+				? {
+						...part,
+						confirmation: {
+							...part.confirmation,
+							approved,
+							...(approved && values !== undefined && { values }),
+						},
+					}
 				: part,
 		),
 	};

@@ -5,6 +5,8 @@
 		"notFound": "Unterhaltung nicht gefunden.",
 		"readOnly": "Du kannst diesen Agenten nicht mehr nutzen: Die Unterhaltung bleibt lesbar.",
 		"agentUnavailable": "Agent nicht verfügbar.",
+		"signIn": "Anmelden",
+		"signInFailed": "Anmeldung fehlgeschlagen.",
 		"history": {
 			"title": "Unterhaltungen",
 			"empty": "Noch keine Unterhaltungen.",
@@ -79,7 +81,8 @@
 				"web": "Web",
 				"agent": "Unteragent"
 			},
-			"refused": "Abgelehnt"
+			"refused": "Abgelehnt",
+			"expired": "Abgelaufen"
 		},
 		"plan": {
 			"progress": "Plan {done} von {total}"
@@ -87,7 +90,19 @@
 		"confirmation": {
 			"title": "Der Agent möchte {tool} verwenden",
 			"allow": "Erlauben",
-			"refuse": "Ablehnen"
+			"refuse": "Ablehnen",
+			"preview": "Vorschau",
+			"source": "Quelltext",
+			"errors": {
+				"number": "Gib eine Zahl ein.",
+				"json": "Das ist kein gültiges JSON."
+			},
+			"outcomes": {
+				"allowed": "Erlaubt",
+				"allowedChanged": "Mit geänderten Werten erlaubt",
+				"refused": "Abgelehnt",
+				"expired": "Abgelaufen: Der Agent hat ohne den Aufruf weitergemacht"
+			}
 		},
 		"question": {
 			"other": "Andere",

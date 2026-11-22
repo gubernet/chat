@@ -23,6 +23,7 @@ import {
 	applyAnswerEvent,
 	type ChatErrorCode,
 	type ChatMessage,
+	confirmedValues,
 	createAssistantMessage,
 	createUserMessage,
 	failMessage,
@@ -69,8 +70,9 @@ export interface ChatTransport {
 		},
 		signal: AbortSignal,
 	): Promise<AsyncIterable<AnswerEvent>>;
+	// The user's answer to a write tool, with the values the user changed
 	respond(
-		answer: { stepId: string; approved: boolean },
+		answer: { stepId: string; approved: boolean; values?: Record<string, unknown> },
 		signal: AbortSignal,
 	): Promise<AsyncIterable<AnswerEvent>>;
 	stop(): Promise<void>;
@@ -374,6 +376,7 @@ export function useChatRuntime({
 	const onRespondToToolApproval = async ({
 		approvalId,
 		approved,
+		text,
 	}: RespondToToolApprovalOptions) => {
 		const message = messages.find(({ parts }) =>
 			parts.some((part) => part.type === "step" && part.id === approvalId),
@@ -383,9 +386,14 @@ export function useChatRuntime({
 			return;
 		}
 
-		update(message.id, (current) => answerConfirmation(current, approvalId, approved));
+		const values = approved ? confirmedValues(text) : undefined;
+
+		update(message.id, (current) => answerConfirmation(current, approvalId, approved, values));
 		void run(message.id, (signal) =>
-			transport.respond({ stepId: approvalId, approved }, signal),
+			transport.respond(
+				{ stepId: approvalId, approved, ...(values !== undefined && { values }) },
+				signal,
+			),
 		);
 	};
 

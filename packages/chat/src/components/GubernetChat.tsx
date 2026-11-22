@@ -2,12 +2,14 @@
 
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { HistoryIcon, SquarePenIcon } from "lucide-react";
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { chatAuthFor } from "../client/auth";
 import {
 	type AgentChat,
 	type ChatAgent,
 	createGubernetClient,
+	GubernetApiError,
 	type GubernetClient,
 	type SavedConversation,
 } from "../client/client";
@@ -15,6 +17,7 @@ import { createConversationTransport, toChatTreeMessage } from "../client/transp
 import { useTranslations } from "../i18n/intl";
 import type { ChatColor } from "../lib/colors";
 import type { Transcribe } from "../lib/dictation";
+import { type FileLinks, FileLinksProvider } from "../lib/file-links";
 import { type Notify, useNotify } from "../lib/notify";
 import { useChatRuntime } from "../lib/use-chat-runtime";
 import { useResource } from "../lib/use-resource";
@@ -58,12 +61,20 @@ export interface GubernetChatProps {
 	// What the page puts at the end of the bar on top, as its user's menu: the
 	// chat has nothing of its own there
 	barEnd?: ReactNode;
+	/**
+	 * On a site other than the installation's: the user's token in the app, an
+	 * OpenID Connect token of the tenant's identity provider for one of the
+	 * audiences the tenant accepts. Asked for again before each message.
+	 * Without it, a visitor signs in with the "Accedi" window.
+	 */
+	getToken?: () => Promise<string | null | undefined>;
 }
 
 /**
  * The whole chat of an agent of a Gubernet installation: a new chat or one of
  * the user's conversations with the agent, its model and the conversations
- * had before. The user is the one signed in to the installation.
+ * had before. The user is the one signed in to the installation: on its own
+ * address with its cookie, elsewhere with a session of the chat alone.
  */
 export function GubernetChat({
 	url,
@@ -78,23 +89,45 @@ export function GubernetChat({
 	color,
 	notify,
 	barEnd,
+	getToken,
 }: GubernetChatProps) {
-	const client = useMemo(() => createGubernetClient({ url }), [url]);
+	// The page's latest getToken, without a new session at each render
+	const getTokenRef = useRef(getToken);
+	const withToken = getToken !== undefined;
+
+	useEffect(() => {
+		getTokenRef.current = getToken;
+	}, [getToken]);
+
+	const client = useMemo(() => {
+		const readToken = async () => (await getTokenRef.current?.()) ?? null;
+		// The ref is read when the session asks for a token, never while rendering
+		// oxlint-disable-next-line react/refs
+		const auth = chatAuthFor({ url, agentId, getToken: withToken ? readToken : undefined });
+
+		return createGubernetClient({ url, auth });
+	}, [url, agentId, withToken]);
+	const fileLinks = useMemo<FileLinks>(
+		() => (client.auth.mode === "cookie" ? null : (address) => client.fileLink(address)),
+		[client],
+	);
 
 	return (
 		<ChatProvider locale={locale} theme={theme} color={color} notify={notify}>
-			<AgentChatView
-				// Another agent is another chat
-				key={agentId}
-				client={client}
-				agentId={agentId}
-				conversationId={conversationId}
-				onConversationChange={onConversationChange}
-				history={history}
-				hideTitle={hideTitle}
-				hideModel={hideModel}
-				barEnd={barEnd}
-			/>
+			<FileLinksProvider value={fileLinks}>
+				<AgentChatView
+					// Another agent is another chat
+					key={agentId}
+					client={client}
+					agentId={agentId}
+					conversationId={conversationId}
+					onConversationChange={onConversationChange}
+					history={history}
+					hideTitle={hideTitle}
+					hideModel={hideModel}
+					barEnd={barEnd}
+				/>
+			</FileLinksProvider>
 		</ChatProvider>
 	);
 }
@@ -189,9 +222,22 @@ function AgentChatView({
 	}
 
 	if (!agentChat.data) {
+		const signedOut = isSignedOut(client, agentChat.error);
+
+		// "Accedi" alone, in the middle of the chat
+		if (signedOut && client.auth.signIn) {
+			return (
+				<Frame>
+					<div className="m-auto p-6">
+						<SignInButton signIn={client.auth.signIn} onSignedIn={agentChat.reload} />
+					</div>
+				</Frame>
+			);
+		}
+
 		return (
 			<Frame>
-				<Notice centered>{t("agentUnavailable")}</Notice>
+				<Notice centered>{signedOut ? t("signInFailed") : t("agentUnavailable")}</Notice>
 			</Frame>
 		);
 	}
@@ -276,6 +322,50 @@ function AgentChatView({
 				</div>
 			</div>
 		</Frame>
+	);
+}
+
+/**
+ * Whether the chat lacks a session, rather than the agent: on another site,
+ * none was given yet, it ended, or the window's is of another tenant.
+ */
+function isSignedOut(client: GubernetClient, error: unknown) {
+	return (
+		client.auth.mode !== "cookie" &&
+		error instanceof GubernetApiError &&
+		(error.status === 401 || (client.auth.mode === "window" && error.status === 403))
+	);
+}
+
+// "Accedi": the installation's window, then the agent again
+function SignInButton({
+	signIn,
+	onSignedIn,
+}: {
+	signIn: () => Promise<boolean>;
+	onSignedIn: () => void;
+}) {
+	const t = useTranslations("chat");
+	const [signingIn, setSigningIn] = useState(false);
+
+	return (
+		<Button
+			variant="primary"
+			loading={signingIn}
+			onClick={async () => {
+				setSigningIn(true);
+
+				const signedIn = await signIn();
+
+				setSigningIn(false);
+
+				if (signedIn) {
+					onSignedIn();
+				}
+			}}
+		>
+			{t("signIn")}
+		</Button>
 	);
 }
 

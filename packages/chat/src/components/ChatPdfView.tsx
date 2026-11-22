@@ -1,6 +1,9 @@
 "use client";
 
 import { MessageSquareQuoteIcon } from "lucide-react";
+// The worker's text, which the build writes here (tsup.config.ts): the file itself has no default
+// oxlint-disable-next-line import/default
+import workerSource from "pdfjs-dist/build/pdf.worker.min.mjs?raw";
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -8,11 +11,11 @@ import { useTranslations } from "../i18n/intl";
 import { passageOf } from "../lib/references";
 import { Button } from "../ui/button";
 
-// Set here, where the pages are drawn, as React-PDF asks
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-	"pdfjs-dist/build/pdf.worker.min.mjs",
-	import.meta.url,
-).toString();
+// Set here, where the pages are drawn, as React-PDF asks. The worker is inside
+// the package and starts from the page itself: no file for the site's build to find
+pdfjs.GlobalWorkerOptions.workerSrc = URL.createObjectURL(
+	new Blob([workerSource], { type: "text/javascript" }),
+);
 
 // Wider pages would only be harder to read, in full screen
 const MAX_PAGE_WIDTH = 960;

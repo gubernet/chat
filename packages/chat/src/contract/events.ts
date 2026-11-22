@@ -79,12 +79,17 @@ export const chatEventSchema = z.discriminatedUnion("type", [
 	z.object({ type: z.literal("text"), delta: z.string() }),
 	stepEventSchema,
 	planEventSchema,
-	// A write tool waits for the user: the turn ends and goes on with the answer
+	// A write tool waits for the user: the turn ends and goes on with the answer.
+	// The values are the agent's; the user may change them before allowing it
 	z.object({
 		type: z.literal("confirmation"),
 		stepId: z.string(),
 		input: z.record(z.string(), z.unknown()),
+		// What the tool does, as its system describes it
+		description: z.string().max(2000).optional(),
 	}),
+	// Nobody answered in time: the agent went on without the call
+	z.object({ type: z.literal("confirmation-expired"), stepId: z.string() }),
 	// The agent asks the user questions with options: the answer ends, and the
 	// user's answers are their next message
 	questionPartSchema,
@@ -107,7 +112,12 @@ export const chatPartSchema = z.discriminatedUnion("type", [
 		confirmation: z
 			.object({
 				input: z.record(z.string(), z.unknown()),
+				description: z.string().optional(),
 				approved: z.boolean().optional(),
+				// The values the user allowed the call with, when they changed the agent's
+				values: z.record(z.string(), z.unknown()).optional(),
+				// Nobody answered in time: the agent went on without the call
+				expired: z.boolean().optional(),
 			})
 			.optional(),
 	}),

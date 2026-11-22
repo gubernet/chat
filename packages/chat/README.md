@@ -33,13 +33,14 @@ export function AgentChat() {
 `GubernetChat` is the whole chat of an agent: a new chat or one of the user's conversations with
 it, its model and the conversations had before. The chat fills the height of its container.
 
-The user is the one signed in to the installation at `url`: this version works on the
-installation's own site.
+The user is the one signed in to the installation at `url`. See [Sign-in](#sign-in) for the chat
+on your own site.
 
 | Prop                   | Default  | What it does                                                                             |
 | ---------------------- | -------- | ---------------------------------------------------------------------------------------- |
 | `url`                  | —        | The address of the Gubernet installation.                                                |
 | `agentId`              | —        | The agent to chat with.                                                                  |
+| `getToken`             | —        | On your own site: the user's token in your app. See [Sign-in](#sign-in).                 |
 | `conversationId`       | —        | The conversation to open; without it, a new chat.                                        |
 | `onConversationChange` | —        | Called with the conversation the chat is on, `null` for a new chat.                      |
 | `history`              | `"menu"` | Where the conversations are: `"menu"` in the bar, `"panel"` beside the chat, `"hidden"`. |
@@ -53,6 +54,34 @@ installation's own site.
 
 The bar on top has the agent's name, the new chat, the conversations and the model on the left.
 Its right end is your app's.
+
+## Sign-in
+
+On the installation's own site the chat uses its session. On your site, which the browser does not
+send that session to, the chat signs the user in one of two ways. Either way, the session opens
+only the chat of the agent's organization, and the user is the same as in Gubernet: same
+conversations, same access rules, same budget.
+
+**With your app's token.** If your users sign in to your app with the organization's identity
+provider (OpenID Connect), pass the token your app already has:
+
+```tsx
+<GubernetChat url="https://app.example.com" agentId="…" getToken={() => auth.getAccessToken()} />
+```
+
+The installation checks the token against the organization's identity provider: its signature,
+issuer, expiry and audience. The audience must be one of the provider's _Accepted audiences_, which
+the organization's admins set in Gubernet. The chat calls `getToken` again before each message,
+so it should give a valid token, renewed when needed. Return `null` when the user is not signed
+in.
+
+**With the "Sign in" window.** Without `getToken`, a visitor sees a _Sign in_ button: a small
+window of Gubernet opens on the organization's identity provider (OpenID Connect or SAML), then
+closes. The session lasts as long as the tab, 12 hours at most. Your site must be one of the
+organization's _Sites where agents can be embedded_, set by its admins in Gubernet, and the
+organization must have an identity provider.
+
+Files open through signed links of the installation, valid for 15 minutes.
 
 ## Your own transport
 
@@ -147,6 +176,12 @@ and can be themed with CSS variables, set on `:root` or on any element around it
 	--gubernet-font: "Inter", sans-serif;
 }
 ```
+
+## PDF previews
+
+The chat draws PDFs, and Word documents and presentations shown as PDF, in a worker of its own:
+nothing to set up in your build. A site with a Content Security Policy allows it with
+`worker-src blob:`.
 
 ## Contract
 

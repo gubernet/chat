@@ -3,6 +3,7 @@
 import { DownloadIcon, FileIcon } from "lucide-react";
 
 import { useFormatter, useTranslations } from "../i18n/intl";
+import { useFileDownload } from "../lib/file-links";
 import { FILE_SIZE_FORMAT } from "../lib/file-size";
 import type { ChatFile } from "../lib/messages";
 import { hasPreview } from "../lib/preview";
@@ -17,6 +18,7 @@ export function ChatFileLink({ file }: { file: ChatFile }) {
 	const t = useTranslations("chat.preview");
 	const format = useFormatter();
 	const { open } = useChatPreview();
+	const download = useFileDownload(file);
 
 	const details = (
 		<>
@@ -37,6 +39,7 @@ export function ChatFileLink({ file }: { file: ChatFile }) {
 				download={file.name}
 				target="_blank"
 				rel="noreferrer"
+				onClick={download}
 				className="my-2 flex w-fit max-w-full min-w-0 items-center gap-3 rounded-lg border bg-card px-3 py-2 hover:bg-muted"
 				aria-label={t("downloadFile", { name: file.name })}
 			>
@@ -61,6 +64,7 @@ export function ChatFileLink({ file }: { file: ChatFile }) {
 				download={file.name}
 				target="_blank"
 				rel="noreferrer"
+				onClick={download}
 				className="flex items-center self-stretch rounded-e-lg border-s px-3 text-muted-foreground hover:bg-muted"
 				aria-label={t("download")}
 				title={t("download")}

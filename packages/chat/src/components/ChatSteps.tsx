@@ -16,8 +16,8 @@ import { type PropsWithChildren, useState } from "react";
 
 import { useTranslations } from "../i18n/intl";
 import type { ChatStep, ChatStepView } from "../lib/messages";
-import { Button } from "../ui/button";
 import { cn } from "../ui/cn";
+import { ChatConfirmation, ChatConfirmationOutcome } from "./ChatConfirmation";
 
 const KIND_ICONS = {
 	file: FileTextIcon,
@@ -112,13 +112,16 @@ export function ChatStepRow({
 					<StepStatus step={step} />
 				</span>
 			</div>
-			{step.confirmation?.approved === undefined && step.confirmation && (
-				<ChatConfirmation
-					tool={step.label}
-					input={step.confirmation.input}
-					respondToApproval={respondToApproval}
-				/>
-			)}
+			{step.confirmation &&
+				(step.confirmation.approved === undefined ? (
+					<ChatConfirmation
+						tool={step.label}
+						confirmation={step.confirmation}
+						respondToApproval={respondToApproval}
+					/>
+				) : (
+					<ChatConfirmationOutcome confirmation={step.confirmation} />
+				))}
 		</div>
 	);
 }
@@ -127,7 +130,11 @@ function StepStatus({ step }: { step: ChatStep }) {
 	const t = useTranslations("chat.steps");
 
 	if (step.confirmation?.approved === false) {
-		return <span className="text-muted-foreground">{t("refused")}</span>;
+		return (
+			<span className="text-muted-foreground">
+				{t(step.confirmation.expired ? "expired" : "refused")}
+			</span>
+		);
 	}
 
 	if (step.status === "running") {
@@ -192,68 +199,6 @@ function ChatSubagent({
 					))}
 				</div>
 			)}
-		</div>
-	);
-}
-
-function ChatConfirmation({
-	tool,
-	input,
-	respondToApproval,
-}: {
-	tool: string;
-	input: Record<string, unknown>;
-	respondToApproval: (response: ToolApprovalResponse) => Promise<void>;
-}) {
-	const t = useTranslations("chat.confirmation");
-	const [answer, setAnswer] = useState<boolean | null>(null);
-
-	const respond = async (approved: boolean) => {
-		setAnswer(approved);
-
-		try {
-			await respondToApproval({ approved });
-		} catch {
-			// The buttons stay usable to try again
-			setAnswer(null);
-		}
-	};
-
-	return (
-		<div className="flex flex-col gap-3 rounded-lg border bg-card p-3">
-			<p className="text-sm font-medium">{t("title", { tool })}</p>
-			{Object.keys(input).length > 0 && (
-				<dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">
-					{Object.entries(input).map(([name, value]) => (
-						<div key={name} className="contents">
-							<dt className="font-mono text-muted-foreground">{name}</dt>
-							<dd className="break-words whitespace-pre-wrap">
-								{typeof value === "string" ? value : JSON.stringify(value)}
-							</dd>
-						</div>
-					))}
-				</dl>
-			)}
-			<div className="flex justify-end gap-2">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => void respond(false)}
-					disabled={answer !== null}
-					loading={answer === false}
-				>
-					{t("refuse")}
-				</Button>
-				<Button
-					variant="primary"
-					size="sm"
-					onClick={() => void respond(true)}
-					disabled={answer !== null}
-					loading={answer === true}
-				>
-					{t("allow")}
-				</Button>
-			</div>
 		</div>
 	);
 }

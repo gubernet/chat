@@ -17,6 +17,7 @@ import {
 import readXlsxFile from "read-excel-file/browser";
 
 import { useFormatter, useTranslations } from "../i18n/intl";
+import { useOpenableFile } from "../lib/file-links";
 import { FILE_SIZE_FORMAT } from "../lib/file-size";
 import type { ChatFile } from "../lib/messages";
 import { type LoadedPreviewKind, previewOf } from "../lib/preview";
@@ -102,20 +103,42 @@ function ChatPreviewPanel({ file, onClose }: { file: ChatFile; onClose: () => vo
 	return <ChatFilePreview file={file} onClose={onClose} />;
 }
 
-/**
- * A file the agent delivered, as it reads, with its download: beside the
- * chat, where a page, a passage or cells can be asked about, or filling the
- * place it is given, as the files of an elaborato, without a chat to ask.
- */
-export function ChatFilePreview({
-	file,
-	onClose,
-	embedded = false,
-}: {
+interface FilePreviewProps {
 	file: ChatFile;
 	onClose?: () => void;
 	embedded?: boolean;
-}) {
+}
+
+/**
+ * A file the agent delivered, as it reads, with its download: beside the
+ * chat, where a page, a passage or cells can be asked about, or filling the
+ * place it is given, as the files of an elaborato, without a chat to ask. On
+ * another site its links are asked for first.
+ */
+export function ChatFilePreview(props: FilePreviewProps) {
+	const t = useTranslations("chat.preview");
+	const openable = useOpenableFile(props.file);
+
+	if (openable.state === "ready") {
+		return <FilePreview {...props} file={openable.file} />;
+	}
+
+	return (
+		<aside
+			className={cn(
+				"flex flex-col bg-background",
+				props.embedded
+					? "min-h-0 flex-1"
+					: "fixed inset-0 z-50 md:static md:inset-auto md:z-auto md:w-[min(50%,40rem)] md:shrink-0 md:border-s",
+			)}
+			aria-label={props.file.name}
+		>
+			<Message>{t(openable.state === "loading" ? "loading" : "failed")}</Message>
+		</aside>
+	);
+}
+
+function FilePreview({ file, onClose, embedded = false }: FilePreviewProps) {
 	const t = useTranslations("chat.preview");
 	const format = useFormatter();
 	const aui = useAui();
@@ -195,7 +218,13 @@ export function ChatFilePreview({
 					aria-label={t("download")}
 					title={t("download")}
 					render={({ children, ...props }) => (
-						<a {...props} href={file.url} download={file.name}>
+						<a
+							{...props}
+							href={file.url}
+							download={file.name}
+							target="_blank"
+							rel="noreferrer"
+						>
 							{children}
 						</a>
 					)}
@@ -260,7 +289,13 @@ export function ChatFilePreview({
 						<Button
 							variant="primary"
 							render={({ children, ...props }) => (
-								<a {...props} href={file.url} download={file.name}>
+								<a
+									{...props}
+									href={file.url}
+									download={file.name}
+									target="_blank"
+									rel="noreferrer"
+								>
 									{children}
 								</a>
 							)}
