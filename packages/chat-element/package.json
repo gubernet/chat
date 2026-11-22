@@ -1,0 +1,58 @@
+{
+	"name": "@gubernet/chat-element",
+	"version": "0.5.0",
+	"description": "The chat of Gubernet agents as a web component, for any site",
+	"keywords": [
+		"agent",
+		"ai",
+		"chat",
+		"custom-element",
+		"gubernet",
+		"web-component"
+	],
+	"homepage": "https://gubernet.ai",
+	"bugs": {
+		"url": "https://github.com/gubernet/chat/issues"
+	},
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gubernet/chat.git",
+		"directory": "packages/chat-element"
+	},
+	"files": [
+		"dist"
+	],
+	"type": "module",
+	"sideEffects": true,
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./styles.css": "./dist/styles.css",
+		"./package.json": "./package.json"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "rm -rf dist && tsup && tsc -p tsconfig.build.json && node scripts/after-build.mjs",
+		"clean": "rm -rf dist",
+		"prepublishOnly": "pnpm build",
+		"test": "vitest run",
+		"type-check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@gubernet/chat": "workspace:*",
+		"@types/node": "26.6.6",
+		"@types/react": "19.3.0",
+		"@types/react-dom": "19.3.0",
+		"react": "19.3.1",
+		"react-dom": "19.3.1",
+		"tsup": "^9.0.0",
+		"typescript": "7.0.2",
+		"vitest": "^5.0.5"
+	}
+}

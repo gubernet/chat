@@ -10,7 +10,8 @@ Open-source React components for chatting with AI agents built on [Gubernet](htt
 npm install @gubernet/chat
 ```
 
-Requires React 19.
+Requires React 19. For Vue, [`@gubernet/chat-vue`](https://www.npmjs.com/package/@gubernet/chat-vue);
+for any other site, [`@gubernet/chat-element`](https://www.npmjs.com/package/@gubernet/chat-element).
 
 ## Use
 

@@ -6,6 +6,13 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-22
+
+### Added
+
+- The chat for any site and for Vue: `@gubernet/chat-element` (`<gubernet-chat>`) and
+  `@gubernet/chat-vue`, released with the same version as this package.
+
 ## [0.4.0] - 2026-11-22
 
 ### Added
@@ -108,7 +115,8 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/gubernet/chat/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/gubernet/chat/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/gubernet/chat/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/gubernet/chat/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/gubernet/chat/compare/v0.2.0...v0.3.0

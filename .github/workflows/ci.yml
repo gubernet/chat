@@ -19,6 +19,9 @@ jobs:
                   cache: pnpm
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
+            # First: the element and the Vue component read the chat as it is built
+            - name: Build
+              run: pnpm build
             - name: Run oxlint
               run: pnpm lint
             - name: Check formatting
@@ -27,5 +30,3 @@ jobs:
               run: pnpm type-check
             - name: Run unit tests
               run: pnpm test
-            - name: Build
-              run: pnpm build
