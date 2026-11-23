@@ -72,6 +72,10 @@
 				"limit": "La dettatura si è fermata dopo 5 minuti."
 			}
 		},
+		"access": {
+			"title": "Serve l'accesso",
+			"signIn": "Accedi"
+		},
 		"steps": {
 			"count": "{count, plural, one {# passo} other {# passi}}",
 			"kinds": {

@@ -6,6 +6,24 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-23
+
+### Added
+
+- **Access to the organization's systems.** A tool whose system needs the user's account at one of
+  the organization's identity providers waits for it: the `access` event, and the step's `access`,
+  show the tool's context with the provider's sign-in button. The button opens the installation's
+  window on the provider's sign-in; the account it gives goes back to the installation with the
+  user's session, and the agent goes on. `GubernetChat` does it by itself; with your own transport,
+  `linkAccess` of `useChatRuntime`, made with `createAccessLink`. `IDENTITY_ACCESS_MESSAGE` and its
+  schema in `/contract`.
+- `confirmation-expired` also closes an access nobody gave in time.
+
+### Fixed
+
+- A sub-agent's row opens by itself when one of its steps waits for the user: the card of a
+  confirmation was hidden inside it.
+
 ## [0.5.0] - 2026-11-22
 
 ### Added
@@ -115,7 +133,8 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/gubernet/chat/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/gubernet/chat/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/gubernet/chat/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/gubernet/chat/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/gubernet/chat/compare/v0.3.0...v0.3.1

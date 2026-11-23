@@ -72,6 +72,10 @@
 				"limit": "La dictée s'est arrêtée après 5 minutes."
 			}
 		},
+		"access": {
+			"title": "Accès requis",
+			"signIn": "Se connecter"
+		},
 		"steps": {
 			"count": "{count, plural, one {# étape} other {# étapes}}",
 			"kinds": {

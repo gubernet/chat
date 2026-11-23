@@ -84,6 +84,18 @@ organization must have an identity provider.
 
 Files open through signed links of the installation, valid for 15 minutes.
 
+## Access to the organization's systems
+
+An agent's tool may call a system with the user's own account at one of the organization's identity
+providers. When the user has not linked that account yet, the agent stops and the chat shows the
+tool's context with the provider's sign-in button. The button opens a small window of Gubernet on
+the provider's sign-in; once the user signs in, the window closes and the agent goes on. On your
+site the window hands the account back only if your site is one of the organization's _Sites where
+agents can be embedded_.
+
+`GubernetChat` does it by itself. With your own transport, pass `linkAccess` to `useChatRuntime`,
+made with `createAccessLink` from the installation's calls.
+
 ## Your own transport
 
 The chat alone, connected to an agent by a transport of yours:
@@ -160,6 +172,7 @@ files on the other.
 | `isDisabled`      | A conversation that can only be read.                                  |
 | `showUsage`       | Tokens and cost under each answer; off by default.                     |
 | `transcribe`      | Turns the microphone on: it gets a 16 kHz WAV and gives back its text. |
+| `linkAccess`      | Opens the window where the user links an account a tool needs.         |
 
 ## Styles
 
@@ -187,8 +200,8 @@ nothing to set up in your build. A site with a Content Security Policy allows it
 ## Contract
 
 `@gubernet/chat/contract` has no React and runs on a server too: the events of a turn, the
-messages they build, the agents' forms and the limits on attachments, as
-[Zod](https://zod.dev) schemas.
+messages they build, the agents' forms, the limits on attachments and the messages of the
+windows, as [Zod](https://zod.dev) schemas.
 
 ## License
 

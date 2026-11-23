@@ -22,6 +22,7 @@ export {
 	type GubernetChatProps,
 } from "./components/GubernetChat";
 export { CHAT_LOCALES, type ChatLocale } from "./i18n";
+export { type AccessLinkOptions, createAccessLink, type LinkAccess } from "./lib/access-window";
 export { CHAT_COLORS, type ChatColor } from "./lib/colors";
 export { type Transcribe } from "./lib/dictation";
 export {

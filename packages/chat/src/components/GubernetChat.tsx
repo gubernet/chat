@@ -15,6 +15,7 @@ import {
 } from "../client/client";
 import { createConversationTransport, toChatTreeMessage } from "../client/transport";
 import { useTranslations } from "../i18n/intl";
+import { createAccessLink } from "../lib/access-window";
 import type { ChatColor } from "../lib/colors";
 import type { Transcribe } from "../lib/dictation";
 import { type FileLinks, FileLinksProvider } from "../lib/file-links";
@@ -562,6 +563,18 @@ function OpenSession({
 		transport.choose({ organizationId, agentId: agent.id, modelCode });
 	}, [transport, organizationId, agent.id, modelCode]);
 
+	// The window where the user gives a tool's system access with their account at a provider
+	const linkAccess = useMemo(
+		() =>
+			createAccessLink({
+				installation: client.installation,
+				start: (ssoProviderId, origin) =>
+					client.startIdentityAccess({ organizationId, ssoProviderId, origin }),
+				complete: (result) => client.completeIdentityAccess(organizationId, result),
+			}),
+		[client, organizationId],
+	);
+
 	const { runtime, isRunning } = useChatRuntime({
 		transport,
 		suggestions: conversation ? [] : agent.conversationStarters,
@@ -570,6 +583,7 @@ function OpenSession({
 		isDisabled: !canContinue || (conversationId ? !chosenAvailable : !modelCode),
 		showUsage: false,
 		transcribe,
+		linkAccess,
 	});
 
 	useTurnEnd(isRunning, onTurnEnd);

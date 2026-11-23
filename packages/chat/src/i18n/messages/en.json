@@ -72,6 +72,10 @@
 				"limit": "The dictation stopped after 5 minutes."
 			}
 		},
+		"access": {
+			"title": "Access needed",
+			"signIn": "Sign in"
+		},
 		"steps": {
 			"count": "{count, plural, one {# step} other {# steps}}",
 			"kinds": {

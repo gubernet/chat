@@ -106,6 +106,67 @@ describe("chat messages", () => {
 		});
 	});
 
+	describe("a system that needs the user's access", () => {
+		const access = {
+			type: "access",
+			stepId: "step-1",
+			context: "CRM",
+			provider: { id: "provider-1", label: "Entra" },
+		} as const;
+
+		it("waits for the user to sign in, then goes on to the confirmation of a write", () => {
+			let message = applyChatEvent(createAssistantMessage("answer-1"), step);
+
+			message = applyChatEvent(message, access);
+			message = applyChatEvent(message, { type: "end", reason: "confirmation" });
+
+			expect(hasPendingConfirmation(message)).toBe(true);
+			expect(toThreadMessage(message).content).toMatchObject([
+				{ type: "tool-call", approval: { id: "step-1" } },
+			]);
+
+			message = answerConfirmation(message, "step-1", true);
+
+			expect(message.status).toBe("running");
+			expect(hasPendingConfirmation(message)).toBe(false);
+			expect(message.parts[0]).toMatchObject({
+				access: { context: "CRM", provider: { id: "provider-1" }, given: true },
+			});
+
+			// The same call then writes: its confirmation comes after the access
+			message = applyChatEvent(message, {
+				type: "confirmation",
+				stepId: "step-1",
+				input: {},
+			});
+
+			expect(hasPendingConfirmation(message)).toBe(true);
+			expect(toThreadMessage(message).content).toMatchObject([
+				{ approval: { id: "step-1" } },
+			]);
+			expect(toThreadMessage(message).content).not.toMatchObject([
+				{ approval: { approved: true } },
+			]);
+
+			message = answerConfirmation(message, "step-1", true);
+
+			expect(message.parts[0]).toMatchObject({
+				access: { given: true },
+				confirmation: { approved: true },
+			});
+		});
+
+		it("closes an access nobody gave in time", () => {
+			let message = applyChatEvent(createAssistantMessage("answer-1"), step);
+
+			message = applyChatEvent(message, access);
+			message = applyChatEvent(message, { type: "confirmation-expired", stepId: "step-1" });
+
+			expect(hasPendingConfirmation(message)).toBe(false);
+			expect(message.parts[0]).toMatchObject({ access: { given: false, expired: true } });
+		});
+	});
+
 	it("ends the answer with the agent's questions, and shows the answers as the user's message", () => {
 		const questions = [
 			{

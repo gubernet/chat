@@ -72,6 +72,10 @@
 				"limit": "Das Diktat wurde nach 5 Minuten beendet."
 			}
 		},
+		"access": {
+			"title": "Zugriff erforderlich",
+			"signIn": "Anmelden"
+		},
 		"steps": {
 			"count": "{count, plural, one {# Schritt} other {# Schritte}}",
 			"kinds": {

@@ -17,6 +17,7 @@ import { type PropsWithChildren, useState } from "react";
 import { useTranslations } from "../i18n/intl";
 import type { ChatStep, ChatStepView } from "../lib/messages";
 import { cn } from "../ui/cn";
+import { ChatAccess } from "./ChatAccess";
 import { ChatConfirmation, ChatConfirmationOutcome } from "./ChatConfirmation";
 
 const KIND_ICONS = {
@@ -30,12 +31,23 @@ const KIND_ICONS = {
 const stepAt = (parts: readonly { type: string; artifact?: unknown }[], index: number) => {
 	const part = parts[index];
 
-	return part?.type === "tool-call" ? (part.artifact as ChatStep) : undefined;
+	return part?.type === "tool-call" ? (part.artifact as ChatStepView) : undefined;
 };
+
+// The step's system waits for the user's access
+const waitsForAccess = (step: ChatStep | undefined) =>
+	step?.access !== undefined && step.access.given === undefined && !step.confirmation;
+
+// The step, or one of its sub-agent's, waits for the user's confirmation or access
+const waitsForUser = (step: ChatStepView | undefined): boolean =>
+	(step?.confirmation !== undefined && step.confirmation.approved === undefined) ||
+	waitsForAccess(step) ||
+	(step?.steps?.some(waitsForUser) ?? false);
 
 /**
  * The steps of the agent between two pieces of text, closed on one line; they
- * open by themselves when a write tool waits for the user.
+ * open by themselves when a write tool or an access waits for the user, also
+ * a sub-agent's.
  */
 export function ChatSteps({
 	group,
@@ -47,11 +59,7 @@ export function ChatSteps({
 		(s) => stepAt(s.message.parts, group.indices[group.indices.length - 1] ?? -1)?.label ?? "",
 	);
 	const isWaiting = useAuiState((s) =>
-		group.indices.some((index) => {
-			const confirmation = stepAt(s.message.parts, index)?.confirmation;
-
-			return confirmation !== undefined && confirmation.approved === undefined;
-		}),
+		group.indices.some((index) => waitsForUser(stepAt(s.message.parts, index))),
 	);
 	const isRunning = group.status.type === "running";
 	const isOpen = open || isWaiting;
@@ -112,6 +120,9 @@ export function ChatStepRow({
 					<StepStatus step={step} />
 				</span>
 			</div>
+			{waitsForAccess(step) && step.access && (
+				<ChatAccess access={step.access} respondToApproval={respondToApproval} />
+			)}
 			{step.confirmation &&
 				(step.confirmation.approved === undefined ? (
 					<ChatConfirmation
@@ -137,6 +148,11 @@ function StepStatus({ step }: { step: ChatStep }) {
 		);
 	}
 
+	// Nobody gave the access in time
+	if (step.access?.expired) {
+		return <span className="text-muted-foreground">{t("expired")}</span>;
+	}
+
 	if (step.status === "running") {
 		return <LoaderCircleIcon className="size-3.5 animate-spin text-muted-foreground" />;
 	}
@@ -150,7 +166,7 @@ function StepStatus({ step }: { step: ChatStep }) {
 
 /**
  * A sub-agent on one line, with its task and how many steps it took; it opens
- * on its steps.
+ * on its steps, and by itself when one of them waits for the user.
  */
 function ChatSubagent({
 	step,
@@ -163,19 +179,20 @@ function ChatSubagent({
 }) {
 	const t = useTranslations("chat.steps");
 	const [open, setOpen] = useState(false);
+	const isOpen = open || steps.some(waitsForUser);
 
 	return (
 		<div className="flex flex-col gap-2">
 			<button
 				type="button"
-				onClick={() => setOpen(!open)}
-				aria-expanded={open}
+				onClick={() => setOpen(!isOpen)}
+				aria-expanded={isOpen}
 				className="flex w-full min-w-0 items-center gap-2 text-start text-xs"
 			>
 				<ChevronRightIcon
 					className={cn(
 						"size-3.5 shrink-0 text-muted-foreground transition-transform",
-						open && "rotate-90",
+						isOpen && "rotate-90",
 					)}
 				/>
 				<BotIcon className="size-3.5 shrink-0 text-muted-foreground" />
@@ -188,7 +205,7 @@ function ChatSubagent({
 					<StepStatus step={step} />
 				</span>
 			</button>
-			{open && steps.length > 0 && (
+			{isOpen && steps.length > 0 && (
 				<div className="ms-1.5 flex flex-col gap-2 border-s ps-3">
 					{steps.map((child) => (
 						<ChatStepRow

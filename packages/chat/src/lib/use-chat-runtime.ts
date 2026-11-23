@@ -17,6 +17,7 @@ import type { FormPart, FormValues } from "../contract/form";
 import { MAX_ATTACHMENT_BYTES, MAX_ATTACHMENTS_PER_MESSAGE } from "../contract/limits";
 import type { Answer, AnswersPart } from "../contract/questions";
 import { useTranslations } from "../i18n/intl";
+import type { LinkAccess } from "./access-window";
 import { createRecordingDictationAdapter, type Transcribe } from "./dictation";
 import {
 	answerConfirmation,
@@ -85,6 +86,11 @@ export interface ChatTransport {
 	follow?(messageId: string, signal: AbortSignal): Promise<AsyncIterable<AnswerEvent>>;
 }
 
+// What the thread's components read of the chat, beside its messages
+export interface ChatExtras {
+	linkAccess: LinkAccess | undefined;
+}
+
 /**
  * Thrown by a transport to show a known error in the chat.
  */
@@ -145,6 +151,7 @@ export function useChatRuntime({
 	isDisabled = false,
 	showUsage = false,
 	transcribe,
+	linkAccess,
 }: {
 	transport: ChatTransport;
 	suggestions: string[];
@@ -157,6 +164,9 @@ export function useChatRuntime({
 	// The microphone of the composer, where the organization has it on; the
 	// text goes in the composer to be read before sending
 	transcribe?: Transcribe;
+	// The window where the user gives a tool's system access with their
+	// account at an identity provider (`createAccessLink`)
+	linkAccess?: LinkAccess;
 }) {
 	const tDictation = useTranslations("chat.composer.dictationErrors");
 	const notify = useNotify();
@@ -428,8 +438,10 @@ export function useChatRuntime({
 		// The arrows between the versions show another branch
 		setMessages: (visible: readonly ThreadMessage[]) => setHeadId(lastId(visible)),
 		isDisabled,
-		// The agent waits for the answer to its write tool before a new message
+		// The agent waits for the answer to its write tool, or for an access, before a new message
 		isSendDisabled: messages.some(hasPendingConfirmation),
+		// For the cards of the steps
+		extras: { linkAccess } satisfies ChatExtras,
 		suggestions: suggestions.map((prompt) => ({ prompt })),
 		adapters: {
 			attachments: attachmentAdapter,

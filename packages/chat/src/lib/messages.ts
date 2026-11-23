@@ -68,7 +68,7 @@ type StepPart = Extract<ChatMessage["parts"][number], { type: "step" }>;
 
 /**
  * The message as assistant-ui renders it: steps become tool calls that carry
- * the step, with the confirmation as an approval, and the steps of a
+ * the step, with the confirmation or the access as an approval, and the steps of a
  * sub-agent go inside its own; the plan, files, notices and the agent's
  * questions become data parts.
  */
@@ -103,11 +103,16 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 			switch (part.type) {
 				case "text":
 					return [{ type: "text", text: part.text }];
-				case "step":
+				case "step": {
 					// Inside its sub-agent's row
 					if (part.parentId !== undefined && subagents.has(part.parentId)) {
 						return [];
 					}
+
+					// What the step waits for: the confirmation, or before it the user's access
+					const answer = part.confirmation
+						? { approved: part.confirmation.approved }
+						: part.access && { approved: part.access.given };
 
 					return [
 						{
@@ -119,18 +124,19 @@ export function toThreadMessage(message: ChatMessage): ThreadMessageLike {
 								part.kind === "agent" ? { ...part, steps: stepsOf(part.id) } : part,
 							...(part.status !== "running" && { result: part.status }),
 							isError: part.status === "error",
-							...(part.confirmation && {
+							...(answer && {
 								approval: {
 									id: part.id,
 									// The values the user changed come back as the answer's text, in JSON
 									allowFreeform: true,
-									...(part.confirmation.approved !== undefined && {
-										approved: part.confirmation.approved,
+									...(answer.approved !== undefined && {
+										approved: answer.approved,
 									}),
 								},
 							}),
 						},
 					];
+				}
 				case "plan":
 					return [{ type: "data-plan", data: part }];
 				case "file":

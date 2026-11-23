@@ -57,6 +57,13 @@ const fileEventSchema = z.object({
 	previewUrl: z.string().optional(),
 });
 
+// The tenant's identity provider whose account a tool's system needs, by the
+// label of its login button; without one, the chat says "sign in"
+const accessProviderSchema = z.object({
+	id: z.string(),
+	label: z.string().nullable(),
+});
+
 // Input tokens exclude the cached ones; no cost when the model runs with the
 // tenant's own key, since the producer bills it
 const usageEventSchema = z.object({
@@ -88,7 +95,16 @@ export const chatEventSchema = z.discriminatedUnion("type", [
 		// What the tool does, as its system describes it
 		description: z.string().max(2000).optional(),
 	}),
-	// Nobody answered in time: the agent went on without the call
+	// A tool's system needs the user's account at a provider, which the user has
+	// not linked: the turn ends and goes on once the user signs in there
+	z.object({
+		type: z.literal("access"),
+		stepId: z.string(),
+		// The name of the tool's context
+		context: z.string(),
+		provider: accessProviderSchema,
+	}),
+	// Nobody answered in time, or gave the access: the agent went on without the call
 	z.object({ type: z.literal("confirmation-expired"), stepId: z.string() }),
 	// The agent asks the user questions with options: the answer ends, and the
 	// user's answers are their next message
@@ -117,6 +133,16 @@ export const chatPartSchema = z.discriminatedUnion("type", [
 				// The values the user allowed the call with, when they changed the agent's
 				values: z.record(z.string(), z.unknown()).optional(),
 				// Nobody answered in time: the agent went on without the call
+				expired: z.boolean().optional(),
+			})
+			.optional(),
+		// A tool's system waiting for the user's access, or given it
+		access: z
+			.object({
+				context: z.string(),
+				provider: accessProviderSchema,
+				given: z.boolean().optional(),
+				// Nobody gave it in time: the agent went on without the call
 				expired: z.boolean().optional(),
 			})
 			.optional(),

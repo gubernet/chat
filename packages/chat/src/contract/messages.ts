@@ -212,22 +212,36 @@ export function applyChatEvent(message: ChatMessage, event: ChatEvent): ChatMess
 						: part,
 				),
 			};
+		case "access":
+			return {
+				...message,
+				parts: message.parts.map((part) =>
+					part.type === "step" && part.id === event.stepId
+						? { ...part, access: { context: event.context, provider: event.provider } }
+						: part,
+				),
+			};
 		// The call never ran, whatever the user answered late
 		case "confirmation-expired":
 			return {
 				...message,
-				parts: message.parts.map((part) =>
-					part.type === "step" && part.id === event.stepId && part.confirmation
-						? {
-								...part,
-								confirmation: {
-									...part.confirmation,
-									approved: false,
-									expired: true,
-								},
-							}
-						: part,
-				),
+				parts: message.parts.map((part) => {
+					if (part.type !== "step" || part.id !== event.stepId) {
+						return part;
+					}
+
+					// A call may wait for the access first, then for the confirmation
+					if (part.confirmation) {
+						return {
+							...part,
+							confirmation: { ...part.confirmation, approved: false, expired: true },
+						};
+					}
+
+					return part.access
+						? { ...part, access: { ...part.access, given: false, expired: true } }
+						: part;
+				}),
 			};
 		// Once, at the end of the answer
 		case "question":
@@ -300,9 +314,17 @@ export function closingEvents(message: ChatMessage): AnswerEvent[] {
 	}
 }
 
+// A step's card that waits for the user: the access its system needs, then the confirmation
+const waitsForAccess = (part: ChatPart) =>
+	part.type === "step" &&
+	part.access !== undefined &&
+	part.access.given === undefined &&
+	!part.confirmation;
+
 /**
  * The user's answer to a write tool: with the values the call goes with, when
- * the user changed the agent's.
+ * the user changed the agent's. For a step that waits for the user's access,
+ * whether the user gave it.
  */
 export function answerConfirmation(
 	message: ChatMessage,
@@ -313,8 +335,16 @@ export function answerConfirmation(
 	return {
 		...message,
 		status: "running",
-		parts: message.parts.map((part) =>
-			part.type === "step" && part.id === stepId && part.confirmation
+		parts: message.parts.map((part) => {
+			if (part.type !== "step" || part.id !== stepId) {
+				return part;
+			}
+
+			if (waitsForAccess(part) && part.access) {
+				return { ...part, access: { ...part.access, given: approved } };
+			}
+
+			return part.confirmation
 				? {
 						...part,
 						confirmation: {
@@ -323,8 +353,8 @@ export function answerConfirmation(
 							...(approved && values !== undefined && { values }),
 						},
 					}
-				: part,
-		),
+				: part;
+		}),
 	};
 }
 
@@ -344,9 +374,13 @@ export function settleMessage(message: ChatMessage, stopped: boolean): ChatMessa
 	return stopped ? { ...message, status: "stopped" } : failMessage(message, "internal");
 }
 
+// A write tool that waits for the user's answer, or a system for the user's access
 export function hasPendingConfirmation(message: ChatMessage) {
 	return message.parts.some(
 		(part) =>
-			part.type === "step" && part.confirmation && part.confirmation.approved === undefined,
+			(part.type === "step" &&
+				part.confirmation &&
+				part.confirmation.approved === undefined) ||
+			waitsForAccess(part),
 	);
 }

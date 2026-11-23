@@ -72,6 +72,10 @@
 				"limit": "El dictado se detuvo tras 5 minutos."
 			}
 		},
+		"access": {
+			"title": "Se necesita acceso",
+			"signIn": "Iniciar sesión"
+		},
 		"steps": {
 			"count": "{count, plural, one {# paso} other {# pasos}}",
 			"kinds": {

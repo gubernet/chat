@@ -214,6 +214,11 @@ export function createGubernetClient({
 	return {
 		auth,
 
+		// The installation's origin, where its windows end: the page's own for a client without an address
+		get installation() {
+			return installation ?? window.location.origin;
+		},
+
 		/**
 		 * A link the page can open to a file of a conversation. With the cookie the
 		 * file's own address; with a token, which an image or a download cannot
@@ -397,6 +402,32 @@ export function createGubernetClient({
 			);
 
 			return text;
+		},
+
+		// The address of the provider's login, in the window that links the user's account there
+		async startIdentityAccess(
+			input: { organizationId: string; ssoProviderId: string; origin: string },
+			signal?: AbortSignal,
+		) {
+			const { url: address } = await json<{ url: string }>(
+				`/organizations/${id(input.organizationId)}/identity-accesses/windows`,
+				{
+					method: "POST",
+					body: { ssoProviderId: input.ssoProviderId, origin: input.origin },
+					signal,
+				},
+			);
+
+			return address;
+		},
+
+		// Links the account the window gave, for the user of the session
+		async completeIdentityAccess(organizationId: string, result: string, signal?: AbortSignal) {
+			await json(`/organizations/${id(organizationId)}/identity-accesses`, {
+				method: "POST",
+				body: { result },
+				signal,
+			});
 		},
 
 		// Asks the organization's admins for more budget

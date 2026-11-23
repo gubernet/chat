@@ -25,11 +25,11 @@ Without a build, from a CDN:
 ```html
 <link
 	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.5.0/dist/styles.css"
+	href="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.6.0/dist/styles.css"
 />
 <script
 	type="module"
-	src="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.5.0/dist/index.js"
+	src="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.6.0/dist/index.js"
 ></script>
 ```
 
