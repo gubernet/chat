@@ -8,9 +8,9 @@ import { chatAuthFor } from "../client/auth";
 import {
 	type AgentChat,
 	type ChatAgent,
-	createGubernetClient,
-	GubernetApiError,
-	type GubernetClient,
+	createLayeralClient,
+	LayeralApiError,
+	type LayeralClient,
 	type SavedConversation,
 } from "../client/client";
 import { createConversationTransport, toChatTreeMessage } from "../client/transport";
@@ -39,8 +39,8 @@ import { ChatThread } from "./ChatThread";
 // a panel beside the chat, or nowhere
 export type ChatHistoryPlacement = "menu" | "panel" | "hidden";
 
-export interface GubernetChatProps {
-	// The address of the Gubernet installation, as https://app.example.com
+export interface LayeralChatProps {
+	// The address of the Layeral installation, as https://app.example.com
 	url: string;
 	agentId: string;
 	// The conversation to open; without it, a new chat
@@ -72,12 +72,12 @@ export interface GubernetChatProps {
 }
 
 /**
- * The whole chat of an agent of a Gubernet installation: a new chat or one of
+ * The whole chat of an agent of a Layeral installation: a new chat or one of
  * the user's conversations with the agent, its model and the conversations
  * had before. The user is the one signed in to the installation: on its own
  * address with its cookie, elsewhere with a session of the chat alone.
  */
-export function GubernetChat({
+export function LayeralChat({
 	url,
 	agentId,
 	conversationId,
@@ -91,7 +91,7 @@ export function GubernetChat({
 	notify,
 	barEnd,
 	getToken,
-}: GubernetChatProps) {
+}: LayeralChatProps) {
 	// The page's latest getToken, without a new session at each render
 	const getTokenRef = useRef(getToken);
 	const withToken = getToken !== undefined;
@@ -106,7 +106,7 @@ export function GubernetChat({
 		// oxlint-disable-next-line react/refs
 		const auth = chatAuthFor({ url, agentId, getToken: withToken ? readToken : undefined });
 
-		return createGubernetClient({ url, auth });
+		return createLayeralClient({ url, auth });
 	}, [url, agentId, withToken]);
 	const fileLinks = useMemo<FileLinks>(
 		() => (client.auth.mode === "cookie" ? null : (address) => client.fileLink(address)),
@@ -143,7 +143,7 @@ function AgentChatView({
 	hideModel,
 	barEnd,
 }: {
-	client: GubernetClient;
+	client: LayeralClient;
 	agentId: string;
 	conversationId: string | null | undefined;
 	onConversationChange: ((conversationId: string | null) => void) | undefined;
@@ -330,10 +330,10 @@ function AgentChatView({
  * Whether the chat lacks a session, rather than the agent: on another site,
  * none was given yet, it ended, or the window's is of another tenant.
  */
-function isSignedOut(client: GubernetClient, error: unknown) {
+function isSignedOut(client: LayeralClient, error: unknown) {
 	return (
 		client.auth.mode !== "cookie" &&
-		error instanceof GubernetApiError &&
+		error instanceof LayeralApiError &&
 		(error.status === 401 || (client.auth.mode === "window" && error.status === 403))
 	);
 }
@@ -452,7 +452,7 @@ function SessionFrame({
 }
 
 interface SessionProps {
-	client: GubernetClient;
+	client: LayeralClient;
 	chat: AgentChat;
 	barStart: ReactNode;
 	barEnd: ReactNode;

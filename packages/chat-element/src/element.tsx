@@ -1,4 +1,4 @@
-import { GubernetChat } from "@gubernet/chat";
+import { LayeralChat } from "@layeral/chat";
 import { useLayoutEffect, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -12,7 +12,7 @@ import type {
 	Notify,
 } from "./types";
 
-const TAG = "gubernet-chat";
+const TAG = "layeral-chat";
 
 interface ChatOptions {
 	url: string;
@@ -295,7 +295,7 @@ function createElementClass() {
 			// Without the installation or the agent there is no chat yet
 			this.#root.render(
 				url && agentId ? (
-					<GubernetChat
+					<LayeralChat
 						{...options}
 						url={url}
 						agentId={agentId}
@@ -313,7 +313,7 @@ function createElementClass() {
 }
 
 // Once in the browser, never on a server: the page's own definition wins
-export function defineGubernetChat() {
+export function defineLayeralChat() {
 	if (typeof customElements === "undefined" || customElements.get(TAG)) {
 		return;
 	}

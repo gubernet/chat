@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
 const dist = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");
-const elementStyles = require.resolve("@gubernet/chat-element/styles.css");
+const elementStyles = require.resolve("@layeral/chat-element/styles.css");
 
 await mkdir(dist, { recursive: true });
 await cp(elementStyles, join(dist, "styles.css"));

@@ -5,9 +5,9 @@ export {
 	type ChatAgent,
 	type ChatAgentModel,
 	type ChatBudget,
-	createGubernetClient,
-	GubernetApiError,
-	type GubernetClient,
+	createLayeralClient,
+	LayeralApiError,
+	type LayeralClient,
 	type ListedConversation,
 	type SavedConversation,
 } from "./client/client";
@@ -18,9 +18,9 @@ export { ChatProvider, type ChatTheme } from "./components/ChatProvider";
 export { ChatThread } from "./components/ChatThread";
 export {
 	type ChatHistoryPlacement,
-	GubernetChat,
-	type GubernetChatProps,
-} from "./components/GubernetChat";
+	LayeralChat,
+	type LayeralChatProps,
+} from "./components/LayeralChat";
 export { CHAT_LOCALES, type ChatLocale } from "./i18n";
 export { type AccessLinkOptions, createAccessLink, type LinkAccess } from "./lib/access-window";
 export { CHAT_COLORS, type ChatColor } from "./lib/colors";

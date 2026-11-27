@@ -12,7 +12,7 @@ import { Toaster } from "../ui/toast";
 export type ChatTheme = "auto" | "light" | "dark";
 
 // The class the chat's stylesheet is written under
-const ROOT_CLASS = "gubernet-chat";
+const ROOT_CLASS = "layeral-chat";
 
 const pageIsDark = () => {
 	const page = document.documentElement;

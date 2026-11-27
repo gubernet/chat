@@ -8,7 +8,7 @@ import { z } from "zod";
  * and the chat gives it back to the installation with the user's session.
  */
 
-export const IDENTITY_ACCESS_MESSAGE = "gubernet-identity-access";
+export const IDENTITY_ACCESS_MESSAGE = "layeral-identity-access";
 
 // Why the window gave no account: the user said no, it took too long, or it went wrong
 export const ACCESS_WINDOW_ERRORS = ["refused", "expired", "failed"] as const;

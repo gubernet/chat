@@ -12,12 +12,12 @@ import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
 const dist = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");
-const chatStyles = require.resolve("@gubernet/chat/styles.css");
+const chatStyles = require.resolve("@layeral/chat/styles.css");
 
 await mkdir(dist, { recursive: true });
 await writeFile(
 	join(dist, "styles.css"),
-	`gubernet-chat{display:block}\n${await readFile(chatStyles, "utf8")}`,
+	`layeral-chat{display:block}\n${await readFile(chatStyles, "utf8")}`,
 );
 await cp(join(dirname(chatStyles), "fonts"), join(dist, "fonts"), { recursive: true });
 

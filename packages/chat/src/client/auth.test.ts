@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createAppTokenAuth, createWindowAuth, sessionFromMessage } from "./auth";
-import { createGubernetClient, GubernetApiError } from "./client";
+import { createLayeralClient, LayeralApiError } from "./client";
 
 interface Call {
 	url: string;
@@ -58,7 +58,7 @@ describe("the chat on another site, with the app's token", () => {
 			send: fetch,
 			getToken: async () => "app-token",
 		});
-		const client = createGubernetClient({ url: base, fetch, auth });
+		const client = createLayeralClient({ url: base, fetch, auth });
 
 		await client.listConversations({ organizationId: "org-1", agentId: "agent-1" });
 
@@ -84,7 +84,7 @@ describe("the chat on another site, with the app's token", () => {
 			send: fetch,
 			getToken: async () => "app-token",
 		});
-		const client = createGubernetClient({ url: base, fetch, auth });
+		const client = createLayeralClient({ url: base, fetch, auth });
 
 		await client.listConversations({ organizationId: "org-1", agentId: "agent-1" });
 
@@ -109,7 +109,7 @@ describe("the chat on another site, with the app's token", () => {
 			send: fetch,
 			getToken: async () => appToken,
 		});
-		const client = createGubernetClient({ url: base, fetch, auth });
+		const client = createLayeralClient({ url: base, fetch, auth });
 
 		await client.listConversations({ organizationId: "org-1", agentId: "agent-1" });
 		// The same token: nothing to give
@@ -134,7 +134,7 @@ describe("the chat on another site, with the app's token", () => {
 			send: fetch,
 			getToken: async () => null,
 		});
-		const client = createGubernetClient({ url: base, fetch, auth });
+		const client = createLayeralClient({ url: base, fetch, auth });
 
 		await expect(client.getAgentChat("agent-1")).rejects.toMatchObject({
 			status: 401,
@@ -153,7 +153,7 @@ describe("the chat on another site, with the app's token", () => {
 			send: fetch,
 			getToken: async () => "app-token",
 		});
-		const client = createGubernetClient({ url: base, fetch, auth });
+		const client = createLayeralClient({ url: base, fetch, auth });
 
 		await expect(
 			client.fileLink(`${base}/api/conversations/conversation-1/files/file-1`),
@@ -190,16 +190,16 @@ describe("the chat on another site, with the Accedi window", () => {
 	it("is signed out until the window gives a session, then keeps it in the page", async () => {
 		const items = storage();
 		const { fetch, calls } = fakeFetch([json({ conversations: [] })]);
-		const client = createGubernetClient({
+		const client = createLayeralClient({
 			url: base,
 			fetch,
 			auth: createWindowAuth({ base, agentId: "agent-1" }),
 		});
 
-		await expect(client.getAgentChat("agent-1")).rejects.toBeInstanceOf(GubernetApiError);
+		await expect(client.getAgentChat("agent-1")).rejects.toBeInstanceOf(LayeralApiError);
 
 		items.set(
-			"gubernet-chat-session:https://app.example.com",
+			"layeral-chat-session:https://app.example.com",
 			JSON.stringify({ token: "gbe_w", expiresAt: inOneHour() }),
 		);
 		await client.listConversations({ organizationId: "org-1", agentId: "agent-1" });
@@ -211,7 +211,7 @@ describe("the chat on another site, with the Accedi window", () => {
 		const items = storage();
 
 		items.set(
-			"gubernet-chat-session:https://app.example.com",
+			"layeral-chat-session:https://app.example.com",
 			JSON.stringify({
 				token: "gbe_w",
 				expiresAt: new Date(Date.now() - 1000).toISOString(),
@@ -225,7 +225,7 @@ describe("the chat on another site, with the Accedi window", () => {
 
 	it("takes the window's message only from the installation, for the same agent", () => {
 		const data = {
-			type: "gubernet-chat-session",
+			type: "layeral-chat-session",
 			agentId: "agent-1",
 			token: "gbe_w",
 			expiresAt: inOneHour(),

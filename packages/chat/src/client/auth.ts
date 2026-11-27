@@ -147,7 +147,7 @@ export function createAppTokenAuth({
 	};
 }
 
-const storageKey = (installation: string) => `gubernet-chat-session:${installation}`;
+const storageKey = (installation: string) => `layeral-chat-session:${installation}`;
 
 function readStored(key: string) {
 	try {
@@ -196,7 +196,7 @@ const CLOSED_GRACE_MS = 1000;
 // The installation's window: the session it sends, or null when it closes without one
 function openSignInWindow(installation: string, agentId: string) {
 	const address = `${installation}/embed-sign-in/${encodeURIComponent(agentId)}?${new URLSearchParams({ origin: window.location.origin })}`;
-	const popup = window.open(address, "gubernet-chat-sign-in", "popup,width=480,height=640");
+	const popup = window.open(address, "layeral-chat-sign-in", "popup,width=480,height=640");
 
 	if (!popup) {
 		return Promise.resolve(null);

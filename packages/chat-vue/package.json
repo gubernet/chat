@@ -1,22 +1,22 @@
 {
-	"name": "@gubernet/chat-vue",
-	"version": "0.6.0",
-	"description": "The chat of Gubernet agents as a Vue component",
+	"name": "@layeral/chat-vue",
+	"version": "0.7.0",
+	"description": "The chat of Layeral agents as a Vue component",
 	"keywords": [
 		"agent",
 		"ai",
 		"chat",
-		"gubernet",
+		"layeral",
 		"vue"
 	],
-	"homepage": "https://gubernet.ai",
+	"homepage": "https://layeral.com",
 	"bugs": {
-		"url": "https://github.com/gubernet/chat/issues"
+		"url": "https://github.com/layeral/chat/issues"
 	},
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gubernet/chat.git",
+		"url": "git+https://github.com/layeral/chat.git",
 		"directory": "packages/chat-vue"
 	},
 	"files": [
@@ -45,7 +45,7 @@
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@gubernet/chat-element": "workspace:*"
+		"@layeral/chat-element": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/node": "26.6.6",

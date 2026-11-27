@@ -1,5 +1,5 @@
 /**
- * The API of a Gubernet installation, as the chat uses it: the agent, its
+ * The API of a Layeral installation, as the chat uses it: the agent, its
  * conversations and the turns of a conversation. The user is the one signed in
  * to the installation: the requests carry its session.
  */
@@ -87,21 +87,21 @@ export interface MessageInput {
 }
 
 // An error the API answered with: its HTTP status and its code, as NOT_FOUND
-export class GubernetApiError extends Error {
+export class LayeralApiError extends Error {
 	constructor(
 		readonly status: number,
 		readonly code: string,
 		message: string,
 	) {
 		super(message);
-		this.name = "GubernetApiError";
+		this.name = "LayeralApiError";
 	}
 }
 
 const toApiError = (status: number, body: unknown) => {
 	const error = (body ?? {}) as { code?: unknown; message?: unknown };
 
-	return new GubernetApiError(
+	return new LayeralApiError(
 		status,
 		typeof error.code === "string" ? error.code : "UNKNOWN",
 		typeof error.message === "string" ? error.message : `Request failed with status ${status}`,
@@ -115,7 +115,7 @@ interface RequestOptions {
 	signal?: AbortSignal;
 }
 
-export interface GubernetClientOptions {
+export interface LayeralClientOptions {
 	// The address of the installation, as https://app.example.com
 	url: string;
 	// Another fetch, for a test or a server
@@ -124,13 +124,13 @@ export interface GubernetClientOptions {
 	auth?: ChatAuth;
 }
 
-export type GubernetClient = ReturnType<typeof createGubernetClient>;
+export type LayeralClient = ReturnType<typeof createLayeralClient>;
 
-export function createGubernetClient({
+export function createLayeralClient({
 	url,
 	fetch: customFetch,
 	auth = cookieAuth,
-}: GubernetClientOptions) {
+}: LayeralClientOptions) {
 	const base = url.replace(/\/+$/, "");
 	const send: typeof fetch = (input, init) => (customFetch ?? fetch)(input, init);
 
@@ -146,7 +146,7 @@ export function createGubernetClient({
 	): Promise<Response> => {
 		const session = await auth.request().catch((error: unknown) => {
 			throw error instanceof ChatSignedOutError
-				? new GubernetApiError(401, "SIGNED_OUT", error.message)
+				? new LayeralApiError(401, "SIGNED_OUT", error.message)
 				: error;
 		});
 		const isForm = body instanceof FormData;
@@ -203,7 +203,7 @@ export function createGubernetClient({
 		const response = await request(path, options);
 
 		if (!response.body) {
-			throw new GubernetApiError(response.status, "UNKNOWN", "The answer has no stream");
+			throw new LayeralApiError(response.status, "UNKNOWN", "The answer has no stream");
 		}
 
 		return readEventIterator<AnswerEvent>(response.body, (data) => toApiError(500, data));
@@ -374,7 +374,7 @@ export function createGubernetClient({
 			});
 
 			if (!response.ok) {
-				throw new GubernetApiError(response.status, "UPLOAD_FAILED", "The upload failed");
+				throw new LayeralApiError(response.status, "UPLOAD_FAILED", "The upload failed");
 			}
 
 			return fileId;

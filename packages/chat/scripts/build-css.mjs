@@ -1,6 +1,6 @@
 /**
  * Builds the stylesheets of the package:
- * - dist/styles.css, the whole chat, every rule under .gubernet-chat and out of
+ * - dist/styles.css, the whole chat, every rule under .layeral-chat and out of
  *   the cascade layers, so the page's own styles neither reach the chat nor win
  *   over it;
  * - dist/vendor.css, only the formulas and the PDF text, for an app that
@@ -19,7 +19,7 @@ const require = createRequire(import.meta.url);
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
 
-const SCOPE = ".gubernet-chat";
+const SCOPE = ".layeral-chat";
 
 // The page itself, in a stylesheet written for a whole page: here, the chat
 const PAGE = /^(:root|:host|html|body)(?![\w-])/;
@@ -28,7 +28,7 @@ const scopeSelector = (selector) =>
 	PAGE.test(selector) ? selector.replace(PAGE, SCOPE) : `${SCOPE} ${selector}`;
 
 const scope = {
-	postcssPlugin: "gubernet-scope",
+	postcssPlugin: "layeral-scope",
 	Once(css) {
 		// Out of the layers: a page's rules outside any layer would win over all of them
 		css.walkAtRules("layer", (layer) => {
@@ -52,7 +52,7 @@ const scope = {
 
 // The fonts go next to the stylesheets, wherever the build found them
 const localFonts = {
-	postcssPlugin: "gubernet-fonts",
+	postcssPlugin: "layeral-fonts",
 	Declaration(declaration) {
 		if (declaration.value.includes("KaTeX_")) {
 			declaration.value = declaration.value.replace(

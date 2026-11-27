@@ -42,11 +42,11 @@ export interface ConversationChangeDetail {
 export type ConversationChangeEvent = CustomEvent<ConversationChangeDetail>;
 
 /**
- * `<gubernet-chat>`: the whole chat of an agent of a Gubernet installation.
+ * `<layeral-chat>`: the whole chat of an agent of a Layeral installation.
  * The attributes set the values that are text; the functions are properties.
  */
-export interface GubernetChatElement extends HTMLElement {
-	// The address of the Gubernet installation (attribute `url`)
+export interface LayeralChatElement extends HTMLElement {
+	// The address of the Layeral installation (attribute `url`)
 	url: string;
 	// The agent to chat with (attribute `agent-id`)
 	agentId: string;
@@ -67,9 +67,9 @@ export interface GubernetChatElement extends HTMLElement {
 	notify: Notify | undefined;
 	// Where what goes at the end of the bar is: the children with slot="bar-end" end up here
 	readonly barEndContainer: HTMLElement;
-	addEventListener<K extends keyof GubernetChatElementEventMap>(
+	addEventListener<K extends keyof LayeralChatElementEventMap>(
 		type: K,
-		listener: (this: GubernetChatElement, event: GubernetChatElementEventMap[K]) => void,
+		listener: (this: LayeralChatElement, event: LayeralChatElementEventMap[K]) => void,
 		options?: boolean | AddEventListenerOptions,
 	): void;
 	addEventListener(
@@ -77,9 +77,9 @@ export interface GubernetChatElement extends HTMLElement {
 		listener: EventListenerOrEventListenerObject,
 		options?: boolean | AddEventListenerOptions,
 	): void;
-	removeEventListener<K extends keyof GubernetChatElementEventMap>(
+	removeEventListener<K extends keyof LayeralChatElementEventMap>(
 		type: K,
-		listener: (this: GubernetChatElement, event: GubernetChatElementEventMap[K]) => void,
+		listener: (this: LayeralChatElement, event: LayeralChatElementEventMap[K]) => void,
 		options?: boolean | EventListenerOptions,
 	): void;
 	removeEventListener(
@@ -89,12 +89,12 @@ export interface GubernetChatElement extends HTMLElement {
 	): void;
 }
 
-export interface GubernetChatElementEventMap extends HTMLElementEventMap {
+export interface LayeralChatElementEventMap extends HTMLElementEventMap {
 	"conversation-change": ConversationChangeEvent;
 }
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"gubernet-chat": GubernetChatElement;
+		"layeral-chat": LayeralChatElement;
 	}
 }

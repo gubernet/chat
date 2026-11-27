@@ -1,5 +1,5 @@
 /**
- * What the chat and a Gubernet installation exchange: the events of a turn,
+ * What the chat and a Layeral installation exchange: the events of a turn,
  * the messages they build, the agents' forms, the limits on attachments and
  * the session of the chat on other sites and the window of the user's
  * accesses. No React here: a server imports it as well.

@@ -1,10 +1,22 @@
 # Changelog
 
-All notable changes to `@gubernet/chat` are documented here. The format follows
+All notable changes to `@layeral/chat` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.7.0] - 2026-11-27
+
+### Changed
+
+- **The package is now `@layeral/chat`**, in the repository `layeral/chat`; `@gubernet/chat` is
+  deprecated. The names change with it: `LayeralChat` and `LayeralChatProps` (were `GubernetChat`
+  and `GubernetChatProps`), `createLayeralClient`, `LayeralClient` and `LayeralApiError`, the root
+  class `.layeral-chat` and the CSS variables `--layeral-*` (were `--gubernet-*`).
+- The windows' messages are `layeral-identity-access` and `layeral-chat-session`
+  (`IDENTITY_ACCESS_MESSAGE`, `EMBED_SESSION_MESSAGE`): an installation and its chats move to
+  0.7.0 together. The session kept in the tab has a new key: a visitor signs in once more.
 
 ## [0.6.0] - 2026-11-23
 
@@ -133,11 +145,12 @@ All notable changes to `@gubernet/chat` are documented here. The format follows
   application that compiles the chat's classes with its own Tailwind.
 - English, German, Spanish, French and Italian.
 
-[Unreleased]: https://github.com/gubernet/chat/compare/v0.6.0...HEAD
-[0.6.0]: https://github.com/gubernet/chat/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/gubernet/chat/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/gubernet/chat/compare/v0.3.1...v0.4.0
-[0.3.1]: https://github.com/gubernet/chat/compare/v0.3.0...v0.3.1
-[0.3.0]: https://github.com/gubernet/chat/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/gubernet/chat/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/gubernet/chat/releases/tag/v0.1.0
+[Unreleased]: https://github.com/layeral/chat/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/layeral/chat/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/layeral/chat/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/layeral/chat/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/layeral/chat/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/layeral/chat/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/layeral/chat/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/layeral/chat/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/layeral/chat/releases/tag/v0.1.0

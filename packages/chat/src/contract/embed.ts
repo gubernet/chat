@@ -7,7 +7,7 @@ import { z } from "zod";
  * to the site that opened it with this message.
  */
 
-export const EMBED_SESSION_MESSAGE = "gubernet-chat-session";
+export const EMBED_SESSION_MESSAGE = "layeral-chat-session";
 
 export const embedSessionSchema = z.object({
 	token: z.string().min(1),

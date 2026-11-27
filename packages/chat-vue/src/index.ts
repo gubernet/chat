@@ -1,4 +1,4 @@
-export { GubernetChat } from "./GubernetChat";
+export { LayeralChat } from "./LayeralChat";
 export {
 	CHAT_COLORS,
 	type ChatColor,
@@ -7,4 +7,4 @@ export {
 	type ChatTheme,
 	type GetToken,
 	type Notify,
-} from "@gubernet/chat-element";
+} from "@layeral/chat-element";

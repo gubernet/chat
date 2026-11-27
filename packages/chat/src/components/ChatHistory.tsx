@@ -3,7 +3,7 @@
 import { EllipsisIcon, SearchIcon } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 
-import type { GubernetClient, ListedConversation } from "../client/client";
+import type { LayeralClient, ListedConversation } from "../client/client";
 import { useTranslations } from "../i18n/intl";
 import { useNotify } from "../lib/notify";
 import { useResource } from "../lib/use-resource";
@@ -74,7 +74,7 @@ export function groupByDate(conversations: ListedConversation[], now = new Date(
  * the search, which asks the server once the user stops typing.
  */
 export function useConversationHistory(
-	client: GubernetClient,
+	client: LayeralClient,
 	// Null while the agent loads, or where the chat shows no conversations
 	source: { organizationId: string; agentId: string } | null,
 ) {
@@ -131,7 +131,7 @@ export function ChatHistory({
 	onOpen,
 	onDeleted,
 }: {
-	client: GubernetClient;
+	client: LayeralClient;
 	history: ConversationHistory;
 	// The conversation that is open, if any
 	activeId: string | null;
@@ -192,7 +192,7 @@ function ConversationItem({
 	onChanged,
 	onDeleted,
 }: {
-	client: GubernetClient;
+	client: LayeralClient;
 	conversation: ListedConversation;
 	isActive: boolean;
 	onOpen: () => void;

@@ -1,22 +1,22 @@
 {
-	"name": "@gubernet/chat",
-	"version": "0.6.0",
-	"description": "React components for chatting with AI agents built on Gubernet",
+	"name": "@layeral/chat",
+	"version": "0.7.0",
+	"description": "React components for chatting with AI agents built on Layeral",
 	"keywords": [
 		"agent",
 		"ai",
 		"chat",
-		"gubernet",
+		"layeral",
 		"react"
 	],
-	"homepage": "https://gubernet.ai",
+	"homepage": "https://layeral.com",
 	"bugs": {
-		"url": "https://github.com/gubernet/chat/issues"
+		"url": "https://github.com/layeral/chat/issues"
 	},
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gubernet/chat.git",
+		"url": "git+https://github.com/layeral/chat.git",
 		"directory": "packages/chat"
 	},
 	"files": [

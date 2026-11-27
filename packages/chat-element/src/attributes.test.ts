@@ -1,4 +1,4 @@
-import type * as Chat from "@gubernet/chat";
+import type * as Chat from "@layeral/chat";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { fromAttribute } from "./attributes";
@@ -42,7 +42,7 @@ describe("types", () => {
 		expectTypeOf<Element.ChatNotification>().toEqualTypeOf<Chat.ChatNotification>();
 		expectTypeOf<Element.Notify>().toEqualTypeOf<Chat.Notify>();
 		expectTypeOf<Element.GetToken>().toEqualTypeOf<
-			NonNullable<Chat.GubernetChatProps["getToken"]>
+			NonNullable<Chat.LayeralChatProps["getToken"]>
 		>();
 	});
 });

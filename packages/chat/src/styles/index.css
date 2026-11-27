@@ -1,6 +1,6 @@
 /*
  * The chat's stylesheet. scripts/build-css.mjs compiles it and writes every
- * rule under .gubernet-chat, so it neither changes the page around the chat
+ * rule under .layeral-chat, so it neither changes the page around the chat
  * nor is changed by it.
  */
 @import "tailwindcss";
@@ -18,8 +18,8 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme inline {
-	/* The page's font, unless --gubernet-font names another */
-	--font-sans: var(--gubernet-font, inherit);
+	/* The page's font, unless --layeral-font names another */
+	--font-sans: var(--layeral-font, inherit);
 	/* The chat's sparkles while the agent works */
 	--animate-twinkle: twinkle 1.4s ease-in-out infinite;
 

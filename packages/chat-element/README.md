@@ -1,23 +1,23 @@
-# @gubernet/chat-element
+# @layeral/chat-element
 
-The chat of AI agents built on [Gubernet](https://gubernet.ai) as a web component,
-`<gubernet-chat>`, for any site: with or without a build, with any framework.
+The chat of AI agents built on [Layeral](https://layeral.com) as a web component,
+`<layeral-chat>`, for any site: with or without a build, with any framework.
 
 > Version 0.x, in development: the API can change between minor versions.
 
 ## Install
 
 ```bash
-npm install @gubernet/chat-element
+npm install @layeral/chat-element
 ```
 
 ```js
-import "@gubernet/chat-element";
-import "@gubernet/chat-element/styles.css";
+import "@layeral/chat-element";
+import "@layeral/chat-element/styles.css";
 ```
 
 ```html
-<gubernet-chat url="https://app.example.com" agent-id="…" style="height: 600px"></gubernet-chat>
+<layeral-chat url="https://app.example.com" agent-id="…" style="height: 600px"></layeral-chat>
 ```
 
 Without a build, from a CDN:
@@ -25,25 +25,25 @@ Without a build, from a CDN:
 ```html
 <link
 	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.6.0/dist/styles.css"
+	href="https://cdn.jsdelivr.net/npm/@layeral/chat-element@0.7.0/dist/styles.css"
 />
 <script
 	type="module"
-	src="https://cdn.jsdelivr.net/npm/@gubernet/chat-element@0.6.0/dist/index.js"
+	src="https://cdn.jsdelivr.net/npm/@layeral/chat-element@0.7.0/dist/index.js"
 ></script>
 ```
 
 React and the chat are inside the element: the page needs nothing else. The chat fills the height
 of the element.
 
-For Vue, use [`@gubernet/chat-vue`](https://www.npmjs.com/package/@gubernet/chat-vue); for React,
-[`@gubernet/chat`](https://www.npmjs.com/package/@gubernet/chat).
+For Vue, use [`@layeral/chat-vue`](https://www.npmjs.com/package/@layeral/chat-vue); for React,
+[`@layeral/chat`](https://www.npmjs.com/package/@layeral/chat).
 
 ## Attributes and properties
 
 | Attribute         | Property         | Default  | What it does                                                                             |
 | ----------------- | ---------------- | -------- | ---------------------------------------------------------------------------------------- |
-| `url`             | `url`            | —        | The address of the Gubernet installation.                                                |
+| `url`             | `url`            | —        | The address of the Layeral installation.                                                 |
 | `agent-id`        | `agentId`        | —        | The agent to chat with.                                                                  |
 | `conversation-id` | `conversationId` | —        | The conversation to open; without it, a new chat.                                        |
 | `history`         | `history`        | `"menu"` | Where the conversations are: `"menu"` in the bar, `"panel"` beside the chat, `"hidden"`. |
@@ -58,7 +58,7 @@ For Vue, use [`@gubernet/chat-vue`](https://www.npmjs.com/package/@gubernet/chat
 Functions are properties:
 
 ```js
-const chat = document.querySelector("gubernet-chat");
+const chat = document.querySelector("layeral-chat");
 
 chat.getToken = () => auth.getAccessToken();
 chat.addEventListener("conversation-change", (event) => {
@@ -74,20 +74,20 @@ chat.addEventListener("conversation-change", (event) => {
 A child with `slot="bar-end"` goes at the end of the bar on top, as your user's menu:
 
 ```html
-<gubernet-chat url="https://app.example.com" agent-id="…">
+<layeral-chat url="https://app.example.com" agent-id="…">
 	<button slot="bar-end">Account</button>
-</gubernet-chat>
+</layeral-chat>
 ```
 
 ## Sign-in, styles and PDF previews
 
-As in [`@gubernet/chat`](https://www.npmjs.com/package/@gubernet/chat): [Sign-in][sign-in],
-[Styles](https://www.npmjs.com/package/@gubernet/chat#styles) and
-[PDF previews](https://www.npmjs.com/package/@gubernet/chat#pdf-previews). The chat is drawn in the
-page's own DOM: it takes the page's font, and its stylesheet keeps its rules under `.gubernet-chat`.
+As in [`@layeral/chat`](https://www.npmjs.com/package/@layeral/chat): [Sign-in][sign-in],
+[Styles](https://www.npmjs.com/package/@layeral/chat#styles) and
+[PDF previews](https://www.npmjs.com/package/@layeral/chat#pdf-previews). The chat is drawn in the
+page's own DOM: it takes the page's font, and its stylesheet keeps its rules under `.layeral-chat`.
 
 ## License
 
-[Apache-2.0](https://github.com/gubernet/chat/blob/main/LICENSE)
+[Apache-2.0](https://github.com/layeral/chat/blob/main/LICENSE)
 
-[sign-in]: https://www.npmjs.com/package/@gubernet/chat#sign-in
+[sign-in]: https://www.npmjs.com/package/@layeral/chat#sign-in

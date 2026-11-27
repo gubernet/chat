@@ -1,37 +1,37 @@
-# @gubernet/chat
+# @layeral/chat
 
-Open-source React components for chatting with AI agents built on [Gubernet](https://gubernet.ai).
+Open-source React components for chatting with AI agents built on [Layeral](https://layeral.com).
 
 > Version 0.x, in development: the API can change between minor versions.
 
 ## Install
 
 ```bash
-npm install @gubernet/chat
+npm install @layeral/chat
 ```
 
-Requires React 19. For Vue, [`@gubernet/chat-vue`](https://www.npmjs.com/package/@gubernet/chat-vue);
-for any other site, [`@gubernet/chat-element`](https://www.npmjs.com/package/@gubernet/chat-element).
+Requires React 19. For Vue, [`@layeral/chat-vue`](https://www.npmjs.com/package/@layeral/chat-vue);
+for any other site, [`@layeral/chat-element`](https://www.npmjs.com/package/@layeral/chat-element).
 
 ## Use
 
 ```tsx
 "use client";
 
-import { GubernetChat } from "@gubernet/chat";
+import { LayeralChat } from "@layeral/chat";
 
-import "@gubernet/chat/styles.css";
+import "@layeral/chat/styles.css";
 
 export function AgentChat() {
 	return (
 		<div style={{ height: 600 }}>
-			<GubernetChat url="https://app.example.com" agentId="…" />
+			<LayeralChat url="https://app.example.com" agentId="…" />
 		</div>
 	);
 }
 ```
 
-`GubernetChat` is the whole chat of an agent: a new chat or one of the user's conversations with
+`LayeralChat` is the whole chat of an agent: a new chat or one of the user's conversations with
 it, its model and the conversations had before. The chat fills the height of its container.
 
 The user is the one signed in to the installation at `url`. See [Sign-in](#sign-in) for the chat
@@ -39,7 +39,7 @@ on your own site.
 
 | Prop                   | Default  | What it does                                                                             |
 | ---------------------- | -------- | ---------------------------------------------------------------------------------------- |
-| `url`                  | —        | The address of the Gubernet installation.                                                |
+| `url`                  | —        | The address of the Layeral installation.                                                 |
 | `agentId`              | —        | The agent to chat with.                                                                  |
 | `getToken`             | —        | On your own site: the user's token in your app. See [Sign-in](#sign-in).                 |
 | `conversationId`       | —        | The conversation to open; without it, a new chat.                                        |
@@ -60,26 +60,26 @@ Its right end is your app's.
 
 On the installation's own site the chat uses its session. On your site, which the browser does not
 send that session to, the chat signs the user in one of two ways. Either way, the session opens
-only the chat of the agent's organization, and the user is the same as in Gubernet: same
+only the chat of the agent's organization, and the user is the same as in Layeral: same
 conversations, same access rules, same budget.
 
 **With your app's token.** If your users sign in to your app with the organization's identity
 provider (OpenID Connect), pass the token your app already has:
 
 ```tsx
-<GubernetChat url="https://app.example.com" agentId="…" getToken={() => auth.getAccessToken()} />
+<LayeralChat url="https://app.example.com" agentId="…" getToken={() => auth.getAccessToken()} />
 ```
 
 The installation checks the token against the organization's identity provider: its signature,
 issuer, expiry and audience. The audience must be one of the provider's _Accepted audiences_, which
-the organization's admins set in Gubernet. The chat calls `getToken` again before each message,
+the organization's admins set in Layeral. The chat calls `getToken` again before each message,
 so it should give a valid token, renewed when needed. Return `null` when the user is not signed
 in.
 
 **With the "Sign in" window.** Without `getToken`, a visitor sees a _Sign in_ button: a small
-window of Gubernet opens on the organization's identity provider (OpenID Connect or SAML), then
+window of Layeral opens on the organization's identity provider (OpenID Connect or SAML), then
 closes. The session lasts as long as the tab, 12 hours at most. Your site must be one of the
-organization's _Sites where agents can be embedded_, set by its admins in Gubernet, and the
+organization's _Sites where agents can be embedded_, set by its admins in Layeral, and the
 organization must have an identity provider.
 
 Files open through signed links of the installation, valid for 15 minutes.
@@ -88,12 +88,12 @@ Files open through signed links of the installation, valid for 15 minutes.
 
 An agent's tool may call a system with the user's own account at one of the organization's identity
 providers. When the user has not linked that account yet, the agent stops and the chat shows the
-tool's context with the provider's sign-in button. The button opens a small window of Gubernet on
+tool's context with the provider's sign-in button. The button opens a small window of Layeral on
 the provider's sign-in; once the user signs in, the window closes and the agent goes on. On your
 site the window hands the account back only if your site is one of the organization's _Sites where
 agents can be embedded_.
 
-`GubernetChat` does it by itself. With your own transport, pass `linkAccess` to `useChatRuntime`,
+`LayeralChat` does it by itself. With your own transport, pass `linkAccess` to `useChatRuntime`,
 made with `createAccessLink` from the installation's calls.
 
 ## Your own transport
@@ -109,9 +109,9 @@ import {
 	ChatThread,
 	type ChatTransport,
 	useChatRuntime,
-} from "@gubernet/chat";
+} from "@layeral/chat";
 
-import "@gubernet/chat/styles.css";
+import "@layeral/chat/styles.css";
 
 function Chat({ transport }: { transport: ChatTransport }) {
 	const { runtime } = useChatRuntime({ transport, suggestions: [] });
@@ -138,7 +138,7 @@ export function AgentChat({ transport }: { transport: ChatTransport }) {
 
 A `ChatTransport` connects the chat to an agent: `send`, `respond` and `stop`, plus the optional
 `regenerate`, `load` and `follow`. Each call returns the events of a turn, typed in
-`@gubernet/chat/contract`.
+`@layeral/chat/contract`.
 
 ## Components
 
@@ -176,18 +176,18 @@ files on the other.
 
 ## Styles
 
-`@gubernet/chat/styles.css` is compiled and scoped to the chat. The chat inherits the page's font
+`@layeral/chat/styles.css` is compiled and scoped to the chat. The chat inherits the page's font
 and can be themed with CSS variables, set on `:root` or on any element around it:
 
 ```css
 :root {
-	--gubernet-primary: #1d4ed8;
-	--gubernet-primary-foreground: #ffffff;
-	--gubernet-background: #ffffff;
-	--gubernet-foreground: #111827;
-	--gubernet-border: #e5e7eb;
-	--gubernet-radius: 0.5rem;
-	--gubernet-font: "Inter", sans-serif;
+	--layeral-primary: #1d4ed8;
+	--layeral-primary-foreground: #ffffff;
+	--layeral-background: #ffffff;
+	--layeral-foreground: #111827;
+	--layeral-border: #e5e7eb;
+	--layeral-radius: 0.5rem;
+	--layeral-font: "Inter", sans-serif;
 }
 ```
 
@@ -199,12 +199,12 @@ nothing to set up in your build. A site with a Content Security Policy allows it
 
 ## Contract
 
-`@gubernet/chat/contract` has no React and runs on a server too: the events of a turn, the
+`@layeral/chat/contract` has no React and runs on a server too: the events of a turn, the
 messages they build, the agents' forms, the limits on attachments and the messages of the
 windows, as [Zod](https://zod.dev) schemas.
 
 ## License
 
-[Apache-2.0](https://github.com/gubernet/chat/blob/main/LICENSE)
+[Apache-2.0](https://github.com/layeral/chat/blob/main/LICENSE)
 
 The logos of the models come from [LobeHub Icons](https://github.com/lobehub/lobe-icons) (MIT).

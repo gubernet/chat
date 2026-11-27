@@ -27,7 +27,7 @@ const CLOSED_GRACE_MS = 1000;
  */
 export function createAccessLink({ start, complete, installation }: AccessLinkOptions): LinkAccess {
 	return (providerId) => {
-		const popup = window.open("", "gubernet-identity-access", "popup,width=480,height=640");
+		const popup = window.open("", "layeral-identity-access", "popup,width=480,height=640");
 
 		if (!popup) {
 			return Promise.resolve(false);

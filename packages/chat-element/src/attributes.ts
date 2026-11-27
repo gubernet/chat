@@ -2,7 +2,7 @@ import {
 	CHAT_COLORS,
 	CHAT_HISTORY_PLACEMENTS,
 	CHAT_THEMES,
-	type GubernetChatElement,
+	type LayeralChatElement,
 } from "./types";
 
 // The element's attributes and the properties they set
@@ -16,7 +16,7 @@ export const ATTRIBUTES = {
 	color: "color",
 	"hide-title": "hideTitle",
 	"hide-model": "hideModel",
-} as const satisfies Record<string, keyof GubernetChatElement>;
+} as const satisfies Record<string, keyof LayeralChatElement>;
 
 export type AttributeName = keyof typeof ATTRIBUTES;
 

@@ -1,12 +1,12 @@
-# Gubernet chat
+# Layeral chat
 
-Open-source components for chatting with AI agents built on [Gubernet](https://gubernet.ai).
+Open-source components for chatting with AI agents built on [Layeral](https://layeral.com).
 
-| Package                                           | What it is                                     |
-| ------------------------------------------------- | ---------------------------------------------- |
-| [`@gubernet/chat`](packages/chat)                 | The chat as React components                   |
-| [`@gubernet/chat-element`](packages/chat-element) | The chat as a web component, `<gubernet-chat>` |
-| [`@gubernet/chat-vue`](packages/chat-vue)         | The chat as a Vue component                    |
+| Package                                          | What it is                                    |
+| ------------------------------------------------ | --------------------------------------------- |
+| [`@layeral/chat`](packages/chat)                 | The chat as React components                  |
+| [`@layeral/chat-element`](packages/chat-element) | The chat as a web component, `<layeral-chat>` |
+| [`@layeral/chat-vue`](packages/chat-vue)         | The chat as a Vue component                   |
 
 The three packages are released together, with the same version.
 

@@ -1,5 +1,5 @@
 {
-	"name": "gubernet-chat",
+	"name": "layeral-chat",
 	"private": true,
 	"scripts": {
 		"build": "pnpm -r build",

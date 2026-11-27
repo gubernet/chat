@@ -1,13 +1,13 @@
-import "@gubernet/chat-element";
+import "@layeral/chat-element";
 import type {
 	ChatColor,
 	ChatHistoryPlacement,
 	ChatTheme,
 	ConversationChangeEvent,
 	GetToken,
-	GubernetChatElement,
+	LayeralChatElement,
 	Notify,
-} from "@gubernet/chat-element";
+} from "@layeral/chat-element";
 import {
 	defineComponent,
 	h,
@@ -20,14 +20,14 @@ import {
 } from "vue";
 
 /**
- * The whole chat of an agent of a Gubernet installation, as `<gubernet-chat>`
+ * The whole chat of an agent of a Layeral installation, as `<layeral-chat>`
  * draws it. `v-model:conversation-id` keeps the conversation the chat is on;
  * the `bar-end` slot goes at the end of the bar on top.
  */
-export const GubernetChat = defineComponent({
-	name: "GubernetChat",
+export const LayeralChat = defineComponent({
+	name: "LayeralChat",
 	props: {
-		// The address of the Gubernet installation, as https://app.example.com
+		// The address of the Layeral installation, as https://app.example.com
 		url: { type: String, required: true },
 		agentId: { type: String, required: true },
 		// The conversation to open, null for a new chat
@@ -50,7 +50,7 @@ export const GubernetChat = defineComponent({
 	},
 	slots: Object as SlotsType<{ "bar-end"?: () => VNode[] }>,
 	setup(props, { emit, slots }) {
-		const element = shallowRef<GubernetChatElement | null>(null);
+		const element = shallowRef<LayeralChatElement | null>(null);
 		// Known once the element is in the page
 		const barEnd = shallowRef<HTMLElement | null>(null);
 
@@ -62,7 +62,7 @@ export const GubernetChat = defineComponent({
 			const barEndSlot = slots["bar-end"];
 
 			return h(
-				"gubernet-chat",
+				"layeral-chat",
 				{
 					ref: element,
 					// Properties of the element, not attributes: functions included

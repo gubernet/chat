@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createGubernetClient, GubernetApiError } from "./client";
+import { createLayeralClient, LayeralApiError } from "./client";
 import { createConversationTransport } from "./transport";
 
 interface Call {
@@ -73,7 +73,7 @@ const agentChat = {
 describe("the client of an installation", () => {
 	it("reads the agent with the user's session and its logo at the installation's address", async () => {
 		const { fetch, calls } = fakeFetch([json(agentChat)]);
-		const client = createGubernetClient({ url: "https://app.example.com/", fetch });
+		const client = createLayeralClient({ url: "https://app.example.com/", fetch });
 
 		const chat = await client.getAgentChat("agent-1");
 
@@ -92,7 +92,7 @@ describe("the client of an installation", () => {
 
 	it("lists the conversations of the agent, with the search only when there is one", async () => {
 		const { fetch, calls } = fakeFetch([json({ conversations: [] })]);
-		const client = createGubernetClient({ url: "https://app.example.com", fetch });
+		const client = createLayeralClient({ url: "https://app.example.com", fetch });
 
 		await client.listConversations({ organizationId: "org-1", agentId: "agent-1", limit: 30 });
 
@@ -105,14 +105,14 @@ describe("the client of an installation", () => {
 		const { fetch } = fakeFetch([
 			json({ code: "NOT_FOUND", status: 404, message: "Not found" }, 404),
 		]);
-		const client = createGubernetClient({ url: "https://app.example.com", fetch });
+		const client = createLayeralClient({ url: "https://app.example.com", fetch });
 
 		await expect(client.getAgentChat("missing")).rejects.toMatchObject({
-			name: "GubernetApiError",
+			name: "LayeralApiError",
 			status: 404,
 			code: "NOT_FOUND",
 		});
-		expect(new GubernetApiError(404, "NOT_FOUND", "Not found")).toBeInstanceOf(Error);
+		expect(new LayeralApiError(404, "NOT_FOUND", "Not found")).toBeInstanceOf(Error);
 	});
 });
 
@@ -124,7 +124,7 @@ describe("the transport of a conversation", () => {
 			new Response(null, { status: 200 }),
 			events({ type: "text", delta: "Ciao" }, { type: "end", reason: "completed" }),
 		]);
-		const client = createGubernetClient({ url: "https://app.example.com", fetch });
+		const client = createLayeralClient({ url: "https://app.example.com", fetch });
 		const created: string[] = [];
 		const transport = createConversationTransport(client, {
 			conversationId: null,
@@ -172,7 +172,7 @@ describe("the transport of a conversation", () => {
 		const { fetch } = fakeFetch([
 			json({ code: "SERVICE_UNAVAILABLE", status: 503, message: "Unavailable" }, 503),
 		]);
-		const client = createGubernetClient({ url: "https://app.example.com", fetch });
+		const client = createLayeralClient({ url: "https://app.example.com", fetch });
 		const transport = createConversationTransport(client, { conversationId: "conversation-1" });
 
 		await expect(

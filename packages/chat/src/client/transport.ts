@@ -5,10 +5,10 @@ import {
 	ChatTransportError,
 	type ChatTreeMessage,
 } from "../lib/use-chat-runtime";
-import { type GubernetClient, GubernetApiError, type SavedMessage } from "./client";
+import { type LayeralClient, LayeralApiError, type SavedMessage } from "./client";
 
 const toChatError = (error: unknown) =>
-	error instanceof GubernetApiError && error.code === "SERVICE_UNAVAILABLE"
+	error instanceof LayeralApiError && error.code === "SERVICE_UNAVAILABLE"
 		? new ChatTransportError("engine_unavailable")
 		: error;
 
@@ -38,7 +38,7 @@ export interface NewConversation {
  * tells its identifier and what it started with.
  */
 export function createConversationTransport(
-	client: GubernetClient,
+	client: LayeralClient,
 	{
 		conversationId,
 		onCreated,
