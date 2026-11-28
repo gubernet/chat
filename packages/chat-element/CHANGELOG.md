@@ -6,10 +6,12 @@ All notable changes to `@layeral/chat-element` are documented here. The format f
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-28
+
 ### Added
 
-- `hide-effort` (`hideEffort`): without the choice of the reasoning level, which the chat shows
-  next to the model.
+- On `@layeral/chat` 0.8.0: the reasoning level next to the model, and `hide-effort`
+  (`hideEffort`) without its choice.
 
 ## [0.7.0] - 2026-11-27
 
@@ -34,7 +36,8 @@ All notable changes to `@layeral/chat-element` are documented here. The format f
   site and from a CDN. Attributes for the values that are text, properties for `getToken` and
   `notify`, the `conversation-change` event and the `bar-end` slot.
 
-[Unreleased]: https://github.com/layeral/chat/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/layeral/chat/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/layeral/chat/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/layeral/chat/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/layeral/chat/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/layeral/chat/releases/tag/v0.5.0

@@ -1,6 +1,6 @@
 {
 	"name": "@layeral/chat",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"description": "React components for chatting with AI agents built on Layeral",
 	"keywords": [
 		"agent",
