@@ -10,6 +10,8 @@ describe("attributes", () => {
 		expect(fromAttribute("hide-model", "true")).toBe(true);
 		expect(fromAttribute("hide-title", "false")).toBe(false);
 		expect(fromAttribute("hide-model", null)).toBe(false);
+		expect(fromAttribute("hide-effort", "")).toBe(true);
+		expect(fromAttribute("hide-effort", null)).toBe(false);
 	});
 
 	it("opens a new chat when the conversation is removed", () => {

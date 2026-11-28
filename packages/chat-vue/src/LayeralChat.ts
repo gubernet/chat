@@ -39,6 +39,7 @@ export const LayeralChat = defineComponent({
 		color: { type: String as PropType<ChatColor>, default: undefined },
 		hideTitle: Boolean,
 		hideModel: Boolean,
+		hideEffort: Boolean,
 		// On a site other than the installation's: the user's token in the app
 		getToken: { type: Function as PropType<GetToken>, default: undefined },
 		// Shows the chat's notices with the app's own toasts, in place of the chat's
@@ -75,6 +76,7 @@ export const LayeralChat = defineComponent({
 					".color": props.color,
 					".hideTitle": props.hideTitle,
 					".hideModel": props.hideModel,
+					".hideEffort": props.hideEffort,
 					".getToken": props.getToken,
 					".notify": props.notify,
 					onConversationChange: (event: ConversationChangeEvent) =>

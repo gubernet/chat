@@ -5,6 +5,8 @@ export {
 	type ChatAgent,
 	type ChatAgentModel,
 	type ChatBudget,
+	CHAT_EFFORT_LEVELS,
+	type ChatEffortLevel,
 	createLayeralClient,
 	LayeralApiError,
 	type LayeralClient,

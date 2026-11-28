@@ -35,7 +35,18 @@
 		},
 		"controls": {
 			"noModel": "No model available",
-			"modelError": "The model could not be changed."
+			"modelError": "The model could not be changed.",
+			"effortError": "The reasoning could not be changed."
+		},
+		"effort": {
+			"label": "Reasoning",
+			"levels": {
+				"low": "Low",
+				"medium": "Medium",
+				"high": "High",
+				"xhigh": "Extra high",
+				"max": "Max"
+			}
 		},
 		"modelCost": {
 			"title": "Usage consumption",

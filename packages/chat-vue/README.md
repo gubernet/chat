@@ -54,6 +54,7 @@ it, its model and the conversations had before. The chat fills the height of its
 | `color`                   | —        | `"blue"`, `"indigo"`, `"violet"`, `"pink"`, `"red"`, `"orange"`, `"green"` or `"teal"`.  |
 | `hide-title`              | `false`  | Without the agent's name in the bar.                                                     |
 | `hide-model`              | `false`  | Without the choice of the model.                                                         |
+| `hide-effort`             | `false`  | Without the choice of the reasoning level.                                               |
 | `get-token`               | —        | On your own site: the user's token in your app. See [Sign-in][sign-in].                  |
 | `notify`                  | —        | Shows the chat's notices with your own toasts, in place of the chat's.                   |
 

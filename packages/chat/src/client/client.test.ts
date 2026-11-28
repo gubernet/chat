@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { chatEffortValue } from "../components/ChatEffortPicker";
 import { createLayeralClient, LayeralApiError } from "./client";
 import { createConversationTransport } from "./transport";
 
@@ -113,6 +114,63 @@ describe("the client of an installation", () => {
 			code: "NOT_FOUND",
 		});
 		expect(new LayeralApiError(404, "NOT_FOUND", "Not found")).toBeInstanceOf(Error);
+	});
+
+	it("starts a conversation at the chosen reasoning level and changes it later", async () => {
+		const { fetch, calls } = fakeFetch([
+			json({ id: "conv-1" }),
+			json({ id: "conv-2" }),
+			json(null),
+		]);
+		const client = createLayeralClient({ url: "https://app.example.com", fetch });
+
+		await client.createConversation({
+			organizationId: "org-1",
+			agentId: "agent-1",
+			modelCode: "model-a",
+			effort: "xhigh",
+		});
+		// Without a level, the agent's: the body says none
+		await client.createConversation({
+			organizationId: "org-1",
+			agentId: "agent-1",
+			modelCode: "model-a",
+		});
+		await client.setConversationEffort("conv-1", "max");
+
+		expect(calls.map(({ method, url, body }) => ({ method, url, body }))).toEqual([
+			{
+				method: "POST",
+				url: "https://app.example.com/api/organizations/org-1/conversations",
+				body: { agentId: "agent-1", modelCode: "model-a", effort: "xhigh" },
+			},
+			{
+				method: "POST",
+				url: "https://app.example.com/api/organizations/org-1/conversations",
+				body: { agentId: "agent-1", modelCode: "model-a" },
+			},
+			{
+				method: "PUT",
+				url: "https://app.example.com/api/conversations/conv-1/effort",
+				body: { effort: "max" },
+			},
+		]);
+	});
+});
+
+describe("the level the chat shows", () => {
+	const effort = {
+		levels: ["high" as const, "xhigh" as const, "max" as const],
+		start: "high" as const,
+	};
+
+	it("is the one chosen, brought among the model's levels, or the start", () => {
+		expect(chatEffortValue(effort, null)).toBe("high");
+		expect(chatEffortValue(effort, "max")).toBe("max");
+		expect(chatEffortValue(effort, "low")).toBe("high");
+		// An installation before the levels; a model whose levels make no difference
+		expect(chatEffortValue(undefined, "max")).toBe(null);
+		expect(chatEffortValue({ levels: [], start: "high" }, "max")).toBe("high");
 	});
 });
 

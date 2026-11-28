@@ -6,6 +6,11 @@ All notable changes to `@layeral/chat-element` are documented here. The format f
 
 ## [Unreleased]
 
+### Added
+
+- `hide-effort` (`hideEffort`): without the choice of the reasoning level, which the chat shows
+  next to the model.
+
 ## [0.7.0] - 2026-11-27
 
 ### Changed

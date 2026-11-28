@@ -16,6 +16,7 @@ export const ATTRIBUTES = {
 	color: "color",
 	"hide-title": "hideTitle",
 	"hide-model": "hideModel",
+	"hide-effort": "hideEffort",
 } as const satisfies Record<string, keyof LayeralChatElement>;
 
 export type AttributeName = keyof typeof ATTRIBUTES;
@@ -33,6 +34,7 @@ export function fromAttribute(name: AttributeName, value: string | null) {
 	switch (name) {
 		case "hide-title":
 		case "hide-model":
+		case "hide-effort":
 			return value !== null && value !== "false";
 		// Without it, a new chat
 		case "conversation-id":

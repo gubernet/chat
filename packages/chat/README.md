@@ -49,6 +49,7 @@ on your own site.
 | `theme`                | `"auto"` | `"light"`, `"dark"`, or `"auto"`.                                                        |
 | `hideTitle`            | `false`  | Without the agent's name in the bar.                                                     |
 | `hideModel`            | `false`  | Without the choice of the model.                                                         |
+| `hideEffort`           | `false`  | Without the choice of the reasoning level.                                               |
 | `color`                | —        | `"blue"`, `"indigo"`, `"violet"`, `"pink"`, `"red"`, `"orange"`, `"green"` or `"teal"`.  |
 | `notify`               | —        | Shows the chat's notices with your own toasts, in place of the chat's.                   |
 | `barEnd`               | —        | What your app puts at the end of the bar, as its user's menu.                            |

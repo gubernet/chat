@@ -5,7 +5,12 @@ import {
 	ChatTransportError,
 	type ChatTreeMessage,
 } from "../lib/use-chat-runtime";
-import { type LayeralClient, LayeralApiError, type SavedMessage } from "./client";
+import {
+	type ChatEffortLevel,
+	type LayeralClient,
+	LayeralApiError,
+	type SavedMessage,
+} from "./client";
 
 const toChatError = (error: unknown) =>
 	error instanceof LayeralApiError && error.code === "SERVICE_UNAVAILABLE"
@@ -30,12 +35,14 @@ export interface NewConversation {
 	organizationId: string;
 	agentId: string;
 	modelCode: string;
+	// The reasoning level the user chose; without one, the agent's
+	effort?: ChatEffortLevel;
 }
 
 /**
  * A saved conversation of an installation. A new chat creates it at the first
- * message, with the agent and the model chosen until then (`choose`), and
- * tells its identifier and what it started with.
+ * message, with the agent, the model and the reasoning level chosen until then
+ * (`choose`), and tells its identifier and what it started with.
  */
 export function createConversationTransport(
 	client: LayeralClient,
@@ -88,7 +95,7 @@ export function createConversationTransport(
 			: attachment;
 
 	return {
-		// A new chat's agent and model until the first message; then nothing changes
+		// A new chat's agent, model and level until the first message; then nothing changes
 		choose(next: NewConversation) {
 			newConversation = next;
 		},

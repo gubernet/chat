@@ -8,6 +8,7 @@ import { chatAuthFor } from "../client/auth";
 import {
 	type AgentChat,
 	type ChatAgent,
+	type ChatEffortLevel,
 	createLayeralClient,
 	LayeralApiError,
 	type LayeralClient,
@@ -29,6 +30,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Skeleton } from "../ui/skeleton";
 import { AgentLogo } from "./AgentLogo";
 import { ChatBudgetNotice } from "./ChatBudgetNotice";
+import { ChatEffortPicker, chatEffortValue } from "./ChatEffortPicker";
 import { ChatElaborato } from "./ChatElaborato";
 import { ChatHistory, useConversationHistory } from "./ChatHistory";
 import { ChatModelPicker } from "./ChatModelPicker";
@@ -52,6 +54,8 @@ export interface LayeralChatProps {
 	hideTitle?: boolean;
 	// Without the choice of the model: the chat uses the first one the budgets leave
 	hideModel?: boolean;
+	// Without the choice of the reasoning level: the chat goes at the one the agent starts from
+	hideEffort?: boolean;
 	// A language tag, as "it" or "it-IT"; without it, the browser's language
 	locale?: string;
 	theme?: ChatTheme;
@@ -85,6 +89,7 @@ export function LayeralChat({
 	history = "menu",
 	hideTitle = false,
 	hideModel = false,
+	hideEffort = false,
 	locale,
 	theme,
 	color,
@@ -126,6 +131,7 @@ export function LayeralChat({
 					history={history}
 					hideTitle={hideTitle}
 					hideModel={hideModel}
+					hideEffort={hideEffort}
 					barEnd={barEnd}
 				/>
 			</FileLinksProvider>
@@ -141,6 +147,7 @@ function AgentChatView({
 	history,
 	hideTitle,
 	hideModel,
+	hideEffort,
 	barEnd,
 }: {
 	client: LayeralClient;
@@ -150,6 +157,7 @@ function AgentChatView({
 	history: ChatHistoryPlacement;
 	hideTitle: boolean;
 	hideModel: boolean;
+	hideEffort: boolean;
 	barEnd: ReactNode;
 }) {
 	const t = useTranslations("chat");
@@ -267,7 +275,9 @@ function AgentChatView({
 	const inBar = history === "panel" ? "md:hidden" : undefined;
 	// Nothing is left in the bar on a wide screen: it goes away
 	const barClassName =
-		history === "panel" && hideTitle && hideModel && !barEnd ? "md:hidden" : undefined;
+		history === "panel" && hideTitle && hideModel && hideEffort && !barEnd
+			? "md:hidden"
+			: undefined;
 	const barStart = (
 		<>
 			{!hideTitle && (
@@ -315,6 +325,7 @@ function AgentChatView({
 						barEnd={barEnd}
 						barClassName={barClassName}
 						hideModel={hideModel}
+						hideEffort={hideEffort}
 						transcribe={transcribe}
 						onStarted={started}
 						onTurnEnd={turnEnded}
@@ -458,6 +469,7 @@ interface SessionProps {
 	barEnd: ReactNode;
 	barClassName: string | undefined;
 	hideModel: boolean;
+	hideEffort: boolean;
 	transcribe: Transcribe | undefined;
 	onStarted: (conversationId: string) => void;
 	onTurnEnd: () => void;
@@ -519,6 +531,7 @@ function OpenSession({
 	barEnd,
 	barClassName,
 	hideModel,
+	hideEffort,
 	transcribe,
 	onStarted,
 	onTurnEnd,
@@ -533,6 +546,9 @@ function OpenSession({
 		conversation?.modelCode ?? firstAvailableModel(agent),
 	);
 	const [changingModel, setChangingModel] = useState(false);
+	// The reasoning level the user chose; null for the one the conversation starts from
+	const [effort, setEffort] = useState<ChatEffortLevel | null>(conversation?.effort ?? null);
+	const [changingEffort, setChangingEffort] = useState(false);
 	const chosenAvailable = agent.models.some(
 		({ code, available }) => code === chosenModelCode && available,
 	);
@@ -560,8 +576,13 @@ function OpenSession({
 	);
 
 	useEffect(() => {
-		transport.choose({ organizationId, agentId: agent.id, modelCode });
-	}, [transport, organizationId, agent.id, modelCode]);
+		transport.choose({
+			organizationId,
+			agentId: agent.id,
+			modelCode,
+			...(effort && { effort }),
+		});
+	}, [transport, organizationId, agent.id, modelCode, effort]);
 
 	// The window where the user gives a tool's system access with their account at a provider
 	const linkAccess = useMemo(
@@ -612,6 +633,28 @@ function OpenSession({
 		setChangingModel(false);
 	};
 
+	// Before the first message the level stays in the chat; then the
+	// conversation goes on at it, from the next answer
+	const changeEffort = async (level: ChatEffortLevel) => {
+		if (!conversationId) {
+			setEffort(level);
+			return;
+		}
+
+		setChangingEffort(true);
+
+		try {
+			await client.setConversationEffort(conversationId, level);
+			setEffort(level);
+		} catch {
+			notify({ title: t("controls.effortError"), type: "error" });
+		}
+
+		setChangingEffort(false);
+	};
+
+	const model = agent.models.find(({ code }) => code === modelCode);
+
 	// Started from a form whose result is only files: the elaborato's page, with
 	// the agent's form as it is now, or as it was sent
 	const startForm = conversation?.messages
@@ -631,14 +674,24 @@ function OpenSession({
 			end={barEnd}
 			className={barClassName}
 			model={
-				!hideModel && (
-					<ChatModelPicker
-						models={agent.models}
-						modelCode={modelCode}
-						onModelChange={(code) => void changeModel(code)}
-						locked={!canContinue || isRunning || changingModel}
-					/>
-				)
+				<>
+					{!hideModel && (
+						<ChatModelPicker
+							models={agent.models}
+							modelCode={modelCode}
+							onModelChange={(code) => void changeModel(code)}
+							locked={!canContinue || isRunning || changingModel || changingEffort}
+						/>
+					)}
+					{!hideEffort && (
+						<ChatEffortPicker
+							levels={model?.effort?.levels ?? []}
+							value={chatEffortValue(model?.effort, effort)}
+							onChange={(level) => void changeEffort(level)}
+							locked={!canContinue || isRunning || changingModel || changingEffort}
+						/>
+					)}
+				</>
 			}
 		>
 			<div className="flex h-full flex-col">

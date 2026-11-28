@@ -52,6 +52,7 @@ For Vue, use [`@layeral/chat-vue`](https://www.npmjs.com/package/@layeral/chat-v
 | `color`           | `color`          | —        | `"blue"`, `"indigo"`, `"violet"`, `"pink"`, `"red"`, `"orange"`, `"green"` or `"teal"`.  |
 | `hide-title`      | `hideTitle`      | `false`  | Without the agent's name in the bar.                                                     |
 | `hide-model`      | `hideModel`      | `false`  | Without the choice of the model.                                                         |
+| `hide-effort`     | `hideEffort`     | `false`  | Without the choice of the reasoning level.                                               |
 | —                 | `getToken`       | —        | On your own site: the user's token in your app. See [Sign-in][sign-in].                  |
 | —                 | `notify`         | —        | Shows the chat's notices with your own toasts, in place of the chat's.                   |
 

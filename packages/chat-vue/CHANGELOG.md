@@ -6,6 +6,10 @@ All notable changes to `@layeral/chat-vue` are documented here. The format follo
 
 ## [Unreleased]
 
+### Added
+
+- `hide-effort`: without the choice of the reasoning level, which the chat shows next to the model.
+
 ## [0.7.0] - 2026-11-27
 
 ### Changed

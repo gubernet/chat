@@ -35,7 +35,18 @@
 		},
 		"controls": {
 			"noModel": "Ningún modelo disponible",
-			"modelError": "No se pudo cambiar el modelo."
+			"modelError": "No se pudo cambiar el modelo.",
+			"effortError": "No se pudo cambiar el razonamiento."
+		},
+		"effort": {
+			"label": "Razonamiento",
+			"levels": {
+				"low": "Bajo",
+				"medium": "Medio",
+				"high": "Alto",
+				"xhigh": "Muy alto",
+				"max": "Máximo"
+			}
 		},
 		"modelCost": {
 			"title": "Consumo de uso",

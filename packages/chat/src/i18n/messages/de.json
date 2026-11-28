@@ -35,7 +35,18 @@
 		},
 		"controls": {
 			"noModel": "Kein Modell verfügbar",
-			"modelError": "Das Modell konnte nicht gewechselt werden."
+			"modelError": "Das Modell konnte nicht gewechselt werden.",
+			"effortError": "Der Denkaufwand konnte nicht geändert werden."
+		},
+		"effort": {
+			"label": "Denkaufwand",
+			"levels": {
+				"low": "Niedrig",
+				"medium": "Mittel",
+				"high": "Hoch",
+				"xhigh": "Sehr hoch",
+				"max": "Maximal"
+			}
 		},
 		"modelCost": {
 			"title": "Nutzungsverbrauch",

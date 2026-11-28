@@ -6,6 +6,16 @@ All notable changes to `@layeral/chat` are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **The reasoning level.** Next to the model, the chat offers the reasoning levels the agent leaves
+  on with it, on one scale for every model (`CHAT_EFFORT_LEVELS`: low, medium, high, xhigh, max),
+  when they make a difference to the model. A new chat starts at the chosen level, a conversation
+  goes on at a new one from the next answer. The client reads each model's `effort` and the
+  conversation's, and gains `setConversationEffort`; `createConversation` takes an `effort`.
+  `hideEffort` hides the level's choice, as `hideModel` the model's. An installation before the
+  levels sends neither, and the chat shows no choice.
+
 ## [0.7.0] - 2026-11-27
 
 ### Changed

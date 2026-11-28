@@ -10,6 +10,11 @@ import type { Answer } from "../contract/questions";
 import { type ChatAuth, ChatSignedOutError, cookieAuth } from "./auth";
 import { readEventIterator } from "./sse";
 
+// The reasoning effort's scale, one for every model, from the least to the most
+export const CHAT_EFFORT_LEVELS = ["low", "medium", "high", "xhigh", "max"] as const;
+
+export type ChatEffortLevel = (typeof CHAT_EFFORT_LEVELS)[number];
+
 export interface ChatAgentModel {
 	code: string;
 	name: string;
@@ -20,6 +25,10 @@ export interface ChatAgentModel {
 	costLevel: number | null;
 	// Whether the budgets leave it for now
 	available: boolean;
+	// The reasoning levels the user may choose with the model, none when they make
+	// no difference to it, and the one a conversation starts from; an installation
+	// before them doesn't say it
+	effort?: { levels: ChatEffortLevel[]; start: ChatEffortLevel };
 }
 
 export interface ChatAgent {
@@ -71,6 +80,8 @@ export interface SavedConversation {
 	organizationId: string;
 	title: string | null;
 	modelCode: string;
+	// The reasoning level the user chose; null, or missing before the levels, for the agent's
+	effort?: ChatEffortLevel | null;
 	agent: { id: string; name: string; logoUrl: string | null } | null;
 	// Without access to the agent any more, the conversation stays readable
 	canContinue: boolean;
@@ -268,15 +279,25 @@ export function createLayeralClient({
 			return conversations;
 		},
 
+		// With the reasoning level the user chose; without one, the agent's
 		createConversation(
-			input: { organizationId: string; agentId: string; modelCode: string },
+			input: {
+				organizationId: string;
+				agentId: string;
+				modelCode: string;
+				effort?: ChatEffortLevel;
+			},
 			signal?: AbortSignal,
 		) {
 			return json<{ id: string }>(
 				`/organizations/${id(input.organizationId)}/conversations`,
 				{
 					method: "POST",
-					body: { agentId: input.agentId, modelCode: input.modelCode },
+					body: {
+						agentId: input.agentId,
+						modelCode: input.modelCode,
+						...(input.effort && { effort: input.effort }),
+					},
 					signal,
 				},
 			);
@@ -309,6 +330,14 @@ export function createLayeralClient({
 			await json(`/conversations/${id(conversationId)}/model`, {
 				method: "PUT",
 				body: { modelCode },
+			});
+		},
+
+		// The conversation goes on at another reasoning level, from the next answer
+		async setConversationEffort(conversationId: string, effort: ChatEffortLevel) {
+			await json(`/conversations/${id(conversationId)}/effort`, {
+				method: "PUT",
+				body: { effort },
 			});
 		},
 

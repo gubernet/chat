@@ -61,6 +61,8 @@ export interface LayeralChatElement extends HTMLElement {
 	hideTitle: boolean;
 	// Without the choice of the model (attribute `hide-model`)
 	hideModel: boolean;
+	// Without the choice of the reasoning level (attribute `hide-effort`)
+	hideEffort: boolean;
 	// On a site other than the installation's: the user's token in the page's app
 	getToken: GetToken | undefined;
 	// Shows the chat's notices with the page's own toasts, in place of the chat's

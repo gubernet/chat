@@ -24,6 +24,7 @@ interface ChatOptions {
 	color: ChatColor | undefined;
 	hideTitle: boolean;
 	hideModel: boolean;
+	hideEffort: boolean;
 	getToken: GetToken | undefined;
 	notify: Notify | undefined;
 }
@@ -40,6 +41,7 @@ const OPTION_NAMES: OptionName[] = [
 	"color",
 	"hideTitle",
 	"hideModel",
+	"hideEffort",
 	"getToken",
 	"notify",
 ];
@@ -84,6 +86,7 @@ function createElementClass() {
 			color: undefined,
 			hideTitle: false,
 			hideModel: false,
+			hideEffort: false,
 			getToken: undefined,
 			notify: undefined,
 		};
@@ -175,6 +178,14 @@ function createElementClass() {
 
 		set hideModel(value: boolean) {
 			this.#set("hideModel", Boolean(value));
+		}
+
+		get hideEffort() {
+			return this.#options.hideEffort;
+		}
+
+		set hideEffort(value: boolean) {
+			this.#set("hideEffort", Boolean(value));
 		}
 
 		get getToken() {
